@@ -1,0 +1,23 @@
+repos:
+  - repo: local
+    hooks:
+      - id: build-check
+        name: Try to build
+        language: system
+        entry: yarn build
+        stages: [commit]
+        pass_filenames: false
+
+      - id: lint
+        name: Try to lint
+        language: system
+        entry: yarn lint
+        stages: [commit]
+        pass_filenames: false
+
+      - id: type-check
+        name: Try to type-check
+        language: system
+        entry: yarn lint
+        stages: [commit]
+        pass_filenames: false

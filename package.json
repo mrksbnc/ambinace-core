@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "Api service for Ambinace project",
 	"main": "index.js",
-	"type": "module",
+	"private": true,
 	"homepage": "git@github.com:mrksbnc/ambinace-core.git/README.md",
 	"repository": {
 		"type": "git",
@@ -18,7 +18,7 @@
 		"lint": "eslint . --ext .ts,.js",
 		"format": "yarn prettier --write src",
 		"format:check": "yarn prettier --check src",
-		"build": "rm -rf dist && node scripts/build.cjs",
+		"build": "rm -rf dist && node scripts/build.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [
@@ -34,9 +34,12 @@
 		"cookie-parser": "^1.4.6",
 		"cors": "^2.8.5",
 		"dotenv": "^16.0.3",
+		"envalid": "^7.3.1",
 		"express": "^4.18.2",
 		"helmet": "^7.0.0",
 		"morgan": "^1.10.0",
+		"pino": "^8.14.1",
+		"pino-pretty": "^10.0.0",
 		"prisma": "^4.13.0"
 	},
 	"devDependencies": {
