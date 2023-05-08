@@ -1,4 +1,4 @@
-import { name, version } from 'package.json';
+import { name, version } from '../../package.json';
 import { API_CONFIG_KEY, APP_CONFIG_KEY, ENABLED_HTTP_REQUEST_METHODS } from '@/data/enums/localObnject';
 
 let sharedInstance: AmbianceConfig | null = null;
