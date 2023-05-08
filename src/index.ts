@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { server } from './app';
+import Server from './app/server';
 import { logger } from './utils/logger';
 
 (async (): Promise<void> => {
@@ -11,7 +11,7 @@ import { logger } from './utils/logger';
 	}
 
 	try {
-		server.init();
+		Server.sharedInstance.init();
 	} catch (error) {
 		const _e: Error = error as Error;
 		logger.error(_e.message);
