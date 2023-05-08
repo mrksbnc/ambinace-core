@@ -1,7 +1,14 @@
 repos:
   - repo: local
     hooks:
-      - id: build-check
+      - id: type-check
+        name: Try to type-check
+        language: system
+        entry: yarn lint
+        stages: [commit]
+        pass_filenames: false
+
+      - id: build
         name: Try to build
         language: system
         entry: yarn build
@@ -10,13 +17,6 @@ repos:
 
       - id: lint
         name: Try to lint
-        language: system
-        entry: yarn lint
-        stages: [commit]
-        pass_filenames: false
-
-      - id: type-check
-        name: Try to type-check
         language: system
         entry: yarn lint
         stages: [commit]
