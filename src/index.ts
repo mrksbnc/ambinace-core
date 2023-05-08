@@ -1,19 +1,26 @@
 import dotenv from 'dotenv';
 import Server from './app/server';
 import { logger } from './utils/logger';
+import Database from './database/database';
+import { validateEnv } from './utils/validateEnv';
 
 (async (): Promise<void> => {
+	validateEnv();
+
+	dotenv.config();
+	logger.info('.env file loaded!');
+
 	try {
-		dotenv.config();
+		await Database.sharedInstance.initialize();
 	} catch (error) {
-		const _e: Error = error as Error;
-		logger.error(_e.message);
+		logger.fatal('Failed to initialize database! Process will now exit with code 1', error);
+		process.exit(1);
 	}
 
 	try {
 		Server.sharedInstance.init();
 	} catch (error) {
-		const _e: Error = error as Error;
-		logger.error(_e.message);
+		logger.fatal('Failed to initialize server! Process will now exit with code 1', error);
+		process.exit(1);
 	}
 })();

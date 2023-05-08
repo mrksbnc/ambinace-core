@@ -16,13 +16,13 @@
 	"scripts": {
 		"dev": "nodemon",
 		"start": "node dist",
+		"test": "jest --coverage",
 		"type-check": "tsc --noEmit",
 		"lint:fix": "yarn lint --fix",
 		"lint": "eslint . --ext .ts,.js",
 		"format": "yarn prettier --write src",
 		"format:check": "yarn prettier --check src",
-		"build": "rm -rf dist && node scripts/build.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "rm -rf dist && node scripts/build.js"
 	},
 	"keywords": [
 		"REST",
@@ -34,6 +34,7 @@
 	],
 	"license": "ISC",
 	"dependencies": {
+		"@prisma/client": "4.13.0",
 		"cookie-parser": "^1.4.6",
 		"cors": "^2.8.5",
 		"dotenv": "^16.0.3",
@@ -51,6 +52,7 @@
 		"@types/cors": "^2.8.13",
 		"@types/express": "^4.17.17",
 		"@types/hpp": "^0.2.2",
+		"@types/jest": "^29.5.1",
 		"@types/morgan": "^1.9.4",
 		"@types/node": "^20.1.0",
 		"@typescript-eslint/eslint-plugin": "^5.59.2",

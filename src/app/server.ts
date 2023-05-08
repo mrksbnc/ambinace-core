@@ -32,7 +32,7 @@ export default class Server implements TServer {
 		const version = AmbianceConfig.sharedInstance.app.get(APP_CONFIG_KEY.VERSION);
 
 		this._app.listen(port, () => {
-			logger.info(`${name})} v${version} is running on port ${port}`);
+			logger.info(`${name} v${version} is running on port ${port}`);
 		});
 	}
 }
