@@ -3,13 +3,16 @@
 	"version": "1.0.0",
 	"description": "Api service for Ambinace project",
 	"main": "index.js",
-	"private": true,
 	"homepage": "git@github.com:mrksbnc/ambinace-core.git/README.md",
+	"author": "Bence Markus<bence.markus@outlook.com>",
+	"private": true,
 	"repository": {
 		"type": "git",
 		"url": "git@github.com:mrksbnc/ambinace-core.git"
 	},
-	"author": "Bence Markus<bence.markus@outlook.com>",
+	"prisma": {
+		"schema": "src/database/prisma/ambiance_core.prisma"
+	},
 	"scripts": {
 		"dev": "nodemon",
 		"start": "node dist",
