@@ -21,3 +21,10 @@ repos:
         entry: yarn lint
         stages: [commit]
         pass_filenames: false
+
+      - id: test
+        name: Try to run tests
+        language: system
+        entry: yarn test
+        stages: [commit]
+        pass_filenames: false
