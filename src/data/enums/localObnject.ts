@@ -1,6 +1,12 @@
 export enum APP_CONFIG_KEY {
-	NAME = 'name',
-	VERSION = 'version',
-	PORT = 'port',
 	ENV = 'env',
+	NAME = 'name',
+	PORT = 'port',
+	VERSION = 'version',
+}
+
+export const ENABLED_HTTP_REQUEST_METHODS = ['get', 'post', 'put', 'delete'];
+
+export enum API_CONFIG_KEY {
+	ENABLED_HTTP_REQUEST_METHODS = 'enabledHttpRequestMethods',
 }

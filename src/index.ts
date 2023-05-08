@@ -12,6 +12,7 @@ import { validateEnv } from './utils/validateEnv';
 
 	try {
 		await Database.sharedInstance.initialize();
+		logger.info('Database initialized!');
 	} catch (error) {
 		logger.fatal('Failed to initialize database! Process will now exit with code 1', error);
 		process.exit(1);
