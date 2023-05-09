@@ -1,9 +1,9 @@
 import { logger } from '@/utils/logger';
 import BaseError from '@/error/baseError';
-import { ERROR_NAME } from '@/data/constants/errorName';
 import BaseResponse from '@/data/models/baseResponse';
-import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
+import { ERROR_NAME } from '@/data/constants/errorName';
 import type { NextFunction, Request, Response } from 'express';
+import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 
 export const errorHandlerMiddleware = (
 	error: unknown,
