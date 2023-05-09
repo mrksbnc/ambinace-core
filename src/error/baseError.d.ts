@@ -1,5 +1,5 @@
 import type { THttpError } from './httpError.d';
-import type { ERROR_NAME } from '../data/enums/errorName';
+import type { ERROR_NAME } from '@/data/enums/errorName';
 
 export type TBaseError = {
 	message: string;

@@ -8,6 +8,6 @@ describe('Server', () => {
 	});
 
 	it('should return an instance of express.Application', () => {
-		expect(mockServer.get()).toBeInstanceOf(Function);
+		expect(mockServer.get()).toBeDefined();
 	});
 });

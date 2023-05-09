@@ -1,7 +1,7 @@
 import type { TRequestMethod } from '..';
 import AmbianceConfig from '@/config/appConfig';
 import BaseResponse from '@/data/models/baseResponse';
-import { API_CONFIG_KEY } from '@/data/enums/localObnject';
+import { API_CONFIG_KEY } from '@/data/enums/appConfig';
 import { HTTP_STATUS_CODE } from '@/data/enums/httpStatusCode';
 import type { NextFunction, Request, Response } from 'express';
 import { RESPONSE_ERROR_MESSAGE } from '@/data/enums/responseMessage';

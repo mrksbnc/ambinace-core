@@ -1,11 +1,11 @@
 import { name, version } from '../../package.json';
-import { API_CONFIG_KEY, APP_CONFIG_KEY, ENABLED_HTTP_REQUEST_METHODS } from '@/data/enums/localObnject';
+import { API_CONFIG_KEY, APP_CONFIG_KEY, ENABLED_HTTP_REQUEST_METHODS } from '@/data/enums/appConfig';
 
 let sharedInstance: AmbianceConfig | null = null;
 
 export default class AmbianceConfig {
-	public readonly app: Map<APP_CONFIG_KEY, string | number> = new Map<APP_CONFIG_KEY, string | number>();
 	public readonly api: Map<string, string | string[]> = new Map<string, string | string[]>();
+	public readonly app: Map<APP_CONFIG_KEY, string | number> = new Map<APP_CONFIG_KEY, string | number>();
 
 	static get sharedInstance(): AmbianceConfig {
 		if (sharedInstance === null) {

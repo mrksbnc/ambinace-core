@@ -2,7 +2,7 @@ import type { Route } from './router.d';
 import { logger } from '@/utils/logger';
 import type { Application } from 'express';
 import AmbianceConfig from '@/config/appConfig';
-import { API_CONFIG_KEY } from '@/data/enums/localObnject';
+import { API_CONFIG_KEY } from '@/data/enums/appConfig';
 import { notFoundHandlerMiddleware } from '../middlewares/notFoundHandler';
 import { errorHandlerMiddleware } from '../middlewares/errorHandler';
 
