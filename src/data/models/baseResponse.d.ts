@@ -1,4 +1,4 @@
-import type HTTP_STATUS_CODE from '../enums/httpStatusCode';
+import type HTTP_STATUS_CODE from '../constants/httpStatusCode';
 
 export interface TBaseResponse<T = null> {
 	data: T | null;

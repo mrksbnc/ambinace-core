@@ -3,7 +3,7 @@ import type { TServer } from './server.d';
 import AmbianceConfig from '@/config/appConfig';
 import express, { type Application } from 'express';
 import { registerApiMiddlewares } from '@/api/middlewares';
-import { APP_CONFIG_KEY } from '@/data/enums/appConfig';
+import { APP_CONFIG_KEY } from '@/data/constants/appConfig';
 import { registerRoutes } from '@/api/routes/router';
 
 let sharedInstance: Server | null = null;

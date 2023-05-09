@@ -1,5 +1,5 @@
 import type { THttpError } from './httpError.d';
-import type { ERROR_NAME } from '@/data/enums/errorName';
+import type { ERROR_NAME } from '@/data/constants/errorName';
 import type { TBaseError, TBaseErrorConstructorArgs } from './baseError.d';
 
 export default class BaseError extends Error implements TBaseError {

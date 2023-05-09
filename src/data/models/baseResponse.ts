@@ -1,4 +1,4 @@
-import type { HTTP_STATUS_CODE } from '../enums/httpStatusCode';
+import type { HTTP_STATUS_CODE } from '../constants/httpStatusCode';
 import type { BaseResponseConstructorArgs, TBaseResponse } from './baseResponse.d';
 
 export default class BaseResponse<T> implements TBaseResponse<T> {
