@@ -3,9 +3,6 @@ import type { Entry, Mood } from '@prisma/client';
  * Arguments for getEntriesByUserId.
  */
 export type TGetEntriesByUserIdArgs = {
-	/**
-	 * Supabase user id.
-	 */
 	userId: number;
 };
 /**
@@ -22,10 +19,13 @@ export type TGetEntriesByMoodArgs = {
 };
 /**
  * Arguments for getEntriesByDaterange.
+ * @remarks
+ * The start date is inclusive, the end date is exclusive.
+ * @see https://www.prisma.io/docs/concepts/components/prisma-client/filtering#filtering-by-date
  */
 export type TGetEntriesByDaterangeArgs = {
 	startDate: Date;
-	endDate: Date;
+	endDate?: Date | null;
 };
 /**
  * Arguments for getEntryById.
@@ -33,7 +33,7 @@ export type TGetEntriesByDaterangeArgs = {
 export type TGetEntryByIdArgs = {
 	id: number;
 };
-/**
+/*
  * Arguments for createEntry.
  */
 export type TCreateEntryArgs = {
@@ -43,7 +43,6 @@ export type TCreateEntryArgs = {
  * Arguments for updateEntry.
  */
 export type TUpdateEntryArgs = {
-	id: number;
 	entry: Entry;
 };
 /**
@@ -52,23 +51,17 @@ export type TUpdateEntryArgs = {
 export type TSoftDeleteEntryArgs = {
 	id: number;
 };
-/**
- * Hard-deletes an Entry
- * @remarks
- * This is not recommended, use softDeleteEntry instead.
- * @see softDeleteEntry
+/*
+ * Arguments for hardDeleteEntry.
  */
 export type THardDeleteEntryArgs = {
 	id: number;
 };
 /**
- * Entry repository interface.
- * @remarks
- * This interface is used to abstract the database layer from the application layer.
- * @see EntryRepository
+ * Interface for the entry repository.
  */
-export type TEntryRepository = {
-	/*
+export type TEntryService = {
+	/**
 	 * Returns all entries.
 	 */
 	getEntries: () => Promise<Entry[]>;
@@ -81,7 +74,7 @@ export type TEntryRepository = {
 	 */
 	getEntriesByDate: (args: TGetEntriesByDateArgs) => Promise<Entry[]>;
 	/**
-	 * Returns all entries with a mood.
+	 * Returns all entries with a given mood.
 	 */
 	getEntriesByMood: (args: TGetEntriesByMoodArgs) => Promise<Entry[]>;
 	/**
@@ -93,11 +86,11 @@ export type TEntryRepository = {
 	 */
 	getActiveEntries: () => Promise<Entry[]>;
 	/**
-	 * Returns an entry by id.
+	 * Returns an entry by its id.
 	 */
 	getEntryById: (args: TGetEntryByIdArgs) => Promise<Entry | null>;
 	/**
-	 * Creates an entry.
+	 * Creates a new entry.
 	 */
 	createEntry: (args: TCreateEntryArgs) => Promise<Entry>;
 	/**
@@ -105,9 +98,7 @@ export type TEntryRepository = {
 	 */
 	updateEntry: (args: TUpdateEntryArgs) => Promise<Entry>;
 	/**
-	 * Soft-deletes an entry.
-	 * @remarks
-	 * This is the recommended way of deleting entries.
+	 * Soft-deletes an entry. (Sets isActive to false)
 	 */
 	softDeleteEntry: (args: TSoftDeleteEntryArgs) => Promise<void>;
 	/**

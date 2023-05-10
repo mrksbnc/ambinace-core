@@ -1,4 +1,4 @@
-import type { HTTP_STATUS_CODE } from '../constants/httpStatusCode';
+import { HTTP_STATUS_CODE } from '../constants/httpStatusCode';
 import type { BaseResponseConstructorArgs, TBaseResponse } from './baseResponse.d';
 
 export default class BaseResponse<T> implements TBaseResponse<T> {
@@ -8,9 +8,9 @@ export default class BaseResponse<T> implements TBaseResponse<T> {
 	public readonly status: HTTP_STATUS_CODE;
 
 	constructor(args: BaseResponseConstructorArgs<T>) {
-		this.status = args.status;
 		this.message = args.message;
 		this.data = args.data ?? null;
+		this.status = args.status ?? HTTP_STATUS_CODE.OK;
 		this.success = args.status >= 200 && args.status <= 299;
 	}
 }

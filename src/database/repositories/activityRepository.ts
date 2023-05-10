@@ -1,5 +1,13 @@
+import type {
+	TActivityRepository,
+	TCreateActivityArgs,
+	TUpdateActivityArgs,
+	TGetActivityByIdArgs,
+	THardDeleteActivityArgs,
+	TSoftDeleteActivityArgs,
+	TGetActivitiesByUserIdArgs,
+} from './activityRepository.d';
 import type { Activity, PrismaClient } from '@prisma/client';
-import type { TActivityRepository } from './activityRepository.d';
 
 export default class ActivityRepository implements TActivityRepository {
 	private readonly _client: PrismaClient;
@@ -18,31 +26,31 @@ export default class ActivityRepository implements TActivityRepository {
 		return queryResult;
 	}
 
-	public async getActivitiesByUserId(userId: number): Promise<Activity[]> {
-		const queryResult = await this._client.activity.findMany({ where: { createdBy: userId } });
+	public async getActivitiesByUserId(args: TGetActivitiesByUserIdArgs): Promise<Activity[]> {
+		const queryResult = await this._client.activity.findMany({ where: { createdBy: args.userId } });
 		return queryResult;
 	}
 
-	public async getActivityById(id: number): Promise<Activity | null> {
-		const queryResult = await this._client.activity.findUnique({ where: { id } });
+	public async getActivityById(args: TGetActivityByIdArgs): Promise<Activity | null> {
+		const queryResult = await this._client.activity.findUnique({ where: { id: args.id } });
 		return queryResult;
 	}
 
-	public async createActivity(activity: Activity): Promise<Activity> {
-		const queryResult = await this._client.activity.create({ data: activity });
+	public async createActivity(args: TCreateActivityArgs): Promise<Activity> {
+		const queryResult = await this._client.activity.create({ data: args.activity });
 		return queryResult;
 	}
 
-	public async updateActivity(activity: Activity): Promise<Activity> {
-		const queryResult = await this._client.activity.update({ where: { id: activity.id }, data: activity });
+	public async updateActivity(args: TUpdateActivityArgs): Promise<Activity> {
+		const queryResult = await this._client.activity.update({ where: { id: args.id }, data: args.activity });
 		return queryResult;
 	}
 
-	public async softDeleteActivity(id: number): Promise<void> {
-		await this._client.activity.update({ where: { id }, data: { isActive: false } });
+	public async softDeleteActivity(args: TSoftDeleteActivityArgs): Promise<void> {
+		await this._client.activity.update({ where: { id: args.id }, data: { isActive: false } });
 	}
 
-	public async hardDeleteActivity(id: number): Promise<void> {
-		await this._client.activity.delete({ where: { id } });
+	public async hardDeleteActivity(args: THardDeleteActivityArgs): Promise<void> {
+		await this._client.activity.delete({ where: { id: args.id } });
 	}
 }

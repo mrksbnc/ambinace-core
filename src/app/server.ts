@@ -4,7 +4,7 @@ import AmbianceConfig from '@/config/appConfig';
 import express, { type Application } from 'express';
 import { registerRoutes } from '@/api/routes/router';
 import { registerApiMiddlewares } from '@/api/middlewares';
-import { APP_CONFIG_KEY } from '@/data/constants/appConfig';
+import { APP_CONFIG_KEY } from '@/data/constants/ambianceConfig';
 
 let sharedInstance: Server | null = null;
 export default class Server implements TServer {

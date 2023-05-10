@@ -1,5 +1,16 @@
-import type { TEntryRepository } from './entryRepository.d';
-import type { Entry, Mood, PrismaClient } from '@prisma/client';
+import type {
+	TCreateEntryArgs,
+	TEntryRepository,
+	TUpdateEntryArgs,
+	TGetEntryByIdArgs,
+	THardDeleteEntryArgs,
+	TSoftDeleteEntryArgs,
+	TGetEntriesByMoodArgs,
+	TGetEntriesByDateArgs,
+	TGetEntriesByUserIdArgs,
+	TGetEntriesByDaterangeArgs,
+} from './entryRepository.d';
+import type { Entry, PrismaClient } from '@prisma/client';
 
 export default class EntryReposiory implements TEntryRepository {
 	private readonly _client: PrismaClient;
@@ -13,23 +24,25 @@ export default class EntryReposiory implements TEntryRepository {
 		return queryResult;
 	}
 
-	public async getEntriesByUserId(userId: number): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany({ where: { createdBy: userId } });
+	public async getEntriesByUserId(args: TGetEntriesByUserIdArgs): Promise<Entry[]> {
+		const queryResult = await this._client.entry.findMany({ where: { createdBy: args.userId } });
 		return queryResult;
 	}
 
-	public async getEntriesByDate(date: Date): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany({ where: { createdAt: date } });
+	public async getEntriesByDate(args: TGetEntriesByDateArgs): Promise<Entry[]> {
+		const queryResult = await this._client.entry.findMany({ where: { createdAt: args.date } });
 		return queryResult;
 	}
 
-	public async getEntriesByMood(mood: Mood): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany({ where: { mood } });
+	public async getEntriesByMood(args: TGetEntriesByMoodArgs): Promise<Entry[]> {
+		const queryResult = await this._client.entry.findMany({ where: { mood: args.mood } });
 		return queryResult;
 	}
 
-	public async getEntriesByDaterange(startDate: Date, endDate: Date): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany({ where: { createdAt: { gte: startDate, lte: endDate } } });
+	public async getEntriesByDaterange(args: TGetEntriesByDaterangeArgs): Promise<Entry[]> {
+		const queryResult = await this._client.entry.findMany({
+			where: { createdAt: { gte: args.startDate, lte: args.endDate } },
+		});
 		return queryResult;
 	}
 
@@ -38,26 +51,26 @@ export default class EntryReposiory implements TEntryRepository {
 		return queryResult;
 	}
 
-	public async getEntryById(id: number): Promise<Entry | null> {
-		const queryResult = await this._client.entry.findUnique({ where: { id } });
+	public async getEntryById(args: TGetEntryByIdArgs): Promise<Entry | null> {
+		const queryResult = await this._client.entry.findUnique({ where: { id: args.id } });
 		return queryResult;
 	}
 
-	public async createEntry(entry: Entry): Promise<Entry> {
-		const queryResult = await this._client.entry.create({ data: entry });
+	public async createEntry(args: TCreateEntryArgs): Promise<Entry> {
+		const queryResult = await this._client.entry.create({ data: args.entry });
 		return queryResult;
 	}
 
-	public async updateEntry(entry: Entry): Promise<Entry> {
-		const queryResult = await this._client.entry.update({ where: { id: entry.id }, data: entry });
+	public async updateEntry(args: TUpdateEntryArgs): Promise<Entry> {
+		const queryResult = await this._client.entry.update({ where: { id: args.id }, data: args.entry });
 		return queryResult;
 	}
 
-	public async softDeleteEntry(id: number): Promise<void> {
-		await this._client.entry.update({ where: { id }, data: { isActive: false } });
+	public async softDeleteEntry(args: TSoftDeleteEntryArgs): Promise<void> {
+		await this._client.entry.update({ where: { id: args.id }, data: { isActive: false } });
 	}
 
-	public async hardDeleteEntry(id: number): Promise<void> {
-		await this._client.entry.delete({ where: { id } });
+	public async hardDeleteEntry(args: THardDeleteEntryArgs): Promise<void> {
+		await this._client.entry.delete({ where: { id: args.id } });
 	}
 }
