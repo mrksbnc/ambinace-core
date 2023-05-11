@@ -37,11 +37,11 @@ export type BaseResponseConstructorArgs<T = null> = {
 	/**
 	 * The message to be returned.
 	 */
-	message: string;
+	message?: string;
 	/**
 	 * The HTTP status code to be returned.
 	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 	 * @default 200
 	 */
-	status: HTTP_STATUS_CODE;
+	status?: HTTP_STATUS_CODE;
 };

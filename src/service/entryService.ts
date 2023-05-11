@@ -18,7 +18,7 @@ let sharedInstance: EntryService | null = null;
 export default class EntryService implements TEntryService {
 	private readonly _entryRepository: EntryReposiory;
 
-	static getSharedInstance(): EntryService {
+	static get sharedInstance(): EntryService {
 		if (sharedInstance === null) {
 			sharedInstance = new EntryService(EntryReposiory.sharedInstance);
 		}
