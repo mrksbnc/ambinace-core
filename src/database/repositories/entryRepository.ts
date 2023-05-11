@@ -1,4 +1,3 @@
-import Database from '../database';
 import type {
 	TCreateEntryArgs,
 	TUpdateEntryArgs,
@@ -10,77 +9,77 @@ import type {
 	TGetEntriesByUserIdArgs,
 	TGetEntriesByDaterangeArgs,
 } from '@/types/args';
-import type { Entry, PrismaClient } from '@prisma/client';
+import Database from '../database';
+import BaseRepository from './baseRepository';
+import type { Entry, Prisma } from '@prisma/client';
 import type { TEntryRepository } from './entryRepository.d';
 
 let sharedInstance: EntryRepository | null = null;
 
-export default class EntryRepository implements TEntryRepository {
-	private readonly _client: PrismaClient;
-
+export default class EntryRepository extends BaseRepository<Prisma.EntryDelegate<false>> implements TEntryRepository {
 	static get sharedInstance(): EntryRepository {
 		if (sharedInstance === null) {
-			sharedInstance = new EntryRepository(Database.sharedInstance.getDefaultClient());
+			sharedInstance = new EntryRepository(Database.sharedInstance.getDefaultClient().entry);
 		}
 		return sharedInstance;
 	}
 
-	constructor(client: PrismaClient) {
-		this._client = client;
+	constructor(delegate: Prisma.EntryDelegate<false>) {
+		super(delegate);
 	}
 
 	public async getEntries(): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany();
+		const queryResult = await this.delegate.findMany();
 		return queryResult;
 	}
 
 	public async getEntriesByUserId(args: TGetEntriesByUserIdArgs): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany({ where: { createdBy: args.userId } });
+		const queryResult = await this.delegate.findMany({ where: { createdBy: args.userId } });
 		return queryResult;
 	}
 
 	public async getEntriesByDate(args: TGetEntriesByDateArgs): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany({ where: { createdAt: args.date } });
+		const queryResult = await this.delegate.findMany({ where: { createdAt: args.date } });
 		return queryResult;
 	}
 
 	public async getEntriesByMood(args: TGetEntriesByMoodArgs): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany({ where: { mood: args.mood } });
+		const queryResult = await this.delegate.findMany({ where: { mood: args.mood } });
 		return queryResult;
 	}
 
 	public async getEntriesByDaterange(args: TGetEntriesByDaterangeArgs): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany({
+		const queryResult = await this.delegate.findMany({
 			where: { createdAt: { gte: args.startDate, lte: args.endDate } },
 		});
 		return queryResult;
 	}
 
 	public async getActiveEntries(): Promise<Entry[]> {
-		const queryResult = await this._client.entry.findMany({ where: { isActive: true } });
+		const queryResult = await this.delegate.findMany({ where: { isActive: true } });
 		return queryResult;
 	}
 
 	public async getEntryById(args: TGetEntryByIdArgs): Promise<Entry | null> {
-		const queryResult = await this._client.entry.findUnique({ where: { id: args.id } });
+		const queryResult = await this.delegate.findUnique({ where: { id: args.id } });
 		return queryResult;
 	}
 
 	public async createEntry(args: TCreateEntryArgs): Promise<Entry> {
-		const queryResult = await this._client.entry.create({ data: args.entry });
+		const queryResult = await this.delegate.create({ data: args.entry });
 		return queryResult;
 	}
 
 	public async updateEntry(args: TUpdateEntryArgs): Promise<Entry> {
-		const queryResult = await this._client.entry.update({ where: { id: args.id }, data: args.entry });
+		const queryResult = await this.delegate.update({ where: { id: args.id }, data: args.entry });
 		return queryResult;
 	}
 
 	public async softDeleteEntry(args: TSoftDeleteEntryArgs): Promise<void> {
-		await this._client.entry.update({ where: { id: args.id }, data: { isActive: false } });
+		await this.delegate.update({ where: { id: args.id }, data: { isActive: false } });
 	}
 
 	public async hardDeleteEntry(args: THardDeleteEntryArgs): Promise<void> {
-		await this._client.entry.delete({ where: { id: args.id } });
+		await this.delegate.delete({ where: { id: args.id } });
 	}
 }

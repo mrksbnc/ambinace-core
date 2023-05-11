@@ -2,8 +2,6 @@ import Log from '@/utils/logger';
 import { PrismaClient } from '@prisma/client';
 import type { TDatabase } from './database.d';
 
-let sharedInstance: Database | null = null;
-
 const DEFAULT_PRISMA_CLIENT = new PrismaClient({
 	log: [
 		{
@@ -34,6 +32,7 @@ DEFAULT_PRISMA_CLIENT.$on('error', (e) => {
 	Log.sharedInstance.baseLogger.error(`prisma error | ${e.message}`);
 });
 
+let sharedInstance: Database | null = null;
 export default class Database implements TDatabase {
 	public static get sharedInstance(): Database {
 		if (sharedInstance === null) {

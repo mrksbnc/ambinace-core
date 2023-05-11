@@ -2,7 +2,7 @@ import { prismaMock } from './mock/singleton';
 import { type Entry, Mood } from '@prisma/client';
 import EntrRepository from '../database/repositories/entryRepository';
 
-const mockRepository = new EntrRepository(prismaMock);
+const mockRepository = new EntrRepository(prismaMock.entry);
 
 const expectedSingle: Entry = {
 	id: 1,
