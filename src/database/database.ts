@@ -1,4 +1,4 @@
-import { logger } from '@/utils/logger';
+import Log from '@/utils/logger';
 import { PrismaClient } from '@prisma/client';
 import type { TDatabase } from './database.d';
 
@@ -23,15 +23,15 @@ const DEFAULT_PRISMA_CLIENT = new PrismaClient({
 });
 
 DEFAULT_PRISMA_CLIENT.$on('query', (e) => {
-	logger.info(`query on | ${e.target} | duration: ${e.duration}ms`);
+	Log.sharedInstance.baseLogger.info(`query on | ${e.target} | duration: ${e.duration}ms`);
 });
 
 DEFAULT_PRISMA_CLIENT.$on('warn', (e) => {
-	logger.warn(`prisma warning | ${e.message}`);
+	Log.sharedInstance.baseLogger.warn(`prisma warning | ${e.message}`);
 });
 
 DEFAULT_PRISMA_CLIENT.$on('error', (e) => {
-	logger.error(`prisma error | ${e.message}`);
+	Log.sharedInstance.baseLogger.error(`prisma error | ${e.message}`);
 });
 
 export default class Database implements TDatabase {

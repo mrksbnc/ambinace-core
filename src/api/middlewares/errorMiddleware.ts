@@ -1,16 +1,16 @@
-import { logger } from '@/utils/logger';
+import Log from '@/utils/logger';
 import BaseError from '@/error/baseError';
 import BaseResponse from '@/data/models/baseResponse';
 import { ERROR_NAME } from '@/data/constants/errorName';
 import type { NextFunction, Request, Response } from 'express';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 
-export const errorHandlerMiddleware = (
+export default function errorMiddleware(
 	error: unknown,
 	request: Request,
 	response: Response,
 	next: NextFunction,
-): void | NextFunction => {
+): void | NextFunction {
 	let responseErrorMessage: string = ERROR_NAME.INTERNAL_SERVER_ERROR as string;
 	let responseStatusCode: HTTP_STATUS_CODE = HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
 
@@ -44,6 +44,6 @@ export const errorHandlerMiddleware = (
 	});
 
 	const _e = error as Error;
-	logger.error(_e.message, '\r\n', error);
+	Log.sharedInstance.baseLogger.error(_e.message, '\r\n', error);
 	next();
-};
+}

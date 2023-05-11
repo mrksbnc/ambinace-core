@@ -1,16 +1,26 @@
 import type {
-	TActivityRepository,
 	TCreateActivityArgs,
 	TUpdateActivityArgs,
 	TGetActivityByIdArgs,
 	THardDeleteActivityArgs,
 	TSoftDeleteActivityArgs,
 	TGetActivitiesByUserIdArgs,
-} from './activityRepository.d';
+} from '../../types/args.d';
+import Database from '../database';
 import type { Activity, PrismaClient } from '@prisma/client';
+import type { TActivityRepository } from './activityRepository.d';
+
+let sharedInstance: ActivityRepository | null = null;
 
 export default class ActivityRepository implements TActivityRepository {
 	private readonly _client: PrismaClient;
+
+	static get sharedInstance(): ActivityRepository {
+		if (sharedInstance === null) {
+			sharedInstance = new ActivityRepository(Database.sharedInstance.getDefaultClient());
+		}
+		return sharedInstance;
+	}
 
 	constructor(client: PrismaClient) {
 		this._client = client;

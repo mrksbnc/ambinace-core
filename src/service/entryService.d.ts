@@ -1,62 +1,15 @@
-import type { Entry, Mood } from '@prisma/client';
-/**
- * Arguments for getEntriesByUserId.
- */
-export type TGetEntriesByUserIdArgs = {
-	userId: number;
-};
-/**
- * Arguments for getEntriesByDate.
- */
-export type TGetEntriesByDateArgs = {
-	date: Date;
-};
-/**
- * Arguments for getEntriesByMood.
- */
-export type TGetEntriesByMoodArgs = {
-	mood: Mood;
-};
-/**
- * Arguments for getEntriesByDaterange.
- * @remarks
- * The start date is inclusive, the end date is exclusive.
- * @see https://www.prisma.io/docs/concepts/components/prisma-client/filtering#filtering-by-date
- */
-export type TGetEntriesByDaterangeArgs = {
-	startDate: Date;
-	endDate?: Date | null;
-};
-/**
- * Arguments for getEntryById.
- */
-export type TGetEntryByIdArgs = {
-	id: number;
-};
-/*
- * Arguments for createEntry.
- */
-export type TCreateEntryArgs = {
-	entry: Entry;
-};
-/**
- * Arguments for updateEntry.
- */
-export type TUpdateEntryArgs = {
-	entry: Entry;
-};
-/**
- * Arguments for softDeleteEntry.
- */
-export type TSoftDeleteEntryArgs = {
-	id: number;
-};
-/*
- * Arguments for hardDeleteEntry.
- */
-export type THardDeleteEntryArgs = {
-	id: number;
-};
+import type {
+	TUpdateEntryArgs,
+	TCreateEntryArgs,
+	TGetEntryByIdArgs,
+	TSoftDeleteEntryArgs,
+	THardDeleteEntryArgs,
+	TGetEntriesByMoodArgs,
+	TGetEntriesByDateArgs,
+	TGetEntriesByUserIdArgs,
+	TGetEntriesByDaterangeArgs,
+} from '@/types/args';
+import type { Entry } from '@prisma/client';
 /**
  * Interface for the entry repository.
  */

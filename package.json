@@ -46,6 +46,7 @@
 		"morgan": "^1.10.0",
 		"pino": "^8.14.1",
 		"pino-pretty": "^10.0.0",
+		"pino-tee": "^0.3.0",
 		"prisma": "^4.13.0"
 	},
 	"devDependencies": {

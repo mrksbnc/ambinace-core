@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import Server from './app/server';
-import { logger } from './utils/logger';
+import Log from './utils/logger';
+import Server from './server/server';
 import Database from './database/database';
 import { validateEnv } from './utils/validateEnv';
 
@@ -8,20 +8,20 @@ import { validateEnv } from './utils/validateEnv';
 	validateEnv();
 
 	dotenv.config();
-	logger.info('.env file loaded!');
+	Log.sharedInstance.baseLogger.info('.env file loaded!');
 
 	try {
-		await Database.sharedInstance.initialize();
-		logger.info('database initialized!');
+		await Database.sharedInstance.getDefaultClient().$connect();
+		Log.sharedInstance.baseLogger.info('database initialized!');
 	} catch (error) {
-		logger.fatal('failed to initialize database! Process will now exit with code 1', error);
+		Log.sharedInstance.baseLogger.fatal('failed to initialize database! Process will now exit with code 1', error);
 		process.exit(1);
 	}
 
 	try {
 		Server.sharedInstance.init();
 	} catch (error) {
-		logger.fatal('failed to initialize server! Process will now exit with code 1', error);
+		Log.sharedInstance.baseLogger.fatal('failed to initialize server! Process will now exit with code 1', error);
 		process.exit(1);
 	}
 })();

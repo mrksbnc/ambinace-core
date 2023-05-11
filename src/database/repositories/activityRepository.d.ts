@@ -1,46 +1,14 @@
+import type {
+	TCreateActivityArgs,
+	TUpdateActivityArgs,
+	TGetActivityByIdArgs,
+	THardDeleteActivityArgs,
+	TSoftDeleteActivityArgs,
+	TGetActivitiesByUserIdArgs,
+} from '@/types/args';
 import type { Activity } from '@prisma/client';
 /**
- * Arguments for getActivitiesByUserId.
- */
-export type TGetActivitiesByUserIdArgs = {
-	userId: number;
-};
-/**
- * Arguments for getActivityById.
- */
-export type TGetActivityByIdArgs = {
-	id: number;
-};
-/**
- * Arguments for createActivity.
- */
-export type TCreateActivityArgs = {
-	activity: Activity;
-};
-/**
- * Arguments for updateActivity.
- */
-export type TUpdateActivityArgs = {
-	id: number;
-	activity: Activity;
-};
-/**
- * Arguments for softDeleteActivity.
- */
-export type TSoftDeleteActivityArgs = {
-	id: number;
-};
-/**
- * Arguments for hardDeleteActivity.
- */
-export type THardDeleteActivityArgs = {
-	id: number;
-};
-/**
  * Activity repository interface.
- * @remarks
- * This is a repository interface, which means that it is an abstraction over the database.
- * @see ActivityRepository
  */
 export type TActivityRepository = {
 	/**

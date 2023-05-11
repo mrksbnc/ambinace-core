@@ -2,19 +2,19 @@ import hpp from 'hpp';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-import { httpLogMiddleware } from './httpLog';
 import express, { type Application } from 'express';
-import { responseHeaderMiddleware } from './responseHeader';
-import { requestMethodValidatorMiddleware } from './requestMethosValidator';
+import responseHeaderMiddlewre from './responseHeaderMiddlewre';
+import requestMethodValidatorMiddleware from './requestMethodValidatorMiddleware';
+import httpLoggerMiddleware from './httpLoggerMiddleware';
 
 export const registerApiMiddlewares = (app: Application): void => {
-	app.all('*', responseHeaderMiddleware);
+	app.all('*', responseHeaderMiddlewre);
 	app.use(helmet({ hidePoweredBy: true }));
 	app.use(cors());
 	app.use(hpp());
 
 	app.use(requestMethodValidatorMiddleware);
-	app.use(httpLogMiddleware);
+	app.use(httpLoggerMiddleware);
 
 	app.use(cookieParser());
 	app.use(express.urlencoded({ extended: true }));

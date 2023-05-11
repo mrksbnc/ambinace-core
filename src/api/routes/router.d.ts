@@ -1,8 +1,10 @@
-import type { Router } from 'express';
+import type { Application } from 'express';
 
-export type Route = {
+export type TRoute = {
 	readonly path: string;
 	readonly router: Router;
 };
 
-export type Routes = Route[];
+export type TRouter = {
+	registerRoutes: (app: Application) => void;
+};

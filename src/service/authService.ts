@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import AmbianceConfig from '@/config/appConfig';
-import type { TAuthService, TDecodeJwtArgs, TJwtPayload, TValidateJwtArgs } from './authService.d';
+import type { TAuthService, TJwtPayload } from './authService.d';
 import { AUTH_CONFIG_KEY } from '@/data/constants/ambianceConfig';
+import type { TDecodeJwtArgs, TValidateJwtArgs } from '@/types/args';
 
 let sharedInstance: AuthService | null = null;
 

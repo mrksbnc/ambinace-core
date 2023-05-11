@@ -1,6 +1,6 @@
+import Database from '../database';
 import type {
 	TCreateEntryArgs,
-	TEntryRepository,
 	TUpdateEntryArgs,
 	TGetEntryByIdArgs,
 	THardDeleteEntryArgs,
@@ -9,11 +9,21 @@ import type {
 	TGetEntriesByDateArgs,
 	TGetEntriesByUserIdArgs,
 	TGetEntriesByDaterangeArgs,
-} from './entryRepository.d';
+} from '@/types/args';
 import type { Entry, PrismaClient } from '@prisma/client';
+import type { TEntryRepository } from './entryRepository.d';
 
-export default class EntryReposiory implements TEntryRepository {
+let sharedInstance: EntryRepository | null = null;
+
+export default class EntryRepository implements TEntryRepository {
 	private readonly _client: PrismaClient;
+
+	static get sharedInstance(): EntryRepository {
+		if (sharedInstance === null) {
+			sharedInstance = new EntryRepository(Database.sharedInstance.getDefaultClient());
+		}
+		return sharedInstance;
+	}
 
 	constructor(client: PrismaClient) {
 		this._client = client;

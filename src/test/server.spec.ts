@@ -1,4 +1,4 @@
-import Server from '../app/server';
+import Server from '../server/server';
 
 const mockServer = new Server();
 
