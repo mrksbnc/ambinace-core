@@ -1,7 +1,7 @@
 import Log from '@/utils/logger';
 import BaseError from '@/error/baseError';
 import BaseResponse from '@/data/models/baseResponse';
-import { ERROR_NAME } from '@/data/constants/errorName';
+import { ERROR_NAME } from '@/data/constants/error';
 import type { NextFunction, Request, Response } from 'express';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 

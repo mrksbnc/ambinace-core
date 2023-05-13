@@ -10,7 +10,7 @@ const expectedSingle: Entry = {
 	createdAt: new Date('2021-01-01T00:00:00.000Z'),
 	updatedAt: new Date('2021-01-01T00:00:00.000Z'),
 	isActive: false,
-	createdBy: 1,
+	userId: 1,
 	mood: Mood.GOOD,
 };
 
@@ -21,7 +21,7 @@ const expectedMultiple: Entry[] = [
 		createdAt: new Date('2021-01-01T00:00:00.000Z'),
 		updatedAt: new Date('2021-01-01T00:00:00.000Z'),
 		isActive: false,
-		createdBy: 1,
+		userId: 1,
 		mood: Mood.GOOD,
 	},
 	{
@@ -30,7 +30,7 @@ const expectedMultiple: Entry[] = [
 		createdAt: new Date('2021-01-01T00:00:00.000Z'),
 		updatedAt: new Date('2021-01-01T00:00:00.000Z'),
 		isActive: false,
-		createdBy: 1,
+		userId: 1,
 		mood: Mood.GOOD,
 	},
 ];
@@ -62,7 +62,7 @@ describe('Entry Repository', () => {
 		it('should return all entries created on a date', async () => {
 			prismaMock.entry.findMany.mockResolvedValue(expectedMultiple);
 
-			const result = await mockRepository.getEntriesByDate({ date: new Date('2021-01-01T00:00:00.000Z') });
+			const result = await mockRepository.getEntriesByDate({ date: new Date('2021-01-01T00:00:00.000Z'), userId: 1 });
 
 			expect(result).toEqual(expectedMultiple);
 			expect(prismaMock.entry.findMany).toHaveBeenCalledTimes(1);
@@ -73,7 +73,7 @@ describe('Entry Repository', () => {
 		it('should return all entries with a mood', async () => {
 			prismaMock.entry.findMany.mockResolvedValue(expectedMultiple);
 
-			const result = await mockRepository.getEntriesByMood({ mood: Mood.GOOD });
+			const result = await mockRepository.getEntriesByMood({ mood: Mood.GOOD, userId: 1 });
 
 			expect(result).toEqual(expectedMultiple);
 			expect(prismaMock.entry.findMany).toHaveBeenCalledTimes(1);
@@ -87,6 +87,7 @@ describe('Entry Repository', () => {
 			const result = await mockRepository.getEntriesByDaterange({
 				startDate: new Date('2021-01-01T00:00:00.000Z'),
 				endDate: new Date('2021-01-01T00:00:00.000Z'),
+				userId: 1,
 			});
 
 			expect(result).toEqual(expectedMultiple);
@@ -98,7 +99,7 @@ describe('Entry Repository', () => {
 		it('should return all active entries', async () => {
 			prismaMock.entry.findMany.mockResolvedValue(expectedMultiple);
 
-			const result = await mockRepository.getActiveEntries();
+			const result = await mockRepository.getActiveEntries({ userId: 1 });
 
 			expect(result).toEqual(expectedMultiple);
 			expect(prismaMock.entry.findMany).toHaveBeenCalledTimes(1);

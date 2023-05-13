@@ -39,7 +39,7 @@ export default class ActivityRepository
 	}
 
 	public async getActivitiesByUserId(args: TGetActivitiesByUserIdArgs): Promise<Activity[]> {
-		const queryResult = await this.delegate.findMany({ where: { createdBy: args.userId } });
+		const queryResult = await this.delegate.findMany({ where: { userId: args.userId } });
 		return queryResult;
 	}
 

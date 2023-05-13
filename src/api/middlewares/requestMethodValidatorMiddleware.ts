@@ -11,7 +11,7 @@ export default function requestMethodValidatorMiddleware(
 	response: Response,
 	next: NextFunction,
 ): void {
-	const enabledHttpRequestMethods = AmbianceConfig.sharedInstance.api.get(API_CONFIG_KEY.ENABLED_HTTP_REQUEST_METHODS);
+	const enabledHttpRequestMethods = AmbianceConfig.sharedInstance.api[API_CONFIG_KEY.ENABLED_HTTP_REQUEST_METHODS];
 
 	if (enabledHttpRequestMethods !== undefined && enabledHttpRequestMethods.includes(request.method as TRequestMethod))
 		next();

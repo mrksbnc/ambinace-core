@@ -1,5 +1,3 @@
-import { NextFunction, Request, Response } from 'express';
-
 /**
  * Arguments for getActivitiesByUserId.
  */
@@ -40,7 +38,7 @@ export type THardDeleteActivityArgs = {
 /**
  * Arguments for getEntriesByUserId.
  */
-export type TGetEntriesByUserIdArgs = {
+export type TGetEntriesArgs = {
 	/**
 	 * Supabase user id.
 	 */
@@ -51,12 +49,14 @@ export type TGetEntriesByUserIdArgs = {
  */
 export type TGetEntriesByDateArgs = {
 	date: Date;
+	userId: number;
 };
 /**
  * Arguments for getEntriesByMood.
  */
 export type TGetEntriesByMoodArgs = {
 	mood: Mood;
+	userId: number;
 };
 /**
  * Arguments for getEntriesByDaterange.
@@ -64,6 +64,11 @@ export type TGetEntriesByMoodArgs = {
 export type TGetEntriesByDaterangeArgs = {
 	startDate: Date;
 	endDate: Date;
+	userId: number;
+};
+
+export type TGetActiveEntriesArgs = {
+	userId: number;
 };
 /**
  * Arguments for getEntryById.

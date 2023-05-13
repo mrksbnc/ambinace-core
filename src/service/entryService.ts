@@ -1,40 +1,27 @@
 import type {
+	TGetEntriesArgs,
 	TUpdateEntryArgs,
 	TCreateEntryArgs,
 	TGetEntryByIdArgs,
 	THardDeleteEntryArgs,
 	TGetEntriesByMoodArgs,
 	TGetEntriesByDateArgs,
-	TGetEntriesByUserIdArgs,
+	TGetActiveEntriesArgs,
 	TSoftDeleteActivityArgs,
 	TGetEntriesByDaterangeArgs,
 } from '@/types/args.d';
 import type { Entry } from '@prisma/client';
 import type { TEntryService } from './entryService.d';
-import EntryReposiory from '@/database/repositories/entryRepository';
-
-let sharedInstance: EntryService | null = null;
+import type EntryReposiory from '@/database/repositories/entryRepository';
 
 export default class EntryService implements TEntryService {
 	private readonly _entryRepository: EntryReposiory;
-
-	static get sharedInstance(): EntryService {
-		if (sharedInstance === null) {
-			sharedInstance = new EntryService(EntryReposiory.sharedInstance);
-		}
-		return sharedInstance;
-	}
 
 	constructor(repository: EntryReposiory) {
 		this._entryRepository = repository;
 	}
 
-	public async getEntries(): Promise<Entry[]> {
-		const repositoryResult = await this._entryRepository.getEntries();
-		return repositoryResult;
-	}
-
-	public async getEntriesByUserId(args: TGetEntriesByUserIdArgs): Promise<Entry[]> {
+	public async getEntriesByUserId(args: TGetEntriesArgs): Promise<Entry[]> {
 		const repositoryResult = await this._entryRepository.getEntriesByUserId(args);
 		return repositoryResult;
 	}
@@ -54,8 +41,8 @@ export default class EntryService implements TEntryService {
 		return repositoryResult;
 	}
 
-	public async getActiveEntries(): Promise<Entry[]> {
-		const repositoryResult = await this._entryRepository.getActiveEntries();
+	public async getActiveEntries(args: TGetActiveEntriesArgs): Promise<Entry[]> {
+		const repositoryResult = await this._entryRepository.getActiveEntries(args);
 		return repositoryResult;
 	}
 

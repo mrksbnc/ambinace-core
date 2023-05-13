@@ -1,3 +1,15 @@
+import type {
+	TCreateEntryArgs,
+	TUpdateEntryArgs,
+	TGetEntryByIdArgs,
+	TSoftDeleteEntryArgs,
+	THardDeleteEntryArgs,
+	TGetEntriesByDateArgs,
+	TGetActiveEntriesArgs,
+	TGetEntriesByMoodArgs,
+	TGetEntriesArgs,
+	TGetEntriesByDaterangeArgs,
+} from '@/types/args';
 import type { Entry } from '@prisma/client';
 /**
  * Entry repository interface.
@@ -13,7 +25,7 @@ export type TEntryRepository = {
 	/**
 	 * Returns all entries created by a user.
 	 */
-	getEntriesByUserId: (args: TGetEntriesByUserIdArgs) => Promise<Entry[]>;
+	getEntriesByUserId: (args: TGetEntriesArgs) => Promise<Entry[]>;
 	/**
 	 * Returns all entries created on a date.
 	 */
@@ -29,7 +41,7 @@ export type TEntryRepository = {
 	/**
 	 * Returns all active entries.
 	 */
-	getActiveEntries: () => Promise<Entry[]>;
+	getActiveEntries: (args: TGetActiveEntriesArgs) => Promise<Entry[]>;
 	/**
 	 * Returns an entry by id.
 	 */

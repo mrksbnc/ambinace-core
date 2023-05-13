@@ -1,33 +1,26 @@
 import Log from '@/utils/logger';
+import EntryRoute from './entryRoute';
 import type { Application } from 'express';
+import { controllers } from '../controllers';
 import AmbianceConfig from '@/config/appConfig';
 import type { TRoute, TRouter } from './router.d';
-import { API_CONFIG_KEY } from '@/data/constants/ambianceConfig';
 import errorMiddleware from '../middlewares/errorMiddleware';
+import { API_CONFIG_KEY } from '@/data/constants/ambianceConfig';
 import notFoundMiddleware from '../middlewares/notFoundMiddleware';
 
-let sharedInstance: Router | null = null;
-
 export default class Router implements TRouter {
-	private readonly _routes: TRoute[];
-
-	static get sharedInstance(): Router {
-		if (sharedInstance === null) {
-			sharedInstance = new Router();
-		}
-		return sharedInstance;
-	}
+	readonly routes: TRoute[];
 
 	constructor() {
-		this._routes = [];
+		this.routes = [new EntryRoute(controllers.entry)];
 	}
 
 	public registerRoutes(app: Application): void {
-		const basePath: string = AmbianceConfig.sharedInstance.api.get(API_CONFIG_KEY.BASE_PATH) as string;
+		const basePath: string = AmbianceConfig.sharedInstance.api[API_CONFIG_KEY.BASE_PATH];
 
-		this._routes.forEach((route: TRoute) => {
-			app.use(`${basePath}/${route.path}`, route.router);
-			Log.sharedInstance.baseLogger.info(`route registered: ${route.path}`);
+		this.routes.forEach((route: TRoute) => {
+			app.use(route.router);
+			Log.sharedInstance.baseLogger.info(`path registered: ${basePath}${route.path}`);
 		});
 
 		app.use(notFoundMiddleware);

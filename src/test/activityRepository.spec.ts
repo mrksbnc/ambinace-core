@@ -11,7 +11,7 @@ const expectedSingle: Activity = {
 	updatedAt: new Date('2021-01-01T00:00:00.000Z'),
 	isActive: false,
 	icon: 'test-icon',
-	createdBy: 1,
+	userId: 1,
 };
 
 const expectedMultiple: Activity[] = [
@@ -22,7 +22,7 @@ const expectedMultiple: Activity[] = [
 		updatedAt: new Date('2021-01-01T00:00:00.000Z'),
 		isActive: true,
 		icon: 'test-icon',
-		createdBy: 1,
+		userId: 1,
 	},
 	{
 		id: 2,
@@ -31,7 +31,7 @@ const expectedMultiple: Activity[] = [
 		updatedAt: new Date('2021-01-01T00:00:00.000Z'),
 		isActive: true,
 		icon: 'test-icon',
-		createdBy: 1,
+		userId: 1,
 	},
 	{
 		id: 3,
@@ -40,7 +40,7 @@ const expectedMultiple: Activity[] = [
 		updatedAt: new Date('2021-01-01T00:00:00.000Z'),
 		isActive: true,
 		icon: 'test-icon',
-		createdBy: 1,
+		userId: 1,
 	},
 ];
 
@@ -62,7 +62,7 @@ describe('ActivityRepository', () => {
 			const result = await mockRepository.getActivitiesByUserId({ userId: 1 });
 			expect(result).toEqual(expectedMultiple);
 			expect(prismaMock.activity.findMany).toHaveBeenCalledTimes(1);
-			expect(prismaMock.activity.findMany).toHaveBeenCalledWith({ where: { createdBy: 1 } });
+			expect(prismaMock.activity.findMany).toHaveBeenCalledWith({ where: { userId: 1 } });
 		});
 	});
 

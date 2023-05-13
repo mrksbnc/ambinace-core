@@ -1,4 +1,5 @@
 import type {
+	TGetEntriesArgs,
 	TCreateEntryArgs,
 	TUpdateEntryArgs,
 	TGetEntryByIdArgs,
@@ -6,7 +7,7 @@ import type {
 	TSoftDeleteEntryArgs,
 	TGetEntriesByMoodArgs,
 	TGetEntriesByDateArgs,
-	TGetEntriesByUserIdArgs,
+	TGetActiveEntriesArgs,
 	TGetEntriesByDaterangeArgs,
 } from '@/types/args';
 import Database from '../database';
@@ -33,30 +34,30 @@ export default class EntryRepository extends BaseRepository<Prisma.EntryDelegate
 		return queryResult;
 	}
 
-	public async getEntriesByUserId(args: TGetEntriesByUserIdArgs): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany({ where: { createdBy: args.userId } });
+	public async getEntriesByUserId(args: TGetEntriesArgs): Promise<Entry[]> {
+		const queryResult = await this.delegate.findMany({ where: { userId: args.userId } });
 		return queryResult;
 	}
 
 	public async getEntriesByDate(args: TGetEntriesByDateArgs): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany({ where: { createdAt: args.date } });
+		const queryResult = await this.delegate.findMany({ where: { createdAt: args.date, userId: args.userId } });
 		return queryResult;
 	}
 
 	public async getEntriesByMood(args: TGetEntriesByMoodArgs): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany({ where: { mood: args.mood } });
+		const queryResult = await this.delegate.findMany({ where: { mood: args.mood, userId: args.userId } });
 		return queryResult;
 	}
 
 	public async getEntriesByDaterange(args: TGetEntriesByDaterangeArgs): Promise<Entry[]> {
 		const queryResult = await this.delegate.findMany({
-			where: { createdAt: { gte: args.startDate, lte: args.endDate } },
+			where: { createdAt: { gte: args.startDate, lte: args.endDate }, userId: args.userId },
 		});
 		return queryResult;
 	}
 
-	public async getActiveEntries(): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany({ where: { isActive: true } });
+	public async getActiveEntries(args: TGetActiveEntriesArgs): Promise<Entry[]> {
+		const queryResult = await this.delegate.findMany({ where: { isActive: true, userId: args.userId } });
 		return queryResult;
 	}
 

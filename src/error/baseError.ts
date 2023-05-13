@@ -1,16 +1,14 @@
 import type { THttpError } from './httpError.d';
-import type { ERROR_NAME } from '@/data/constants/errorName';
+import type { ERROR_MESSAGE, ERROR_NAME } from '@/data/constants/error';
 import type { TBaseError, TBaseErrorConstructorArgs } from './baseError.d';
 
 export default class BaseError extends Error implements TBaseError {
-	public readonly message: string;
 	public readonly errorName: ERROR_NAME;
 	public readonly httpError: THttpError;
-	public readonly stack?: string | undefined;
+	public readonly message: ERROR_MESSAGE | string;
 
-	constructor({ errorName, message, httpError, stack = undefined }: TBaseErrorConstructorArgs) {
+	constructor({ errorName, message, httpError }: TBaseErrorConstructorArgs) {
 		super(message);
-		this.stack = stack;
 		this.message = message;
 		this.errorName = errorName;
 		this.httpError = httpError;

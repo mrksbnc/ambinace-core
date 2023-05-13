@@ -4,9 +4,10 @@ import type {
 	TGetEntryByIdArgs,
 	TSoftDeleteEntryArgs,
 	THardDeleteEntryArgs,
+	TGetActiveEntriesArgs,
 	TGetEntriesByMoodArgs,
 	TGetEntriesByDateArgs,
-	TGetEntriesByUserIdArgs,
+	TGetEntriesArgs,
 	TGetEntriesByDaterangeArgs,
 } from '@/types/args';
 import type { Entry } from '@prisma/client';
@@ -15,13 +16,9 @@ import type { Entry } from '@prisma/client';
  */
 export type TEntryService = {
 	/**
-	 * Returns all entries.
-	 */
-	getEntries: () => Promise<Entry[]>;
-	/**
 	 * Returns all entries created by a user.
 	 */
-	getEntriesByUserId: (args: TGetEntriesByUserIdArgs) => Promise<Entry[]>;
+	getEntriesByUserId: (args: TGetEntriesArgs) => Promise<Entry[]>;
 	/**
 	 * Returns all entries created on a date.
 	 */
@@ -37,7 +34,7 @@ export type TEntryService = {
 	/**
 	 * Returns all active entries.
 	 */
-	getActiveEntries: () => Promise<Entry[]>;
+	getActiveEntries: (args: TGetActiveEntriesArgs) => Promise<Entry[]>;
 	/**
 	 * Returns an entry by its id.
 	 */
