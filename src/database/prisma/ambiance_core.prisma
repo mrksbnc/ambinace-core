@@ -24,7 +24,7 @@ model User {
 
 model Entry {
   id        Int      @id @default(autoincrement())
-  mood      Mood
+  moodId    Int      @map("mood_id")
   notes     String?
   userId    Int      @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
@@ -39,17 +39,21 @@ model Activity {
   name      String
   icon      String
   createdAt DateTime @default(now())
-  userId    Int      @map("user_id")
+  userId    Int?     @map("user_id")
   updatedAt DateTime @updatedAt @map("updated_at")
   isActive  Boolean  @default(true) @map("is_active")
 
   @@map("activities")
 }
 
-enum Mood {
-  AWESOME
-  GOOD
-  OKAY
-  BAD
-  AWFUL
+model Mood {
+  id        Int      @id @default(autoincrement())
+  name      String
+  icon      String
+  createdAt DateTime @default(now())
+  userId    Int?     @map("user_id")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  isActive  Boolean  @default(true) @map("is_active")
+
+  @@map("moods")
 }

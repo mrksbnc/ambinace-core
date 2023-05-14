@@ -1,5 +1,5 @@
 import type { TBaseError } from '@/error/base/baseError';
-import type { TSession } from '@/service/authService';
+import type { TSession } from '@/services/authService';
 import type { Locals, NextFunction, Request, Response } from 'express';
 /**
  * Type definition for supported HTTP request methods.

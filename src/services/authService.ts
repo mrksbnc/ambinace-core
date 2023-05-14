@@ -3,17 +3,17 @@ import type {
 	TAuthService,
 	TEncodeResult,
 	TDecodeResult,
+	TRegisterArgs,
 	TParseTokenArgs,
 	TExpirationStatus,
+	TAuthenticateArgs,
 	TDecodeSessionArgs,
 	TEncodeSessionArgs,
 	TComparePasswordHashArgs,
 	TGeneratePasswordHashArgs,
 	TCheckExpirationStatusArgs,
 	TAuthServiceConstructorArgs,
-	TRegisterArgs,
-	TAuthenticateArgs,
-} from './authService.d';
+} from './authService';
 import bcrypt from 'bcrypt';
 import Log from '@/utils/logger';
 import AppConfig from '@/config/appConfig';

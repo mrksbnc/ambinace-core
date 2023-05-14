@@ -1,16 +1,17 @@
-import BaseError from '../base/baseError';
-import HttpError from '../base/httpError';
+import BaseError from './base/baseError';
+import HttpError from './base/httpError';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 import { ERROR_MESSAGE, ERROR_NAME } from '@/data/constants/error';
+import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/responseMessage';
 
 export default class InvalidDateArgumentError extends BaseError {
 	constructor() {
 		super({
 			message: ERROR_MESSAGE.INVALID_DATE,
-			errorName: ERROR_NAME.INVALID_ARGUMENT_ERROR,
+			errorName: ERROR_NAME.INVALID_DATE_ARGUMENT,
 			httpError: new HttpError({
 				status: HTTP_STATUS_CODE.BAD_REQUEST,
-				message: ERROR_MESSAGE.INVALID_DATE,
+				message: RESPONSE_ERROR_MESSAGE.INVALID_DATE_ARGUMENT,
 			}),
 		});
 	}

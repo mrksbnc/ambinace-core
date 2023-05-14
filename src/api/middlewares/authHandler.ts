@@ -1,8 +1,8 @@
 import type { NextFunction } from 'express';
 import type { TRequest, TResponse } from '..';
-import AuthService from '@/service/authService';
+import AuthService from '@/services/authService';
 import BaseResponse from '@/data/models/baseResponse';
-import type { TDecodeResult } from '@/service/authService.d';
+import type { TDecodeResult } from '@/services/authService.d';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/responseMessage';
 

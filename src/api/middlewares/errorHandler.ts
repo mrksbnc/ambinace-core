@@ -1,9 +1,9 @@
 import Log from '@/utils/logger';
 import BaseError from '@/error/base/baseError';
-import { ERROR_NAME } from '@/data/constants/error';
 import BaseResponse from '@/data/models/baseResponse';
 import type { NextFunction, Request, Response } from 'express';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
+import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/responseMessage';
 
 export default function errorHanlder(
 	error: unknown,
@@ -11,7 +11,7 @@ export default function errorHanlder(
 	response: Response,
 	next: NextFunction,
 ): void | NextFunction {
-	let responseErrorMessage: string = ERROR_NAME.INTERNAL_SERVER_ERROR as string;
+	let responseErrorMessage: string = RESPONSE_ERROR_MESSAGE.INTERNAL_SERVER_ERROR;
 	let responseStatusCode: HTTP_STATUS_CODE = HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
 
 	if (error instanceof BaseError) {
