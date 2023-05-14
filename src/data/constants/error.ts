@@ -8,7 +8,7 @@ export enum ERROR_NAME {
 	INVALID_DATE_RANGE_ARGUMENT = 'InvalidDateRangeArgumentError',
 	INVALID_PAYLOAD = 'InvalidPayloadError',
 	INVALID_EMAIL_ARGUMENT = 'InvalidEmailArgumentError',
-	INVALID_DATE_ARGUMENT = 'InvalidDateArgumentError',
+	INVALID_DATE_ARGUMENT = 'InvalidArgumentError',
 }
 
 export enum ERROR_MESSAGE {

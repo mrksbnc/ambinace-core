@@ -15,7 +15,6 @@ import type { Entry } from '@prisma/client';
 import Validator from '@/validators/validator';
 import EntrySchema from '@/validators/schemas/entrySchema';
 import InvalidPayloadError from '@/error/invalidPayloadError';
-import InvalidDateArgumentError from '@/error/invalidDateError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import EntryRepository from '@/database/repositories/entryRepository';
 import type { TEntryRepository } from '@/database/repositories/entryRepository.d';
@@ -68,7 +67,7 @@ export default class EntryService implements TEntryService {
 		const pastDateLimit: string = new Date().toISOString();
 
 		if (!Validator.sharedInstance.isValidPastDate(date, pastDateLimit)) {
-			throw new InvalidDateArgumentError();
+			throw new InvalidArgumentError();
 		}
 
 		const dateObj: Date = new Date(date);
@@ -92,7 +91,7 @@ export default class EntryService implements TEntryService {
 		}
 
 		if (!Validator.sharedInstance.isValidDate(startDate)) {
-			throw new InvalidDateArgumentError();
+			throw new InvalidArgumentError();
 		}
 
 		if (endDate == null) {

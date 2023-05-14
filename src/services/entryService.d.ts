@@ -67,7 +67,7 @@ export interface TEntryService {
 	 * or empty array if no entries were found
 	 *
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
-	 * @throws InvalidDateArgumentError if the date is not a valid past or now date
+	 * @throws InvalidArgumentError if the date is not a valid past or now date
 	 */
 	getByUserIdAndDate({ userId, date }: TGetEntriesByUserIdAndDateServiceArgs): Promise<Entry[]>;
 	/**
@@ -85,7 +85,7 @@ export interface TEntryService {
 	 * default to the current date
 	 *
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
-	 * @throws InvalidDateArgumentError if the startDate or endDate are not valid past or now dates
+	 * @throws InvalidArgumentError if the startDate or endDate are not valid past or now dates
 	 * @throws InvalidDateRangeArgumentError if the startDate is greater than the endDate
 	 */
 	getByUserIdAndDateRange({ userId, startDate, endDate }: TGetEntriesByUserIdAndDateRangeServiceArgs): Promise<Entry[]>;
