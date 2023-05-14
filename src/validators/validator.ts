@@ -1,9 +1,9 @@
+import Ajv from 'ajv';
 import isInt from 'validator/lib/isInt';
 import isDate from 'validator/lib/isDate';
 import isEmail from 'validator/lib/isEmail';
 import isAfter from 'validator/lib/isAfter';
 import isBefore from 'validator/lib/isBefore';
-import Ajv, { ValidateFunction, type JSONSchemaType } from 'ajv';
 import type { TValidator, TypedJSONSchema } from './validator.d';
 
 let sharedInstance: Validator | null = null;
