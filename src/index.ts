@@ -17,20 +17,20 @@ import { cleanEnv, num, port, str } from 'envalid';
 	});
 
 	dotenv.config();
-	Log.sharedInstance.baseLogger.info('env file loaded!');
+	Log.sharedInstance.baseLogger.info('env file validated and loaded!');
 
 	try {
 		await Database.sharedInstance.getDefaultClient().$connect();
 		Log.sharedInstance.baseLogger.info('database initialized!');
 	} catch (error) {
-		Log.sharedInstance.baseLogger.error('failed to initialize database! Process will now exit with code 1', error);
+		Log.sharedInstance.baseLogger.error('failed to initialize database! Process will now exit with code 1', { error });
 		process.exit(1);
 	}
 
 	try {
 		Server.sharedInstance.init();
 	} catch (error) {
-		Log.sharedInstance.baseLogger.error('failed to initialize server! Process will now exit with code 1', error);
+		Log.sharedInstance.baseLogger.error('failed to initialize server! Process will now exit with code 1', { error });
 		process.exit(1);
 	}
 })();

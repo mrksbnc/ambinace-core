@@ -15,9 +15,7 @@ export default class Log implements TLog {
 		return sharedInstance;
 	}
 
-	readonly fileLogger: Logger;
 	readonly baseLogger: Logger;
-	readonly consoleLogger: Logger;
 
 	constructor() {
 		this._logPath = resolve(__dirname, '../logs');
@@ -27,8 +25,6 @@ export default class Log implements TLog {
 		}
 
 		this.baseLogger = this._createBaseLogger();
-		this.fileLogger = this._createFileLogger();
-		this.consoleLogger = this._createConsoleLogger();
 		this.baseLogger.info('logger initialized!', { path: this._logPath });
 	}
 
@@ -54,49 +50,16 @@ export default class Log implements TLog {
 					level: 'http',
 				}),
 				new winston.transports.Console({
-					format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
-				}),
-			],
-		});
-	}
-
-	private _createFileLogger(): Logger {
-		return createLogger({
-			level: 'info',
-			format: winston.format.combine(
-				winston.format.timestamp({
-					format: 'YYYY-MM-DD HH:mm:ss',
-				}),
-				winston.format.json(),
-			),
-			transports: [
-				new winston.transports.File({
-					filename: `${this._logPath}/error.log`,
-					level: 'error',
-				}),
-				new winston.transports.File({
-					filename: `${this._logPath}/combined.log`,
-				}),
-				new winston.transports.File({
-					filename: `${this._logPath}/http.log`,
-					level: 'http',
-				}),
-			],
-		});
-	}
-
-	private _createConsoleLogger(): Logger {
-		return createLogger({
-			level: 'info',
-			format: winston.format.combine(
-				winston.format.timestamp({
-					format: 'YYYY-MM-DD HH:mm:ss',
-				}),
-				winston.format.json(),
-			),
-			transports: [
-				new winston.transports.Console({
-					format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+					format: winston.format.combine(
+						winston.format.colorize({
+							message: false,
+						}),
+						winston.format.timestamp({
+							format: 'YYYY-MM-DD hh:mm:ss A',
+						}),
+						winston.format.align(),
+						winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`),
+					),
 				}),
 			],
 		});
