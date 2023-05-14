@@ -1,85 +1,99 @@
+import Database from '../database';
 import type {
 	TCreateEntryArgs,
+	TDeleteEntryArgs,
+	TEntryRepository,
 	TUpdateEntryArgs,
+	TRestoreEntryArgs,
 	TGetEntryByIdArgs,
-	THardDeleteEntryArgs,
-	TSoftDeleteEntryArgs,
-	TGetEntriesByMoodArgs,
-	TGetEntriesByDateArgs,
 	TGetEntriesByUserIdArgs,
-	TGetEntriesByDaterangeArgs,
-} from '@/types/args';
-import Database from '../database';
-import BaseRepository from './baseRepository';
+	TGetEntriesByUserIdAndMoodArgs,
+	TGetEntriesByUserIdAndDateArgs,
+	TEntryRepositoryConstructorArgs,
+	TGetEntriesByUserIdAndDateRangeArgs,
+} from './entryRepository.d';
 import type { Entry, Prisma } from '@prisma/client';
-import type { TEntryRepository } from './entryRepository.d';
 
 let sharedInstance: EntryRepository | null = null;
 
-export default class EntryRepository extends BaseRepository<Prisma.EntryDelegate<false>> implements TEntryRepository {
+export default class EntryRepository implements TEntryRepository {
+	private readonly _delegate: Prisma.EntryDelegate<false>;
+
 	static get sharedInstance(): EntryRepository {
 		if (sharedInstance === null) {
-			sharedInstance = new EntryRepository(Database.sharedInstance.getDefaultClient().entry);
+			sharedInstance = new EntryRepository({
+				delegate: Database.sharedInstance.getDefaultClient().entry,
+			});
 		}
 		return sharedInstance;
 	}
 
-	constructor(delegate: Prisma.EntryDelegate<false>) {
-		super(delegate);
+	constructor({ delegate }: TEntryRepositoryConstructorArgs) {
+		this._delegate = delegate;
 	}
 
-	public async getEntries(): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany();
+	async findById({ id }: TGetEntryByIdArgs): Promise<Entry | null> {
+		const queryResult = await this._delegate.findUnique({ where: { id }, rejectOnNotFound: false });
 		return queryResult;
 	}
 
-	public async getEntriesByUserId(args: TGetEntriesByUserIdArgs): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany({ where: { createdBy: args.userId } });
+	async findByUserId({ userId }: TGetEntriesByUserIdArgs): Promise<Entry[]> {
+		const queryResult = await this._delegate.findMany({ where: { userId } });
 		return queryResult;
 	}
 
-	public async getEntriesByDate(args: TGetEntriesByDateArgs): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany({ where: { createdAt: args.date } });
+	async findByUserIdAndDate({ userId, date }: TGetEntriesByUserIdAndDateArgs): Promise<Entry[]> {
+		const queryResult = await this._delegate.findMany({ where: { userId, createdAt: date } });
 		return queryResult;
 	}
 
-	public async getEntriesByMood(args: TGetEntriesByMoodArgs): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany({ where: { mood: args.mood } });
-		return queryResult;
-	}
-
-	public async getEntriesByDaterange(args: TGetEntriesByDaterangeArgs): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany({
-			where: { createdAt: { gte: args.startDate, lte: args.endDate } },
+	async findByUserIdAndDateRange({
+		userId,
+		startDate,
+		endDate,
+	}: TGetEntriesByUserIdAndDateRangeArgs): Promise<Entry[]> {
+		const queryResult = await this._delegate.findMany({
+			where: { userId, createdAt: { gte: startDate, lte: endDate } },
 		});
+
 		return queryResult;
 	}
 
-	public async getActiveEntries(): Promise<Entry[]> {
-		const queryResult = await this.delegate.findMany({ where: { isActive: true } });
+	async findByUserIdAndMood({ userId, mood }: TGetEntriesByUserIdAndMoodArgs): Promise<Entry[]> {
+		const queryResult = await this._delegate.findMany({ where: { userId, mood } });
 		return queryResult;
 	}
 
-	public async getEntryById(args: TGetEntryByIdArgs): Promise<Entry | null> {
-		const queryResult = await this.delegate.findUnique({ where: { id: args.id } });
+	async findActiveByUserId({ userId }: TGetEntriesByUserIdArgs): Promise<Entry[]> {
+		const queryResult = await this._delegate.findMany({ where: { userId, isActive: true } });
 		return queryResult;
 	}
 
-	public async createEntry(args: TCreateEntryArgs): Promise<Entry> {
-		const queryResult = await this.delegate.create({ data: args.entry });
+	async findInactiveByUserId({ userId }: TGetEntriesByUserIdArgs): Promise<Entry[]> {
+		const queryResult = await this._delegate.findMany({ where: { userId, isActive: false } });
 		return queryResult;
 	}
 
-	public async updateEntry(args: TUpdateEntryArgs): Promise<Entry> {
-		const queryResult = await this.delegate.update({ where: { id: args.id }, data: args.entry });
+	async create({ entry }: TCreateEntryArgs): Promise<Entry> {
+		const queryResult = await this._delegate.create({ data: entry });
 		return queryResult;
 	}
 
-	public async softDeleteEntry(args: TSoftDeleteEntryArgs): Promise<void> {
-		await this.delegate.update({ where: { id: args.id }, data: { isActive: false } });
+	async update({ id, entry }: TUpdateEntryArgs): Promise<Entry> {
+		const queryResult = await this._delegate.update({ where: { id }, data: entry });
+		return queryResult;
 	}
 
-	public async hardDeleteEntry(args: THardDeleteEntryArgs): Promise<void> {
-		await this.delegate.delete({ where: { id: args.id } });
+	async softDelete({ id }: TDeleteEntryArgs): Promise<void> {
+		await this._delegate.update({ where: { id }, data: { isActive: false } });
+	}
+
+	async restore({ id }: TRestoreEntryArgs): Promise<Entry> {
+		const queryResult = await this._delegate.update({ where: { id }, data: { isActive: true } });
+		return queryResult;
+	}
+
+	async hardDelete({ id }: TDeleteEntryArgs): Promise<void> {
+		await this._delegate.delete({ where: { id } });
 	}
 }

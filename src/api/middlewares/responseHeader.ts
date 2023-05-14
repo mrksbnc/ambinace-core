@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-export default function responseHeaderMiddlewre(request: Request, response: Response, next: NextFunction): void {
+export default function responseHeader(request: Request, response: Response, next: NextFunction): void {
 	response.setHeader('Access-Control-Allow-Origin', '*');
 	response.setHeader('Content-Type', 'application/json');
 	response.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');

@@ -4,3 +4,8 @@ export type THttpError = {
 	status: HTTP_STATUS_CODE;
 	message: string;
 };
+
+export type THttpErrorConstructorArgs = {
+	status: HTTP_STATUS_CODE;
+	message: string;
+};
