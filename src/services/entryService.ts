@@ -13,9 +13,11 @@ import type {
 } from './entryService.d';
 import type { Entry } from '@prisma/client';
 import Validator from '@/validators/validator';
+import EntrySchema from '@/validators/schemas/entrySchema';
+import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidDateArgumentError from '@/error/invalidDateError';
+import InvalidArgumentError from '@/error/invalidArgumentError';
 import EntryRepository from '@/database/repositories/entryRepository';
-import InvalidNumericArgumentError from '@/error/invalidNumericIdError';
 import type { TEntryRepository } from '@/database/repositories/entryRepository.d';
 import InvalidDateRangeArgumentError from '@/error/invalidDateRangeArgumentError';
 
@@ -39,7 +41,7 @@ export default class EntryService implements TEntryService {
 
 	public async getById({ id }: TGetEntryByIdServiceArgs): Promise<Entry | null> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
 		}
 
 		const numId: number = parseInt(id, 10);
@@ -50,7 +52,7 @@ export default class EntryService implements TEntryService {
 
 	public async getByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]> {
 		if (!Validator.sharedInstance.isValidId(userId)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('userId');
 		}
 
 		const numUserId: number = parseInt(userId, 10);
@@ -60,7 +62,7 @@ export default class EntryService implements TEntryService {
 
 	public async getByUserIdAndDate({ userId, date }: TGetEntriesByUserIdAndDateServiceArgs): Promise<Entry[]> {
 		if (!Validator.sharedInstance.isValidId(userId)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('userId');
 		}
 
 		const pastDateLimit: string = new Date().toISOString();
@@ -86,7 +88,7 @@ export default class EntryService implements TEntryService {
 		endDate,
 	}: TGetEntriesByUserIdAndDateRangeServiceArgs): Promise<Entry[]> {
 		if (!Validator.sharedInstance.isValidId(userId)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('userId');
 		}
 
 		if (!Validator.sharedInstance.isValidDate(startDate)) {
@@ -116,7 +118,9 @@ export default class EntryService implements TEntryService {
 	}
 
 	public async getByUserIdAndMood({ userId, mood }: TGetEntriesByUserIdAndMoodServiceArgs): Promise<Entry[]> {
-		if (!Validator.sharedInstance.isValidId(userId)) throw new InvalidNumericArgumentError();
+		if (!Validator.sharedInstance.isValidId(userId)) {
+			throw new InvalidArgumentError('userId');
+		}
 
 		const userIdNum: number = parseInt(userId, 10);
 		const repositoryResult: Entry[] = await this.repository.findByUserIdAndMood({
@@ -128,7 +132,9 @@ export default class EntryService implements TEntryService {
 	}
 
 	public async getActiveByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]> {
-		if (!Validator.sharedInstance.isValidId(userId)) throw new InvalidNumericArgumentError();
+		if (!Validator.sharedInstance.isValidId(userId)) {
+			throw new InvalidArgumentError('userId');
+		}
 
 		const userIdNum: number = parseInt(userId, 10);
 		const repositoryResult: Entry[] = await this.repository.findActiveByUserId({ userId: userIdNum });
@@ -137,7 +143,7 @@ export default class EntryService implements TEntryService {
 
 	public async getInactiveByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]> {
 		if (!Validator.sharedInstance.isValidId(userId)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('userId');
 		}
 
 		const userIdNum: number = parseInt(userId, 10);
@@ -146,13 +152,21 @@ export default class EntryService implements TEntryService {
 	}
 
 	public async create({ entry }: TCreateEntryServiceArgs): Promise<Entry> {
+		if (!Validator.sharedInstance.isValidSchema(EntrySchema.sharedInstance.create, entry)) {
+			throw new InvalidPayloadError();
+		}
+
 		const repositoryResult: Entry = await this.repository.create({ entry });
 		return repositoryResult;
 	}
 
 	public async update({ id, entry }: TUpdateEntryServiceArgs): Promise<Entry> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
+		}
+
+		if (!Validator.sharedInstance.isValidSchema(EntrySchema.sharedInstance.update, entry)) {
+			throw new InvalidPayloadError();
 		}
 
 		const idNum: number = parseInt(id, 10);
@@ -162,7 +176,7 @@ export default class EntryService implements TEntryService {
 
 	public async softDelete({ id }: TDeleteEntryServiceArgs): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
 		}
 
 		const idNum: number = parseInt(id, 10);
@@ -171,7 +185,7 @@ export default class EntryService implements TEntryService {
 
 	public async restore({ id }: TRestoreEntryServiceArgs): Promise<Entry> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
 		}
 
 		const idNum: number = parseInt(id, 10);
@@ -181,7 +195,7 @@ export default class EntryService implements TEntryService {
 
 	public async hardDelete({ id }: TDeleteEntryServiceArgs): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
 		}
 
 		const idNum: number = parseInt(id, 10);

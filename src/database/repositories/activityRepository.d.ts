@@ -2,6 +2,10 @@ export type TGetActivityByIdArgs = {
 	id: number;
 };
 
+export type TGetSystemWithUserIdsArgs = {
+	userId: number;
+};
+
 export type TGetActivitiesByUserIdArgs = {
 	userId: number;
 };
@@ -42,7 +46,7 @@ export interface TActivityRepository {
 	/**
 	 * Retruns all default activities
 	 */
-	findAll(): Promise<Activity[]>;
+	findAllDefaultWithUser({ userId }: TGetSystemWithUserIdsArgs): Promise<Activity[]>;
 	/**
 	 * Returns a multiple activity by activity ids or empty array if no activities
 	 * were found

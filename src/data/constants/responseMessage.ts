@@ -9,5 +9,5 @@ export enum RESPONSE_ERROR_MESSAGE {
 	INVALID_EMAIL_ARGUMENT = 'Invalid email received from client',
 	INVALID_DATE_RANGE_ARGUMENT = 'Invalid date range received from client',
 	INVALID_DATE_ARGUMENT = 'Invalid date received from client',
-	INVALID_ARGUMENT = 'Invalid argument received from client',
+	INVALID_ARGUMENT = 'Invalid argument $ received from client',
 }

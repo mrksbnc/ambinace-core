@@ -116,11 +116,13 @@ export interface TAuthService {
 	comparePasswordHash({ password, hash }: TComparePasswordHashArgs): Promise<boolean>;
 	/**
 	 * Creates a new user.
+	 *
+	 * @throws InvalidPayloadError if the user payload is not valid.
 	 */
 	register({ user }: TRegisterArgs): Promise<void>;
 	/**
 	 * Authenticates a user.
 	 * Returns a session if the authentication is successful.
 	 */
-	authenticate({ username, password }: TAuthenticateArgs): Promise<TEncodeResult>;
+	authenticate({ email, password }: TAuthenticateArgs): Promise<TEncodeResult>;
 }

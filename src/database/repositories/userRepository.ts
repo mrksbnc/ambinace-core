@@ -1,6 +1,5 @@
-import Database from '../database';
-import type { Prisma, User } from '@prisma/client';
 import type {
+	PartialUser,
 	TGetUsersByIds,
 	TUserRepository,
 	TCreateUserArgs,
@@ -9,8 +8,9 @@ import type {
 	TDeleteUserArgs,
 	TRestoreUserArgs,
 	TUserRepositoryConstructorArgs,
-	PartialUser,
 } from './userRepository.d';
+import Database from '../database';
+import type { Prisma, User } from '@prisma/client';
 
 let sharedInstance: UserRepository | null = null;
 
@@ -19,7 +19,9 @@ export default class UserRepository implements TUserRepository {
 
 	static get sharedInstance(): UserRepository {
 		if (sharedInstance === null) {
-			sharedInstance = new UserRepository({ delegate: Database.sharedInstance.getDefaultClient().user });
+			sharedInstance = new UserRepository({
+				delegate: Database.sharedInstance.getDefaultClient().user,
+			});
 		}
 		return sharedInstance;
 	}

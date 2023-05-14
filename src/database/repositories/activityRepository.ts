@@ -1,3 +1,4 @@
+import Database from '../database';
 import type {
 	TActivityRepository,
 	TGetActivitiesByIds,
@@ -5,13 +6,25 @@ import type {
 	TUpdateActivityArgs,
 	TDeleteActivityArgs,
 	TGetActivityByIdArgs,
+	TGetSystemWithUserIdsArgs,
 	TGetActivitiesByUserIdArgs,
 	TActivityRepositoryConstructorArgs,
 } from './activityRepository.d';
 import type { Activity, Prisma } from '@prisma/client';
 
+let sharedInstance: ActivityRepository | null = null;
+
 export default class ActivityRepository implements TActivityRepository {
 	private readonly _delegate: Prisma.ActivityDelegate<false>;
+
+	static get sharedInstance(): ActivityRepository {
+		if (sharedInstance === null) {
+			sharedInstance = new ActivityRepository({
+				delegate: Database.sharedInstance.getDefaultClient().activity,
+			});
+		}
+		return sharedInstance;
+	}
 
 	constructor({ delegate }: TActivityRepositoryConstructorArgs) {
 		this._delegate = delegate;
@@ -22,8 +35,17 @@ export default class ActivityRepository implements TActivityRepository {
 		return queryResult;
 	}
 
-	async findAll(): Promise<Activity[]> {
-		const queryResult = await this._delegate.findMany();
+	async findAllDefaultWithUser({ userId }: TGetSystemWithUserIdsArgs): Promise<Activity[]> {
+		const queryResult = await this._delegate.findMany({
+			where: {
+				OR: [
+					{ userId },
+					{
+						userId: null,
+					},
+				],
+			},
+		});
 		return queryResult;
 	}
 

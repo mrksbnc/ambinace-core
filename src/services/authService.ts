@@ -13,13 +13,16 @@ import type {
 	TGeneratePasswordHashArgs,
 	TCheckExpirationStatusArgs,
 	TAuthServiceConstructorArgs,
-} from './authService';
+} from './authService.d';
 import bcrypt from 'bcrypt';
 import Log from '@/utils/logger';
 import AppConfig from '@/config/appConfig';
 import type { Prisma } from '@prisma/client';
+import Validator from '@/validators/validator';
 import jwt, { type Algorithm } from 'jsonwebtoken';
+import UserSchema from '@/validators/schemas/userSchema';
 import { AUTH_CONFIG_KEY } from '@/data/constants/config';
+import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import ResourceNotFoundError from '@/error/resourceNotFoundError';
 import UserRepository from '@/database/repositories/userRepository';
@@ -135,6 +138,10 @@ export default class AuthService implements TAuthService {
 	}
 
 	public async register({ user }: TRegisterArgs): Promise<void> {
+		if (!Validator.sharedInstance.isValidSchema(UserSchema.sharedInstance.create, user)) {
+			throw new InvalidPayloadError();
+		}
+
 		const saltRounds = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.SALT_ROUNDS];
 
 		const password: string = user.password;
@@ -151,9 +158,13 @@ export default class AuthService implements TAuthService {
 	}
 
 	async authenticate({ email, password }: TAuthenticateArgs): Promise<TEncodeResult> {
+		if (!Validator.sharedInstance.isValidEmail(email)) {
+			throw new InvalidArgumentError('email');
+		}
+
 		const user = await this._userReposiory.findByEmail({ email });
 
-		if (!user) {
+		if (user == null) {
 			throw new ResourceNotFoundError();
 		}
 
@@ -163,7 +174,7 @@ export default class AuthService implements TAuthService {
 		});
 
 		if (!isValidPassword) {
-			throw new InvalidArgumentError();
+			throw new InvalidArgumentError('password');
 		}
 
 		const encodedSession = this.encodeSession({ userId: user.id });

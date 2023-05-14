@@ -11,7 +11,9 @@ import AppConfig from '@/config/appConfig';
 import Validator from '../validators/validator';
 import type { TAuthService } from './authService.d';
 import { AUTH_CONFIG_KEY } from '@/data/constants/config';
-import InvalidNumericArgumentError from '@/error/invalidNumericIdError';
+import UserSchema from '@/validators/schemas/userSchema';
+import InvalidPayloadError from '@/error/invalidPayloadError';
+import InvalidArgumentError from '@/error/invalidArgumentError';
 import type { PartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
 
 export default class UserService implements TUserService {
@@ -25,7 +27,7 @@ export default class UserService implements TUserService {
 
 	public async getById({ id }: TGetUserByIdServiceArgs): Promise<PartialUser | null> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
 		}
 
 		const idNum: number = parseInt(id, 10);
@@ -38,7 +40,7 @@ export default class UserService implements TUserService {
 		const invalidId = ids.find((id) => !Validator.sharedInstance.isValidId(id));
 
 		if (invalidId !== undefined) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('ids');
 		}
 
 		const idsNum: number[] = ids.map((id) => parseInt(id, 10));
@@ -49,7 +51,11 @@ export default class UserService implements TUserService {
 
 	public async update({ id, user }: TUpdateUserServiceArgs): Promise<PartialUser> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
+		}
+
+		if (!Validator.sharedInstance.isValidSchema(UserSchema.sharedInstance.update, user)) {
+			throw new InvalidPayloadError();
 		}
 
 		if (user.password != null) {
@@ -69,7 +75,7 @@ export default class UserService implements TUserService {
 
 	public async softDelete({ id }: TDeleteUserServiceArgs): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
 		}
 
 		const idNum: number = parseInt(id, 10);
@@ -78,7 +84,7 @@ export default class UserService implements TUserService {
 
 	public async restore({ id }: TRestoreUserServiceArgs): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
 		}
 
 		const idNum: number = parseInt(id, 10);
@@ -87,7 +93,7 @@ export default class UserService implements TUserService {
 
 	public async hardDelete({ id }: TDeleteUserServiceArgs): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
-			throw new InvalidNumericArgumentError();
+			throw new InvalidArgumentError('id');
 		}
 
 		const idNum: number = parseInt(id, 10);
