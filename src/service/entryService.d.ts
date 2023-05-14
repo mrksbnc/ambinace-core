@@ -1,27 +1,27 @@
 import type { TEntryRepository } from '@/database/repositories/entryRepository';
 
 export type TGetEntryByIdServiceArgs = {
-	id: number;
+	id: string;
 };
 
 export type TGetEntriesByUserIdServiceArgs = {
-	userId: number;
+	userId: string;
 };
 
 export type TGetEntriesByUserIdAndDateServiceArgs = {
-	userId: number;
-	date: Date;
+	userId: string;
+	date: string;
 };
 
 export type TGetEntriesByUserIdAndMoodServiceArgs = {
-	userId: number;
+	userId: string;
 	mood: Mood;
 };
 
 export type TGetEntriesByUserIdAndDateRangeServiceArgs = {
-	userId: number;
-	startDate: Date;
-	endDate?: Date;
+	userId: string;
+	startDate: string;
+	endDate?: string;
 };
 
 export type TCreateEntryServiceArgs = {
@@ -29,16 +29,16 @@ export type TCreateEntryServiceArgs = {
 };
 
 export type TUpdateEntryServiceArgs = {
-	id: number;
+	id: string;
 	entry: Prisma.EntryUpdateInput;
 };
 
 export type TDeleteEntryServiceArgs = {
-	id: number;
+	id: string;
 };
 
 export type TRestoreEntryServiceArgs = {
-	id: number;
+	id: string;
 };
 
 export type TEntryServiceConstructorArgs = {

@@ -2,10 +2,19 @@ import dotenv from 'dotenv';
 import Log from './utils/logger';
 import Server from './server/server';
 import Database from './database/database';
-import { validateEnv } from './utils/validateEnv';
+import { cleanEnv, num, port, str } from 'envalid';
 
 (async (): Promise<void> => {
-	validateEnv();
+	cleanEnv(process.env, {
+		PORT: port(),
+		NODE_ENV: str(),
+		DATABASE_URL: str(),
+		JWT_SECRET: str(),
+		JWT_EXPIRES_IN: str(),
+		JWT_GRACE_PERIOD: str(),
+		BCRYPT_SALT_ROUNDS: num(),
+		BASE_URL: str(),
+	});
 
 	dotenv.config();
 	Log.sharedInstance.baseLogger.info('.env file loaded!');

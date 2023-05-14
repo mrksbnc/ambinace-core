@@ -1,5 +1,6 @@
-import type { Request, Response } from 'express';
+import type { TBaseError } from '@/error/base/baseError';
 import type { TSession } from '@/service/authService';
+import type { Locals, NextFunction, Request, Response } from 'express';
 /**
  * Type definition for supported HTTP request methods.
  */
@@ -11,11 +12,15 @@ export interface TRequest<P = object, B = object, Q = object> extends Request {
 	query: Q;
 }
 
-export type TLocals = {
+export interface TLocals extends Locals {
 	session: TSession;
-};
+}
 
 export interface TResponse<B = object, L = TLocals> extends Response {
 	body: B;
 	locals: L;
+}
+
+export interface TNextFunction extends NextFunction {
+	(err?: TBaseError): void;
 }

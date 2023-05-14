@@ -1,4 +1,4 @@
-import type { TRequestMethod } from '@/api';
+import type { TRequestMethod } from '@/api/index.d';
 
 export enum APP_CONFIG_KEY {
 	ENV = 'env',

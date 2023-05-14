@@ -11,13 +11,13 @@ import type {
 	TGetEntriesByUserIdAndMoodServiceArgs,
 	TGetEntriesByUserIdAndDateRangeServiceArgs,
 } from './entryService.d';
-import Validator from '@/utils/validator';
 import type { Entry } from '@prisma/client';
+import ValidatorService from '@/service/validatorService';
 import EntryRepository from '@/database/repositories/entryRepository';
-import { InvalidDateArgumentError } from '@/error/validation/invalidDate';
-import { InvalidNumericArgumentError } from '@/error/validation/invalidNumericId';
+import InvalidDateArgumentError from '@/error/validation/invalidDateError';
 import type { TEntryRepository } from '@/database/repositories/entryRepository.d';
-import { InvalidDateRangeArgumentError } from '@/error/validation/InvalidDateRangeArgumentError';
+import InvalidNumericArgumentError from '@/error/validation/invalidNumericIdError';
+import InvalidDateRangeArgumentError from '@/error/validation/invalidDateRangeArgumentError';
 
 let sharedInstance: EntryService | null = null;
 
@@ -38,33 +38,45 @@ export default class EntryService implements TEntryService {
 	}
 
 	public async getById({ id }: TGetEntryByIdServiceArgs): Promise<Entry | null> {
-		if (!Validator.sharedInstance.isValidNumericId(id)) {
-			throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(id)) {
+			throw new InvalidNumericArgumentError();
 		}
 
-		const repositoryResult: Entry | null = await this.repository.findById({ id });
+		const numId: number = parseInt(id, 10);
+		const repositoryResult: Entry | null = await this.repository.findById({ id: numId });
+
 		return repositoryResult;
 	}
 
 	public async getByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]> {
-		if (!Validator.sharedInstance.isValidNumericId(userId)) {
-			throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(userId)) {
+			throw new InvalidNumericArgumentError();
 		}
 
-		const repositoryResult: Entry[] = await this.repository.findByUserId({ userId });
+		const numUserId: number = parseInt(userId, 10);
+		const repositoryResult: Entry[] = await this.repository.findByUserId({ userId: numUserId });
 		return repositoryResult;
 	}
 
 	public async getByUserIdAndDate({ userId, date }: TGetEntriesByUserIdAndDateServiceArgs): Promise<Entry[]> {
-		if (!Validator.sharedInstance.isValidNumericId(userId)) {
-			throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(userId)) {
+			throw new InvalidNumericArgumentError();
 		}
 
-		if (!Validator.sharedInstance.isValidPastOrNowDate(date)) {
-			throw InvalidDateArgumentError;
+		const pastDateLimit: string = new Date().toISOString();
+
+		if (!ValidatorService.sharedInstance.isValidPastDate(date, pastDateLimit)) {
+			throw new InvalidDateArgumentError();
 		}
 
-		const repositoryResult: Entry[] = await this.repository.findByUserIdAndDate({ userId, date });
+		const dateObj: Date = new Date(date);
+		const userIdNum: number = parseInt(userId, 10);
+
+		const repositoryResult: Entry[] = await this.repository.findByUserIdAndDate({
+			userId: userIdNum,
+			date: dateObj,
+		});
+
 		return repositoryResult;
 	}
 
@@ -73,54 +85,63 @@ export default class EntryService implements TEntryService {
 		startDate,
 		endDate,
 	}: TGetEntriesByUserIdAndDateRangeServiceArgs): Promise<Entry[]> {
-		if (!Validator.sharedInstance.isValidNumericId(userId)) {
-			throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(userId)) {
+			throw new InvalidNumericArgumentError();
 		}
 
-		if (!Validator.sharedInstance.isValidPastOrNowDate(startDate)) {
-			throw InvalidDateArgumentError;
+		if (!ValidatorService.sharedInstance.isValidDate(startDate)) {
+			throw new InvalidDateArgumentError();
 		}
 
 		if (endDate == null) {
-			endDate = new Date();
+			endDate = new Date().toISOString();
 		}
 
-		if (endDate && !Validator.sharedInstance.isValidPastOrNowDate(endDate)) {
-			throw InvalidDateArgumentError;
+		const endDateObj: Date = new Date(endDate);
+		const startDateObj: Date = new Date(startDate);
+
+		if (startDateObj.getTime() > endDateObj.getTime()) {
+			throw new InvalidDateRangeArgumentError();
 		}
 
-		if (startDate > endDate) {
-			throw InvalidDateRangeArgumentError;
-		}
+		const userIdNum: number = parseInt(userId, 10);
 
 		const repositoryResult: Entry[] = await this.repository.findByUserIdAndDateRange({
-			userId,
-			startDate,
-			endDate,
+			userId: userIdNum,
+			startDate: startDateObj,
+			endDate: endDateObj,
 		});
+
 		return repositoryResult;
 	}
 
 	public async getByUserIdAndMood({ userId, mood }: TGetEntriesByUserIdAndMoodServiceArgs): Promise<Entry[]> {
-		if (!Validator.sharedInstance.isValidNumericId(userId)) throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(userId)) throw new InvalidNumericArgumentError();
 
-		const repositoryResult: Entry[] = await this.repository.findByUserIdAndMood({ userId, mood });
+		const userIdNum: number = parseInt(userId, 10);
+		const repositoryResult: Entry[] = await this.repository.findByUserIdAndMood({
+			userId: userIdNum,
+			mood,
+		});
+
 		return repositoryResult;
 	}
 
 	public async getActiveByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]> {
-		if (!Validator.sharedInstance.isValidNumericId(userId)) throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(userId)) throw new InvalidNumericArgumentError();
 
-		const repositoryResult: Entry[] = await this.repository.findActiveByUserId({ userId });
+		const userIdNum: number = parseInt(userId, 10);
+		const repositoryResult: Entry[] = await this.repository.findActiveByUserId({ userId: userIdNum });
 		return repositoryResult;
 	}
 
 	public async getInactiveByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]> {
-		if (!Validator.sharedInstance.isValidNumericId(userId)) {
-			throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(userId)) {
+			throw new InvalidNumericArgumentError();
 		}
 
-		const repositoryResult: Entry[] = await this.repository.findInactiveByUserId({ userId });
+		const userIdNum: number = parseInt(userId, 10);
+		const repositoryResult: Entry[] = await this.repository.findInactiveByUserId({ userId: userIdNum });
 		return repositoryResult;
 	}
 
@@ -130,36 +151,40 @@ export default class EntryService implements TEntryService {
 	}
 
 	public async update({ id, entry }: TUpdateEntryServiceArgs): Promise<Entry> {
-		if (!Validator.sharedInstance.isValidNumericId(id)) {
-			throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(id)) {
+			throw new InvalidNumericArgumentError();
 		}
 
-		const repositoryResult: Entry = await this.repository.update({ id, entry });
+		const idNum: number = parseInt(id, 10);
+		const repositoryResult: Entry = await this.repository.update({ id: idNum, entry });
 		return repositoryResult;
 	}
 
 	public async softDelete({ id }: TDeleteEntryServiceArgs): Promise<void> {
-		if (!Validator.sharedInstance.isValidNumericId(id)) {
-			throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(id)) {
+			throw new InvalidNumericArgumentError();
 		}
 
-		await this.repository.softDelete({ id });
+		const idNum: number = parseInt(id, 10);
+		await this.repository.softDelete({ id: idNum });
 	}
 
 	public async restore({ id }: TRestoreEntryServiceArgs): Promise<Entry> {
-		if (!Validator.sharedInstance.isValidNumericId(id)) {
-			throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(id)) {
+			throw new InvalidNumericArgumentError();
 		}
 
-		const repositoryResult: Entry = await this.repository.restore({ id });
+		const idNum: number = parseInt(id, 10);
+		const repositoryResult: Entry = await this.repository.restore({ id: idNum });
 		return repositoryResult;
 	}
 
 	public async hardDelete({ id }: TDeleteEntryServiceArgs): Promise<void> {
-		if (!Validator.sharedInstance.isValidNumericId(id)) {
-			throw InvalidNumericArgumentError;
+		if (!ValidatorService.sharedInstance.isValidId(id)) {
+			throw new InvalidNumericArgumentError();
 		}
 
-		await this.repository.hardDelete({ id });
+		const idNum: number = parseInt(id, 10);
+		await this.repository.hardDelete({ id: idNum });
 	}
 }

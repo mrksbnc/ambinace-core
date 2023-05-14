@@ -1,14 +1,32 @@
+import type { Prisma } from '@prisma/client';
+import type { TUserRepository } from '@/database/repositories/userRepository.d';
+
+/**
+ * The session is the payload of the JWT token.
+ * It contains the user ID, the issued timestamp, and the expiration timestamp.
+ * The expiration timestamp is the issued timestamp plus the expiration duration.
+ * The expiration duration is the value of the JWT_EXPIRES_IN config key.
+ */
 export type TSession = {
 	userId: number;
 	issued: number;
 	expiresAt: number;
 };
-
+/**
+ * The encode result contains the access token and the issued timestamp.
+ */
 export type TEncodeResult = {
 	accessToken: string;
 	issued: number;
 };
-
+/**
+ * The decode result can be one of three types:
+ * 1. A valid session.
+ * 2. An invalid token.
+ * 3. An expired session.
+ *
+ * The session property will be null if the token is invalid.
+ */
 // prettier-ignore
 export type TDecodeResult =
 	| {
@@ -52,9 +70,19 @@ export type TComparePasswordHashArgs = {
 	hash: string;
 };
 
+export type TRegisterArgs = {
+	user: Prisma.UserCreateInput;
+};
+
+export type TAuthenticateArgs = {
+	email: string;
+	password: string;
+};
+
 export type TAuthServiceConstructorArgs = {
 	jwtSecret: string;
 	jwtExpiresIn: number;
+	userRepository: TUserRepository;
 };
 /**
  * Interface definition for AuthServices
@@ -86,4 +114,13 @@ export interface TAuthService {
 	 * Compares a plain text password with a hash.
 	 */
 	comparePasswordHash({ password, hash }: TComparePasswordHashArgs): Promise<boolean>;
+	/**
+	 * Creates a new user.
+	 */
+	register({ user }: TRegisterArgs): Promise<void>;
+	/**
+	 * Authenticates a user.
+	 * Returns a session if the authentication is successful.
+	 */
+	authenticate({ username, password }: TAuthenticateArgs): Promise<TEncodeResult>;
 }

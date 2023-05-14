@@ -1,7 +1,7 @@
 import Log from '@/utils/logger';
-import BaseError from '@/error/baseError';
-import BaseResponse from '@/data/models/baseResponse';
+import BaseError from '@/error/base/baseError';
 import { ERROR_NAME } from '@/data/constants/error';
+import BaseResponse from '@/data/models/baseResponse';
 import type { NextFunction, Request, Response } from 'express';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 
@@ -15,16 +15,12 @@ export default function errorHanlder(
 	let responseStatusCode: HTTP_STATUS_CODE = HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
 
 	if (error instanceof BaseError) {
-		responseErrorMessage = error.message;
-		responseStatusCode = error.httpError.status;
-	}
-
-	if (error instanceof BaseError && error.httpError) {
-		responseStatusCode = error.httpError.status;
 		responseErrorMessage = error.httpError.message;
+		responseStatusCode = error.httpError.status;
 	}
 
 	if (response.headersSent) {
+		Log.sharedInstance.baseLogger.error('headers already sent');
 		return next(error);
 	}
 
@@ -43,7 +39,6 @@ export default function errorHanlder(
 		},
 	});
 
-	const _e = error as Error;
-	Log.sharedInstance.baseLogger.error(_e.message, '\r\n', error);
+	Log.sharedInstance.baseLogger.error(error);
 	next();
 }

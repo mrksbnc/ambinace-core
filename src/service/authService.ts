@@ -11,32 +11,41 @@ import type {
 	TGeneratePasswordHashArgs,
 	TCheckExpirationStatusArgs,
 	TAuthServiceConstructorArgs,
+	TRegisterArgs,
+	TAuthenticateArgs,
 } from './authService.d';
 import bcrypt from 'bcrypt';
 import Log from '@/utils/logger';
 import AppConfig from '@/config/appConfig';
+import type { Prisma } from '@prisma/client';
 import jwt, { type Algorithm } from 'jsonwebtoken';
 import { AUTH_CONFIG_KEY } from '@/data/constants/config';
+import InvalidArgumentError from '@/error/invalidArgumentError';
+import ResourceNotFoundError from '@/error/resourceNotFoundError';
+import UserRepository from '@/database/repositories/userRepository';
+import type { TUserRepository } from '@/database/repositories/userRepository.d';
 
 let sharedInstance: AuthService | null = null;
 
 export default class AuthService implements TAuthService {
 	private readonly _jwtSecret: string;
 	private readonly _jwtExpiresIn: number;
+	private readonly _userReposiory: TUserRepository;
 
 	static get sharedInstance(): AuthService {
 		if (sharedInstance === null) {
 			const jwtSecret: string = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_SECRET];
 			const jwtExpiresIn: number = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_EXPIRES_IN];
 
-			sharedInstance = new AuthService({ jwtSecret, jwtExpiresIn });
+			sharedInstance = new AuthService({ jwtSecret, jwtExpiresIn, userRepository: UserRepository.sharedInstance });
 		}
 		return sharedInstance;
 	}
 
-	constructor({ jwtSecret, jwtExpiresIn }: TAuthServiceConstructorArgs) {
+	constructor({ jwtSecret, jwtExpiresIn, userRepository }: TAuthServiceConstructorArgs) {
 		this._jwtSecret = jwtSecret;
 		this._jwtExpiresIn = jwtExpiresIn;
+		this._userReposiory = userRepository;
 	}
 
 	public encodeSession({ userId }: TEncodeSessionArgs): TEncodeResult {
@@ -123,5 +132,41 @@ export default class AuthService implements TAuthService {
 	async comparePasswordHash({ password, hash }: TComparePasswordHashArgs): Promise<boolean> {
 		const result = await bcrypt.compare(password, hash);
 		return result;
+	}
+
+	public async register({ user }: TRegisterArgs): Promise<void> {
+		const saltRounds = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.SALT_ROUNDS];
+
+		const password: string = user.password;
+		const hash = await this.generatePasswordHash({ password, saltRounds });
+
+		const newUser: Prisma.UserCreateInput = {
+			...user,
+			password: hash,
+		};
+
+		await this._userReposiory.create({
+			user: newUser,
+		});
+	}
+
+	async authenticate({ email, password }: TAuthenticateArgs): Promise<TEncodeResult> {
+		const user = await this._userReposiory.findByEmail({ email });
+
+		if (!user) {
+			throw new ResourceNotFoundError();
+		}
+
+		const isValidPassword = this.comparePasswordHash({
+			password,
+			hash: 'hash',
+		});
+
+		if (!isValidPassword) {
+			throw new InvalidArgumentError();
+		}
+
+		const encodedSession = this.encodeSession({ userId: user.id });
+		return encodedSession;
 	}
 }
