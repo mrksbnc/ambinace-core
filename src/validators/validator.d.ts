@@ -1,7 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { Prisma } from '@prisma/client';
 
-export type TypedJSONSchema = JSONSchemaType<
+export type TJSONSchema = JSONSchemaType<
 	| Prisma.UserCreateInput
 	| Prisma.ActivityCreateInput
 	| Prisma.EntryCreateInput
@@ -35,5 +35,5 @@ export interface TValidator {
 	/**
 	 * Return true if argument schema is valid.
 	 */
-	isValidSchema<T>(schema: TypedJSONSchema, data: T): boolean;
+	isValidSchema<T>(schema: TJSONSchema, data: T): boolean;
 }

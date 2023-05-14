@@ -4,7 +4,7 @@ import isDate from 'validator/lib/isDate';
 import isEmail from 'validator/lib/isEmail';
 import isAfter from 'validator/lib/isAfter';
 import isBefore from 'validator/lib/isBefore';
-import type { TValidator, TypedJSONSchema } from './validator.d';
+import type { TValidator, TJSONSchema } from './validator.d';
 
 let sharedInstance: Validator | null = null;
 
@@ -42,7 +42,7 @@ export default class Validator implements TValidator {
 		return isDate(date) && isBefore(date, past || new Date().toISOString());
 	}
 
-	public isValidSchema<T>(schema: TypedJSONSchema, data: T): boolean {
+	public isValidSchema<T>(schema: TJSONSchema, data: T): boolean {
 		const validate = this._ajv.compile(schema);
 
 		validate(data);
