@@ -1,8 +1,7 @@
-import path from 'path';
+import { resolve } from 'path';
 import type { TLog } from './logger.d';
-import { name } from '../../package.json';
-import winston, { createLogger, type Logger } from 'winston';
 import { existsSync, mkdirSync } from 'fs';
+import winston, { createLogger, type Logger } from 'winston';
 
 let sharedInstance: Log | null = null;
 
@@ -21,7 +20,7 @@ export default class Log implements TLog {
 	readonly consoleLogger: Logger;
 
 	constructor() {
-		this._logPath = path.resolve(__dirname, '../logs');
+		this._logPath = resolve(__dirname, '../logs');
 
 		if (!existsSync(this._logPath)) {
 			mkdirSync(this._logPath);
