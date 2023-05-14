@@ -30,40 +30,40 @@ export default class EntryRoute implements TRoute {
 	private registerRoutes(): void {
 		this.router.get(
 			this.path + '/get/:userId',
-			this._controller.getEntries,
-			param('userId').isUUID(4).withMessage(VALIDATION_MESSAGE.INVALID_USER_ID),
+			param('userId').isNumeric().withMessage(VALIDATION_MESSAGE.INVALID_USER_ID),
+			controllers.entry.getEntries,
 		);
-		this.router.get(
-			this.path + '/get_by_date/:userId/:date',
-			param('userId').isUUID(4).withMessage(VALIDATION_MESSAGE.INVALID_USER_ID),
-			param('date').isDate().withMessage(VALIDATION_MESSAGE.INVALID_DATE),
-			this._controller.getEntriesByDate,
-		);
-		this.router.get(
-			this.path + '/:id',
-			param('id').isNumeric().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY_ID),
-			this._controller.getEntryById,
-		);
-		this.router.post(
-			this.path + '/create',
-			body('entry').exists().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY),
-			this._controller.createEntry,
-		);
-		this.router.put(
-			this.path + '/update',
-			body('id').isNumeric().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY_ID),
-			body('entry').exists().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY),
-			this._controller.updateEntry,
-		);
-		this.router.delete(
-			this.path + '/soft/:id',
-			param('id').isNumeric().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY_ID),
-			this._controller.softDeleteEntry,
-		);
-		this.router.delete(
-			this.path + '/hard/:id',
-			param('id').isNumeric().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY_ID),
-			this._controller.hardDeleteEntry,
-		);
+		// this.router.get(
+		// 	this.path + '/get_by_date/:userId/:date',
+		// 	param('userId').isUUID(4).withMessage(VALIDATION_MESSAGE.INVALID_USER_ID),
+		// 	param('date').isDate().withMessage(VALIDATION_MESSAGE.INVALID_DATE),
+		// 	this._controller.getEntriesByDate,
+		// );
+		// this.router.get(
+		// 	this.path + '/:id',
+		// 	param('id').isNumeric().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY_ID),
+		// 	this._controller.getEntryById,
+		// );
+		// this.router.post(
+		// 	this.path + '/create',
+		// 	body('entry').exists().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY),
+		// 	this._controller.createEntry,
+		// );
+		// this.router.put(
+		// 	this.path + '/update',
+		// 	body('id').isNumeric().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY_ID),
+		// 	body('entry').exists().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY),
+		// 	this._controller.updateEntry,
+		// );
+		// this.router.delete(
+		// 	this.path + '/soft/:id',
+		// 	param('id').isNumeric().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY_ID),
+		// 	this._controller.softDeleteEntry,
+		// );
+		// this.router.delete(
+		// 	this.path + '/hard/:id',
+		// 	param('id').isNumeric().withMessage(VALIDATION_MESSAGE.INVALID_ENTRY_ID),
+		// 	this._controller.hardDeleteEntry,
+		// );
 	}
 }

@@ -3,10 +3,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import express, { type Application } from 'express';
-import responseHeaderMiddlewre from './responseHeaderMiddlewre';
-import requestMethodValidatorMiddleware from './requestMethodValidatorMiddleware';
+import responseHeaderMiddlewre from './responseHeader';
+import requestMethodValidatorMiddleware from './requestValidator';
 
-export const registerApiMiddlewares = (app: Application): void => {
+export const registerApiMiddlewares = (app: Application): Application => {
 	app.all('*', responseHeaderMiddlewre);
 	app.use(helmet({ hidePoweredBy: true }));
 	app.use(cors());
@@ -17,4 +17,6 @@ export const registerApiMiddlewares = (app: Application): void => {
 	app.use(cookieParser());
 	app.use(express.urlencoded({ extended: true }));
 	app.use(express.json({ type: 'application/json' }));
+
+	return app;
 };

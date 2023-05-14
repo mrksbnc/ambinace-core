@@ -1,73 +1,165 @@
 import type {
-	TGetEntriesArgs,
-	TUpdateEntryArgs,
-	TCreateEntryArgs,
-	TGetEntryByIdArgs,
-	THardDeleteEntryArgs,
-	TGetEntriesByMoodArgs,
-	TGetEntriesByDateArgs,
-	TGetActiveEntriesArgs,
-	TSoftDeleteActivityArgs,
-	TGetEntriesByDaterangeArgs,
-} from '@/types/args.d';
+	TEntryService,
+	TCreateEntryServiceArgs,
+	TUpdateEntryServiceArgs,
+	TDeleteEntryServiceArgs,
+	TGetEntryByIdServiceArgs,
+	TRestoreEntryServiceArgs,
+	TEntryServiceConstructorArgs,
+	TGetEntriesByUserIdServiceArgs,
+	TGetEntriesByUserIdAndDateServiceArgs,
+	TGetEntriesByUserIdAndMoodServiceArgs,
+	TGetEntriesByUserIdAndDateRangeServiceArgs,
+} from './entryService.d';
+import Validator from '@/utils/validator';
 import type { Entry } from '@prisma/client';
-import type { TEntryService } from './entryService.d';
-import type EntryReposiory from '@/database/repositories/entryRepository';
+import EntryRepository from '@/database/repositories/entryRepository';
+import { InvalidDateArgumentError } from '@/error/validation/invalidDate';
+import { InvalidNumericArgumentError } from '@/error/validation/invalidNumericId';
+import type { TEntryRepository } from '@/database/repositories/entryRepository.d';
+import { InvalidDateRangeArgumentError } from '@/error/validation/InvalidDateRangeArgumentError';
+
+let sharedInstance: EntryService | null = null;
 
 export default class EntryService implements TEntryService {
-	private readonly _entryRepository: EntryReposiory;
+	private readonly repository: TEntryRepository;
 
-	constructor(repository: EntryReposiory) {
-		this._entryRepository = repository;
+	static get sharedInstance(): EntryService {
+		if (sharedInstance === null) {
+			sharedInstance = new EntryService({
+				repository: EntryRepository.sharedInstance,
+			});
+		}
+		return sharedInstance;
 	}
 
-	public async getEntriesByUserId(args: TGetEntriesArgs): Promise<Entry[]> {
-		const repositoryResult = await this._entryRepository.getEntriesByUserId(args);
+	constructor({ repository }: TEntryServiceConstructorArgs) {
+		this.repository = repository;
+	}
+
+	public async getById({ id }: TGetEntryByIdServiceArgs): Promise<Entry | null> {
+		if (!Validator.sharedInstance.isValidNumericId(id)) {
+			throw InvalidNumericArgumentError;
+		}
+
+		const repositoryResult: Entry | null = await this.repository.findById({ id });
 		return repositoryResult;
 	}
 
-	public async getEntriesByDate(args: TGetEntriesByDateArgs): Promise<Entry[]> {
-		const repositoryResult = await this._entryRepository.getEntriesByDate(args);
+	public async getByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]> {
+		if (!Validator.sharedInstance.isValidNumericId(userId)) {
+			throw InvalidNumericArgumentError;
+		}
+
+		const repositoryResult: Entry[] = await this.repository.findByUserId({ userId });
 		return repositoryResult;
 	}
 
-	public async getEntriesByMood(args: TGetEntriesByMoodArgs): Promise<Entry[]> {
-		const repositoryResult = await this._entryRepository.getEntriesByMood(args);
+	public async getByUserIdAndDate({ userId, date }: TGetEntriesByUserIdAndDateServiceArgs): Promise<Entry[]> {
+		if (!Validator.sharedInstance.isValidNumericId(userId)) {
+			throw InvalidNumericArgumentError;
+		}
+
+		if (!Validator.sharedInstance.isValidPastOrNowDate(date)) {
+			throw InvalidDateArgumentError;
+		}
+
+		const repositoryResult: Entry[] = await this.repository.findByUserIdAndDate({ userId, date });
 		return repositoryResult;
 	}
 
-	public async getEntriesByDaterange(args: TGetEntriesByDaterangeArgs): Promise<Entry[]> {
-		const repositoryResult = await this._entryRepository.getEntriesByDaterange(args);
+	public async getByUserIdAndDateRange({
+		userId,
+		startDate,
+		endDate,
+	}: TGetEntriesByUserIdAndDateRangeServiceArgs): Promise<Entry[]> {
+		if (!Validator.sharedInstance.isValidNumericId(userId)) {
+			throw InvalidNumericArgumentError;
+		}
+
+		if (!Validator.sharedInstance.isValidPastOrNowDate(startDate)) {
+			throw InvalidDateArgumentError;
+		}
+
+		if (endDate == null) {
+			endDate = new Date();
+		}
+
+		if (endDate && !Validator.sharedInstance.isValidPastOrNowDate(endDate)) {
+			throw InvalidDateArgumentError;
+		}
+
+		if (startDate > endDate) {
+			throw InvalidDateRangeArgumentError;
+		}
+
+		const repositoryResult: Entry[] = await this.repository.findByUserIdAndDateRange({
+			userId,
+			startDate,
+			endDate,
+		});
 		return repositoryResult;
 	}
 
-	public async getActiveEntries(args: TGetActiveEntriesArgs): Promise<Entry[]> {
-		const repositoryResult = await this._entryRepository.getActiveEntries(args);
+	public async getByUserIdAndMood({ userId, mood }: TGetEntriesByUserIdAndMoodServiceArgs): Promise<Entry[]> {
+		if (!Validator.sharedInstance.isValidNumericId(userId)) throw InvalidNumericArgumentError;
+
+		const repositoryResult: Entry[] = await this.repository.findByUserIdAndMood({ userId, mood });
 		return repositoryResult;
 	}
 
-	public async getEntryById(args: TGetEntryByIdArgs): Promise<Entry | null> {
-		const repositoryResult = await this._entryRepository.getEntryById(args);
+	public async getActiveByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]> {
+		if (!Validator.sharedInstance.isValidNumericId(userId)) throw InvalidNumericArgumentError;
+
+		const repositoryResult: Entry[] = await this.repository.findActiveByUserId({ userId });
 		return repositoryResult;
 	}
 
-	public async createEntry(args: TCreateEntryArgs): Promise<Entry> {
-		const repositoryResult = await this._entryRepository.createEntry(args);
+	public async getInactiveByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]> {
+		if (!Validator.sharedInstance.isValidNumericId(userId)) {
+			throw InvalidNumericArgumentError;
+		}
+
+		const repositoryResult: Entry[] = await this.repository.findInactiveByUserId({ userId });
 		return repositoryResult;
 	}
 
-	public async updateEntry(args: TUpdateEntryArgs): Promise<Entry> {
-		const repositoryResult = await this._entryRepository.updateEntry(args);
+	public async create({ entry }: TCreateEntryServiceArgs): Promise<Entry> {
+		const repositoryResult: Entry = await this.repository.create({ entry });
 		return repositoryResult;
 	}
 
-	public async softDeleteEntry(args: TSoftDeleteActivityArgs): Promise<void> {
-		const repositoryResult = await this._entryRepository.softDeleteEntry(args);
+	public async update({ id, entry }: TUpdateEntryServiceArgs): Promise<Entry> {
+		if (!Validator.sharedInstance.isValidNumericId(id)) {
+			throw InvalidNumericArgumentError;
+		}
+
+		const repositoryResult: Entry = await this.repository.update({ id, entry });
 		return repositoryResult;
 	}
 
-	public async hardDeleteEntry(args: THardDeleteEntryArgs): Promise<void> {
-		const repositoryResult = await this._entryRepository.hardDeleteEntry(args);
+	public async softDelete({ id }: TDeleteEntryServiceArgs): Promise<void> {
+		if (!Validator.sharedInstance.isValidNumericId(id)) {
+			throw InvalidNumericArgumentError;
+		}
+
+		await this.repository.softDelete({ id });
+	}
+
+	public async restore({ id }: TRestoreEntryServiceArgs): Promise<Entry> {
+		if (!Validator.sharedInstance.isValidNumericId(id)) {
+			throw InvalidNumericArgumentError;
+		}
+
+		const repositoryResult: Entry = await this.repository.restore({ id });
 		return repositoryResult;
+	}
+
+	public async hardDelete({ id }: TDeleteEntryServiceArgs): Promise<void> {
+		if (!Validator.sharedInstance.isValidNumericId(id)) {
+			throw InvalidNumericArgumentError;
+		}
+
+		await this.repository.hardDelete({ id });
 	}
 }

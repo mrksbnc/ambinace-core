@@ -11,29 +11,25 @@ datasource db {
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  email      String     @unique
-  password   String
-  name       String
-  createdAt  DateTime   @default(now()) @map("created_at")
-  updatedAt  DateTime   @updatedAt @map("updated_at")
-  isActive   Boolean    @default(true) @map("is_active")
-  entries    Entry[]
-  activities Activity[]
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  isActive  Boolean  @default(true) @map("is_active")
 
   @@map("users")
 }
 
 model Entry {
-  id         Int        @id @default(autoincrement())
-  mood       Mood
-  notes      String?
-  activities Activity[]
-  userId     Int?       @map("user_id")
-  createdAt  DateTime   @default(now()) @map("created_at")
-  updatedAt  DateTime   @updatedAt @map("updated_at")
-  isActive   Boolean    @default(true) @map("is_active")
-  User       User?      @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
+  mood      Mood
+  notes     String?
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  isActive  Boolean  @default(true) @map("is_active")
 
   @@map("entries")
 }
@@ -42,12 +38,10 @@ model Activity {
   id        Int      @id @default(autoincrement())
   name      String
   icon      String
-  entries   Entry[]
   createdAt DateTime @default(now())
-  userId    Int?     @map("user_id")
+  userId    Int      @map("user_id")
   updatedAt DateTime @updatedAt @map("updated_at")
   isActive  Boolean  @default(true) @map("is_active")
-  User      User?    @relation(fields: [userId], references: [id])
 
   @@map("activities")
 }

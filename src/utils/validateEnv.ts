@@ -1,4 +1,4 @@
-import { cleanEnv, str, port } from 'envalid';
+import { cleanEnv, str, port, num } from 'envalid';
 
 export const validateEnv = (): void => {
 	cleanEnv(process.env, {
@@ -6,6 +6,9 @@ export const validateEnv = (): void => {
 		NODE_ENV: str(),
 		DATABASE_URL: str(),
 		JWT_SECRET: str(),
-		BASE_PATH: str(),
+		JWT_EXPIRES_IN: str(),
+		JWT_GRACE_PERIOD: str(),
+		BCRYPT_SALT_ROUNDS: num(),
+		BASE_URL: str(),
 	});
 };

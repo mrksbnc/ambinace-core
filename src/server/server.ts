@@ -1,9 +1,9 @@
 import Log from '@/utils/logger';
 import type { TServer } from './server.d';
 import Router from '@/api/routes/router';
-import AmbianceConfig from '@/config/appConfig';
+import AppConfig from '@/config/appConfig';
 import express, { type Application } from 'express';
-import { APP_CONFIG_KEY } from '@/data/constants/ambianceConfig';
+import { APP_CONFIG_KEY } from '@/data/constants/config';
 import { registerApiMiddlewares } from '@/api/middlewares';
 
 let sharedInstance: Server | null = null;
@@ -29,9 +29,9 @@ export default class Server implements TServer {
 	}
 
 	public async init(): Promise<void> {
-		const name = AmbianceConfig.sharedInstance.app[APP_CONFIG_KEY.NAME];
-		const port = AmbianceConfig.sharedInstance.app[APP_CONFIG_KEY.PORT];
-		const version = AmbianceConfig.sharedInstance.app[APP_CONFIG_KEY.VERSION];
+		const name = AppConfig.sharedInstance.app[APP_CONFIG_KEY.NAME];
+		const port = AppConfig.sharedInstance.app[APP_CONFIG_KEY.PORT];
+		const version = AppConfig.sharedInstance.app[APP_CONFIG_KEY.VERSION];
 
 		registerApiMiddlewares(this._app);
 

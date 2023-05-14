@@ -5,7 +5,7 @@ import { ERROR_NAME } from '@/data/constants/error';
 import type { NextFunction, Request, Response } from 'express';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 
-export default function errorMiddleware(
+export default function errorHanlder(
 	error: unknown,
 	request: Request,
 	response: Response,
