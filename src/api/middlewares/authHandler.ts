@@ -13,7 +13,7 @@ export default function authHandler(request: TRequest, response: TResponse, next
 		response.status(HTTP_STATUS_CODE.UNAUTHORIZED).json(
 			new BaseResponse({
 				status: HTTP_STATUS_CODE.UNAUTHORIZED,
-				message: RESPONSE_ERROR_MESSAGE.UNAUTHORIZED,
+				message: RESPONSE_ERROR_MESSAGE.MISSING_AUTHORIZATION_HEADER,
 			}),
 		);
 		return;

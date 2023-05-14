@@ -4,4 +4,5 @@ export enum RESPONSE_ERROR_MESSAGE {
 	INTERNAL_SERVER_ERROR = 'Internal Server Error',
 	METHOD_NOT_ALLOWED = 'Request Method Not Allowed',
 	UNAUTHORIZED = 'Unauthorized',
+	MISSING_AUTHORIZATION_HEADER = 'Missing Authorization Header',
 }
