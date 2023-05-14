@@ -24,6 +24,6 @@ build({
 build({
 	...sharedConfig,
 	format: 'esm',
-	platform: 'neutral',
+	platform: 'node',
 	outfile: 'dist/index.esm.js',
 });
