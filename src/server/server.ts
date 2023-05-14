@@ -1,6 +1,6 @@
 import Log from '@/utils/logger';
-import type { TServer } from './server.d';
 import Router from '@/api/routes/router';
+import type { TServer } from './server.d';
 import AppConfig from '@/config/appConfig';
 import express, { type Application } from 'express';
 import { APP_CONFIG_KEY } from '@/data/constants/config';
