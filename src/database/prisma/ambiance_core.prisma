@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  isActive  Boolean  @default(true) @map("is_active")
+
+  @@map("users")
+}
+
+model Entry {
+  id        Int      @id @default(autoincrement())
+  mood      Mood
+  notes     String?
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  isActive  Boolean  @default(true) @map("is_active")
+
+  @@map("entries")
+}
+
+model Activity {
+  id        Int      @id @default(autoincrement())
+  name      String
+  icon      String
+  createdAt DateTime @default(now())
+  userId    Int      @map("user_id")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  isActive  Boolean  @default(true) @map("is_active")
+
+  @@map("activities")
+}
+
+enum Mood {
+  AWESOME
+  GOOD
+  OKAY
+  BAD
+  AWFUL
+}

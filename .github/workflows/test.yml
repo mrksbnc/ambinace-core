@@ -4,7 +4,7 @@ on:
     branches: [main, dev]
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,4 +15,4 @@ jobs:
           node-version: 18
 
       - run: yarn install
-      - run: yarn lint
+      - run: yarn test
