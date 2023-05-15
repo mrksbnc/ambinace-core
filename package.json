@@ -46,6 +46,7 @@
 		"helmet": "^7.0.0",
 		"hpp": "^0.2.3",
 		"jsonwebtoken": "^9.0.0",
+		"morgan": "^1.10.0",
 		"prisma": "^4.14.0",
 		"validator": "^13.9.0",
 		"winston": "^3.8.2"
@@ -58,6 +59,7 @@
 		"@types/hpp": "^0.2.2",
 		"@types/jest": "^29.5.1",
 		"@types/jsonwebtoken": "^9.0.2",
+		"@types/morgan": "^1.9.4",
 		"@types/node": "^20.1.0",
 		"@types/validator": "^13.7.17",
 		"@typescript-eslint/eslint-plugin": "^5.59.2",

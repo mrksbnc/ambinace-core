@@ -14,12 +14,11 @@
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
 		"moduleResolution": "node",
-		"typeRoots": ["./node_modules/@types"],
 		"forceConsistentCasingInFileNames": true,
 		"paths": {
 			"@/*": ["src/*"]
 		}
 	},
-	"include": ["src/**/*"],
+	"include": ["src/**/*.ts", "src/**/*.d.ts"],
 	"exclude": ["src/**/*.spec.ts", "dist", "node_modules"]
 }

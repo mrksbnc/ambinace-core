@@ -5,12 +5,12 @@ import type { NextFunction, Request, Response } from 'express';
 import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 
-export default function errorHanlder(
+export const errorMiddleware = (
 	error: unknown,
 	request: Request,
 	response: Response,
 	next: NextFunction,
-): void | NextFunction {
+): void | NextFunction => {
 	let responseErrorMessage: string = RESPONSE_ERROR_MESSAGE.INTERNAL_SERVER_ERROR;
 	let responseStatusCode: HTTP_STATUS_CODE = HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
 
@@ -41,4 +41,4 @@ export default function errorHanlder(
 
 	Log.sharedInstance.baseLogger.error(error);
 	next();
-}
+};

@@ -6,7 +6,7 @@ import type { NextFunction, Request, Response } from 'express';
 import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 
-export default function requestMethodValidator(request: Request, response: Response, next: NextFunction): void {
+export const requestMethodValidatorMiddleware = (request: Request, response: Response, next: NextFunction): void => {
 	const enabledHttpRequestMethods = AppConfig.sharedInstance.api[API_CONFIG_KEY.ENABLED_HTTP_REQUEST_METHODS];
 
 	if (enabledHttpRequestMethods !== undefined && enabledHttpRequestMethods.includes(request.method as TRequestMethod))
@@ -18,4 +18,4 @@ export default function requestMethodValidator(request: Request, response: Respo
 				message: RESPONSE_ERROR_MESSAGE.METHOD_NOT_ALLOWED,
 			}),
 		);
-}
+};

@@ -6,7 +6,7 @@ import type { TDecodeResult } from '@/services/authService.d';
 import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 
-export default function authHandler(request: TRequest, response: TResponse, next: NextFunction): void {
+export const authHandlerMiddleware = (request: TRequest, response: TResponse, next: NextFunction): void => {
 	const token: string | undefined = request.headers.authorization?.split(' ')[1];
 
 	if (!token) {
@@ -74,4 +74,4 @@ export default function authHandler(request: TRequest, response: TResponse, next
 			}),
 		);
 	}
-}
+};

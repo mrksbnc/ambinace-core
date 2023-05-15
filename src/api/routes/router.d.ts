@@ -4,7 +4,12 @@ export type TRoute = {
 	readonly path: string;
 	readonly router: Router;
 };
-
+/**
+ * Interface definition for base router class.
+ */
 export type TRouter = {
-	registerRoutes: (app: Application) => void;
+	/**
+	 * Registers routes on the argument express application.
+	 */
+	register: (app: Application) => void;
 };
