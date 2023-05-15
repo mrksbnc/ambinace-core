@@ -2,9 +2,8 @@ import Log from '@/utils/logger';
 import AppConfig from '@/config/appConfig';
 import type { Application } from 'express';
 import type { TRoute, TRouter } from './router.d';
+import Middleware from '../middlewares/middleware';
 import { API_CONFIG_KEY } from '@/data/constants/config';
-import { routeNotFoundMiddleware } from '../middlewares/routeNotFoundMiddleware';
-import { errorMiddleware } from '../middlewares/errorMiddleware';
 
 let sharedInstance: Router | null = null;
 
@@ -30,7 +29,7 @@ export default class Router implements TRouter {
 			Log.sharedInstance.baseLogger.info(`path registered: ${basePath}${route.path}`);
 		});
 
-		app.use(routeNotFoundMiddleware);
-		app.use(errorMiddleware);
+		app.use(Middleware.sharedInstance.routeNotFoundHandler);
+		app.use(Middleware.sharedInstance.errorHandler);
 	}
 }
