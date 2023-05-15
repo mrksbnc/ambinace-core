@@ -26,7 +26,7 @@ import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import ResourceNotFoundError from '@/error/resourceNotFoundError';
 import UserRepository from '@/database/repositories/userRepository';
-import type { TUserRepository } from '@/database/repositories/userRepository.d';
+import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
 
 let sharedInstance: AuthService | null = null;
 
@@ -68,6 +68,7 @@ export default class AuthService implements TAuthService {
 		});
 
 		const encodeResult: TEncodeResult = {
+			userId,
 			accessToken,
 			issued: session.issued,
 		};
@@ -137,7 +138,7 @@ export default class AuthService implements TAuthService {
 		return result;
 	}
 
-	public async register({ user }: TRegisterArgs): Promise<void> {
+	public async register({ user }: TRegisterArgs): Promise<TPartialUser> {
 		if (!Validator.sharedInstance.isValidSchema(UserSchema.sharedInstance.create, user)) {
 			throw new InvalidPayloadError();
 		}
@@ -152,9 +153,11 @@ export default class AuthService implements TAuthService {
 			password: hash,
 		};
 
-		await this._userReposiory.create({
+		const createdUser = await this._userReposiory.create({
 			user: newUser,
 		});
+
+		return createdUser;
 	}
 
 	async authenticate({ email, password }: TAuthenticateArgs): Promise<TEncodeResult> {

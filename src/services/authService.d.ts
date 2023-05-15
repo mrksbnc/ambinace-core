@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client';
-import type { TUserRepository } from '@/database/repositories/userRepository.d';
+import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
 
 /**
  * The session is the payload of the JWT token.
@@ -16,8 +16,9 @@ export type TSession = {
  * The encode result contains the access token and the issued timestamp.
  */
 export type TEncodeResult = {
-	accessToken: string;
 	issued: number;
+	userId: number;
+	accessToken: string;
 };
 /**
  * The decode result can be one of three types:
@@ -119,7 +120,7 @@ export interface TAuthService {
 	 *
 	 * @throws InvalidPayloadError if the user payload is not valid.
 	 */
-	register({ user }: TRegisterArgs): Promise<void>;
+	register({ user }: TRegisterArgs): Promise<TPartialUser>;
 	/**
 	 * Authenticates a user.
 	 * Returns a session if the authentication is successful.

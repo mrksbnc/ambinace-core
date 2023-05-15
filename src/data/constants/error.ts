@@ -30,6 +30,7 @@ export enum RESPONSE_ERROR_MESSAGE {
 	METHOD_NOT_ALLOWED = 'Request Method Not Allowed',
 	INVALID_PAYLOAD = 'Invalid payload received from client',
 	INVALID_DATE_ARGUMENT = 'Invalid date received from client',
+	RESOURCE_NOT_FOUND = 'The requested resource was not found',
 	INVALID_ARGUMENT = 'Invalid argument $ received from client',
 	MISSING_AUTHORIZATION_HEADER = 'Missing Authorization Header',
 	INVALID_EMAIL_ARGUMENT = 'Invalid email received from client',

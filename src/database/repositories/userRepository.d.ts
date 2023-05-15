@@ -1,6 +1,6 @@
 import type { Prisma, User } from '@prisma/client';
 
-export type PartialUser = Omit<User, 'password'>;
+export type TPartialUser = Omit<User, 'password'>;
 
 export type TFindUserByIdArgs = {
 	id: number;
@@ -41,7 +41,7 @@ export interface TUserRepository {
 	/**
 	 * Returns a single user by id or null if user not found
 	 */
-	findById({ id }: TFindUserByIdArgs): Promise<PartialUser | null>;
+	findById({ id }: TFindUserByIdArgs): Promise<TPartialUser | null>;
 	/**
 	 * Returns a single user by email or null if user not found
 	 */
@@ -49,15 +49,15 @@ export interface TUserRepository {
 	/**
 	 * Returns a multiple user by the user ids or empty array if no users
 	 */
-	findManyByIds({ ids }: TFindUsersByIdsArgs): Promise<PartialUser[]>;
+	findManyByIds({ ids }: TFindUsersByIdsArgs): Promise<TPartialUser[]>;
 	/**
 	 * Creates a new user
 	 */
-	create({ user }: TCreateUserArgs): Promise<PartialUser>;
+	create({ user }: TCreateUserArgs): Promise<TPartialUser>;
 	/**
 	 * Updates an existing user
 	 */
-	update({ id, user }: TUpdateUserArgs): Promise<PartialUser>;
+	update({ id, user }: TUpdateUserArgs): Promise<TPartialUser>;
 	/**
 	 * Soft deletes an existing user
 	 */

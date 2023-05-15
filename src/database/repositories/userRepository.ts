@@ -1,5 +1,5 @@
 import type {
-	PartialUser,
+	TPartialUser,
 	TUserRepository,
 	TCreateUserArgs,
 	TUpdateUserArgs,
@@ -30,8 +30,8 @@ export default class UserRepository implements TUserRepository {
 		this._delegate = delegate;
 	}
 
-	private _mapUser(user: User): PartialUser {
-		const partialUser: PartialUser = {
+	private _mapUser(user: User): TPartialUser {
+		const partialUser: TPartialUser = {
 			id: user.id,
 			email: user.email,
 			name: user.name,
@@ -42,7 +42,7 @@ export default class UserRepository implements TUserRepository {
 		return partialUser;
 	}
 
-	async findById({ id }: TFindUserByIdArgs): Promise<PartialUser | null> {
+	async findById({ id }: TFindUserByIdArgs): Promise<TPartialUser | null> {
 		const queryResult = await this._delegate.findUnique({
 			where: { id },
 		});
@@ -56,7 +56,7 @@ export default class UserRepository implements TUserRepository {
 		return queryResult;
 	}
 
-	async findManyByIds({ ids }: TFindUsersByIdsArgs): Promise<PartialUser[]> {
+	async findManyByIds({ ids }: TFindUsersByIdsArgs): Promise<TPartialUser[]> {
 		const queryResult = await this._delegate.findMany({
 			where: { id: { in: ids } },
 		});
@@ -64,12 +64,12 @@ export default class UserRepository implements TUserRepository {
 		return queryResult.map((user) => this._mapUser(user));
 	}
 
-	async create({ user }: TCreateUserArgs): Promise<PartialUser> {
+	async create({ user }: TCreateUserArgs): Promise<TPartialUser> {
 		const queryResult = await this._delegate.create({ data: user });
 		return this._mapUser(queryResult);
 	}
 
-	async update({ id, user }: TUpdateUserArgs): Promise<PartialUser> {
+	async update({ id, user }: TUpdateUserArgs): Promise<TPartialUser> {
 		const queryResult = await this._delegate.update({
 			where: { id },
 			data: user,

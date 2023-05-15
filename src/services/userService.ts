@@ -6,7 +6,7 @@ import type {
 	TRestoreUserServiceArgs,
 	TUserServiceConstructorArgs,
 	TGetManyUsersByIdsServiceArgs,
-} from './userService.';
+} from './userService.d';
 import AppConfig from '@/config/appConfig';
 import Validator from '../validators/validator';
 import type { TAuthService } from './authService.d';
@@ -14,18 +14,31 @@ import { AUTH_CONFIG_KEY } from '@/data/constants/config';
 import UserSchema from '@/validators/schemas/userSchema';
 import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
-import type { PartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
+import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
+import AuthService from './authService';
+import UserRepository from '@/database/repositories/userRepository';
 
+let sharedInstance: UserService | null = null;
 export default class UserService implements TUserService {
 	private readonly _authService: TAuthService;
 	private readonly _userRepository: TUserRepository;
+
+	static get sharedInstance(): UserService {
+		if (sharedInstance === null) {
+			const authService: TAuthService = AuthService.sharedInstance;
+			const userRepository: TUserRepository = UserRepository.sharedInstance;
+
+			sharedInstance = new UserService({ authService, userRepository });
+		}
+		return sharedInstance;
+	}
 
 	constructor({ userRepository, authService }: TUserServiceConstructorArgs) {
 		this._userRepository = userRepository;
 		this._authService = authService;
 	}
 
-	public async getById({ id }: TGetUserByIdServiceArgs): Promise<PartialUser | null> {
+	public async getById({ id }: TGetUserByIdServiceArgs): Promise<TPartialUser | null> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -36,7 +49,7 @@ export default class UserService implements TUserService {
 		return repositoryResult;
 	}
 
-	public async getManyByIds({ ids }: TGetManyUsersByIdsServiceArgs): Promise<PartialUser[]> {
+	public async getManyByIds({ ids }: TGetManyUsersByIdsServiceArgs): Promise<TPartialUser[]> {
 		const invalidId = ids.find((id) => !Validator.sharedInstance.isValidId(id));
 
 		if (invalidId !== undefined) {
@@ -49,7 +62,7 @@ export default class UserService implements TUserService {
 		return repositoryResult;
 	}
 
-	public async update({ id, user }: TUpdateUserServiceArgs): Promise<PartialUser> {
+	public async update({ id, user }: TUpdateUserServiceArgs): Promise<TPartialUser> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
