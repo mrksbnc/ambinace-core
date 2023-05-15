@@ -15,11 +15,11 @@ export default class UserSchema {
 		const schema: JSONSchemaType<Prisma.UserCreateInput> = {
 			type: 'object',
 			properties: {
-				email: { type: 'string', format: 'email' },
+				email: { type: 'string' },
 				password: { type: 'string' },
 				name: { type: 'string' },
-				createdAt: { type: 'string', format: 'date-time', nullable: true },
-				updatedAt: { type: 'string', format: 'date-time', nullable: true },
+				createdAt: { type: 'string', nullable: true },
+				updatedAt: { type: 'string', nullable: true },
 				isActive: { type: 'boolean', nullable: true },
 			},
 			required: ['email', 'password', 'name'],
@@ -33,11 +33,11 @@ export default class UserSchema {
 		const schema: JSONSchemaType<Prisma.UserUpdateInput> = {
 			type: 'object',
 			properties: {
-				email: { type: 'string', format: 'email', nullable: true },
+				email: { type: 'string', nullable: true },
 				password: { type: 'string', nullable: true },
 				name: { type: 'string', nullable: true },
-				createdAt: { type: 'string', format: 'date-time', nullable: true },
-				updatedAt: { type: 'string', format: 'date-time', nullable: true },
+				createdAt: { type: 'string', nullable: true },
+				updatedAt: { type: 'string', nullable: true },
 				isActive: { type: 'boolean', nullable: true },
 			},
 			required: [],

@@ -1,4 +1,5 @@
 import Log from '@/utils/logger';
+import AuthRoute from './authRoute';
 import AppConfig from '@/config/appConfig';
 import type { Application } from 'express';
 import type { TRoute, TRouter } from './router.d';
@@ -18,14 +19,14 @@ export default class Router implements TRouter {
 	}
 
 	constructor() {
-		this.routes = [];
+		this.routes = [AuthRoute.sharedInstance];
 	}
 
 	public register(app: Application): void {
 		const basePath: string = AppConfig.sharedInstance.api[API_CONFIG_KEY.BASE_URL];
 
 		this.routes.forEach((route: TRoute) => {
-			app.use(route.router);
+			app.use(AppConfig.sharedInstance.api[API_CONFIG_KEY.BASE_URL], route.router);
 			Log.sharedInstance.baseLogger.info(`path registered: ${basePath}${route.path}`);
 		});
 

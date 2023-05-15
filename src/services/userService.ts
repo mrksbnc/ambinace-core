@@ -6,17 +6,17 @@ import type {
 	TRestoreUserServiceArgs,
 	TUserServiceConstructorArgs,
 	TGetManyUsersByIdsServiceArgs,
-} from './userService';
+} from './userService.d';
+import AuthService from './authService';
 import AppConfig from '@/config/appConfig';
 import Validator from '../validators/validator';
-import type { TAuthService } from './authService';
-import { AUTH_CONFIG_KEY } from '@/data/constants/config';
+import type { TAuthService } from './authService.d';
 import UserSchema from '@/validators/schemas/userSchema';
+import { AUTH_CONFIG_KEY } from '@/data/constants/config';
 import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
-import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
-import AuthService from './authService';
 import UserRepository from '@/database/repositories/userRepository';
+import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
 
 let sharedInstance: UserService | null = null;
 export default class UserService implements TUserService {
@@ -67,8 +67,12 @@ export default class UserService implements TUserService {
 			throw new InvalidArgumentError('id');
 		}
 
-		if (!Validator.sharedInstance.isValidSchema(UserSchema.sharedInstance.update, user)) {
-			throw new InvalidPayloadError();
+		const schemaValidationResult: string[] = Validator.sharedInstance.isValidSchema(
+			UserSchema.sharedInstance.update,
+			user,
+		);
+		if (schemaValidationResult.length > 0) {
+			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
 		if (user.password != null) {

@@ -8,7 +8,7 @@ import AppConfig from '@/config/appConfig';
 import BaseError from '@/error/base/baseError';
 import AuthService from '@/services/authService';
 import type { TMiddleware } from './middleware.d';
-import type { TRequestMethod, TResponse } from '..';
+import type { TLocals, TRequestMethod } from '..';
 import BaseResponse from '@/data/models/baseResponse';
 import { API_CONFIG_KEY } from '@/data/constants/config';
 import type { TDecodeResult } from '@/services/authService.d';
@@ -102,12 +102,12 @@ export default class Middleware implements TMiddleware {
 				response.type('text/plain').send(responseErrorMessage);
 			},
 		});
-
-		Log.sharedInstance.baseLogger.error(error);
+		const _e = error as Error;
+		Log.sharedInstance.baseLogger.error(_e.message, { error });
 		next();
 	};
 
-	public readonly authHandler = (request: Request, response: TResponse, next: NextFunction): void => {
+	public readonly authHandler = (request: Request, response: Response<object, TLocals>, next: NextFunction): void => {
 		const token: string | undefined = request.headers.authorization?.split(' ')[1];
 
 		if (!token) {
@@ -187,6 +187,7 @@ export default class Middleware implements TMiddleware {
 	};
 
 	public register(app: Application): void {
+		app.use(this._httpTrafficLogHandler);
 		app.use(hpp());
 		app.use(cors());
 		app.use(helmet({ hidePoweredBy: true }));
@@ -195,7 +196,6 @@ export default class Middleware implements TMiddleware {
 		app.use(cookieParser());
 		app.use(urlencoded({ extended: true }));
 		app.use(json({ type: 'application/json' }));
-		app.use(this._httpTrafficLogHandler);
 		app.all('*', this._responseHeaderHandler);
 	}
 }

@@ -29,7 +29,7 @@ export enum RESPONSE_ERROR_MESSAGE {
 	INVALID_CONTENT_TYPE = 'Invalid Content-Type',
 	INTERNAL_SERVER_ERROR = 'Internal Server Error',
 	METHOD_NOT_ALLOWED = 'Request Method Not Allowed',
-	INVALID_PAYLOAD = 'Invalid payload received from client',
+	INVALID_PAYLOAD = 'Invalid payload received from client! $',
 	INVALID_DATE_ARGUMENT = 'Invalid date received from client',
 	RESOURCE_NOT_FOUND = 'The requested resource was not found',
 	INVALID_ARGUMENT = 'Invalid argument $ received from client',

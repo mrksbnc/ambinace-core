@@ -144,8 +144,10 @@ export default class AuthService implements TAuthService {
 	}
 
 	public async register({ user }: TRegisterArgs): Promise<TLoginResponseDto> {
-		if (!Validator.sharedInstance.isValidSchema(UserSchema.sharedInstance.create, user)) {
-			throw new InvalidPayloadError();
+		const schemaValidationResult = Validator.sharedInstance.isValidSchema(UserSchema.sharedInstance.create, user);
+
+		if (schemaValidationResult.length > 0) {
+			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
 		const saltRounds = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.SALT_ROUNDS];

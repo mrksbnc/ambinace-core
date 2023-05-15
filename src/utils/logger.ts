@@ -30,7 +30,7 @@ export default class Log implements TLog {
 
 	private _createBaseLogger(): Logger {
 		return createLogger({
-			level: 'info',
+			level: 'http',
 			format: winston.format.combine(
 				winston.format.timestamp({
 					format: 'YYYY-MM-DD HH:mm:ss',
@@ -45,10 +45,6 @@ export default class Log implements TLog {
 				new winston.transports.File({
 					filename: `${this._logPath}/combined.log`,
 				}),
-				new winston.transports.File({
-					filename: `${this._logPath}/http.log`,
-					level: 'http',
-				}),
 				new winston.transports.Console({
 					format: winston.format.combine(
 						winston.format.colorize({
@@ -58,7 +54,7 @@ export default class Log implements TLog {
 							format: 'YYYY-MM-DD hh:mm:ss A',
 						}),
 						winston.format.align(),
-						winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`),
+						winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message.trim()}`),
 					),
 				}),
 			],

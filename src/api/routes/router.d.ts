@@ -1,9 +1,9 @@
-import type { Application } from 'express';
+import type { Application, Router } from 'express';
 
-export type TRoute = {
-	readonly path: string;
-	readonly router: Router;
-};
+export interface TRoute {
+	path: string;
+	router: Router;
+}
 /**
  * Interface definition for base router class.
  */

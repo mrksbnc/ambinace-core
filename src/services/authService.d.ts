@@ -33,7 +33,7 @@ export type TEncodeResult = {
 export type TDecodeResult =
 	| {
 			type: 'valid';
-			session: Session;
+			session: TSession;
 		}
 	| {
 			type: 'invalid-token';
@@ -41,7 +41,7 @@ export type TDecodeResult =
 		}
 	| {
 			type: 'expired';
-			session: Session;
+			session: TSession;
 		};
 
 export type TExpirationStatus = 'expired' | 'active' | 'grace';

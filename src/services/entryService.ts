@@ -10,7 +10,7 @@ import type {
 	TGetEntriesByUserIdAndDateServiceArgs,
 	TGetEntriesByUserIdAndMoodServiceArgs,
 	TGetEntriesByUserIdAndDateRangeServiceArgs,
-} from './entryService';
+} from './entryService.d';
 import type { Entry } from '@prisma/client';
 import Validator from '@/validators/validator';
 import EntrySchema from '@/validators/schemas/entrySchema';
@@ -151,8 +151,10 @@ export default class EntryService implements TEntryService {
 	}
 
 	public async create({ entry }: TCreateEntryServiceArgs): Promise<Entry> {
-		if (!Validator.sharedInstance.isValidSchema(EntrySchema.sharedInstance.create, entry)) {
-			throw new InvalidPayloadError();
+		const schemaValidationResult = Validator.sharedInstance.isValidSchema(EntrySchema.sharedInstance.create, entry);
+
+		if (schemaValidationResult.length > 0) {
+			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
 		const repositoryResult: Entry = await this.repository.create({ entry });
@@ -164,8 +166,10 @@ export default class EntryService implements TEntryService {
 			throw new InvalidArgumentError('id');
 		}
 
-		if (!Validator.sharedInstance.isValidSchema(EntrySchema.sharedInstance.update, entry)) {
-			throw new InvalidPayloadError();
+		const schemaValidationResult = Validator.sharedInstance.isValidSchema(EntrySchema.sharedInstance.update, entry);
+
+		if (schemaValidationResult.length > 0) {
+			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
 		const idNum: number = parseInt(id, 10);

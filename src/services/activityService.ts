@@ -9,14 +9,14 @@ import type {
 	TGetManyByUserIdServiceArgs,
 	TActivityServiceConstructorArgs,
 	TGetManyActivitiesByIdsServiceArgs,
-} from './activityService';
+} from './activityService.d';
 import type { Activity } from '@prisma/client';
 import Validator from '@/validators/validator';
 import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import ActivitySchema from '@/validators/schemas/activitySchema';
 import ActivityRepository from '@/database/repositories/activityRepository';
-import type { TActivityRepository } from '../database/repositories/activityRepository';
+import type { TActivityRepository } from '../database/repositories/activityRepository.d';
 
 let sharedInstance: ActivityService | null = null;
 
@@ -25,7 +25,9 @@ export default class ActivityService implements TActivityService {
 
 	static get sharedInstance(): ActivityService {
 		if (sharedInstance === null) {
-			sharedInstance = new ActivityService({ activityRepository: ActivityRepository.sharedInstance });
+			sharedInstance = new ActivityService({
+				activityRepository: ActivityRepository.sharedInstance,
+			});
 		}
 		return sharedInstance;
 	}
@@ -83,8 +85,13 @@ export default class ActivityService implements TActivityService {
 	}
 
 	public async create({ activity }: TCreateActivityServiceArgs): Promise<Activity> {
-		if (!Validator.sharedInstance.isValidSchema(ActivitySchema.sharedInstance.create, activity)) {
-			throw new InvalidPayloadError();
+		const schemaValidationResult = Validator.sharedInstance.isValidSchema(
+			ActivitySchema.sharedInstance.create,
+			activity,
+		);
+
+		if (schemaValidationResult.length > 0) {
+			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
 		const repositoryResult: Promise<Activity> = await this._activityRepository.create({ activity });
@@ -96,8 +103,13 @@ export default class ActivityService implements TActivityService {
 			throw new InvalidArgumentError('id');
 		}
 
-		if (!Validator.sharedInstance.isValidSchema(ActivitySchema.sharedInstance.update, activity)) {
-			throw new InvalidPayloadError();
+		const schemaValidationResult = Validator.sharedInstance.isValidSchema(
+			ActivitySchema.sharedInstance.update,
+			activity,
+		);
+
+		if (schemaValidationResult.length > 0) {
+			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
 		const numId: number = parseInt(id, 10);

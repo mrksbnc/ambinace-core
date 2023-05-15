@@ -42,10 +42,10 @@ export default class Validator implements TValidator {
 		return isDate(date) && isBefore(date, past || new Date().toISOString());
 	}
 
-	public isValidSchema<T>(schema: TJSONSchema, data: T): boolean {
+	public isValidSchema<T>(schema: TJSONSchema, data: T): string[] {
 		const validate = this._ajv.compile(schema);
 
 		validate(data);
-		return validate.errors != null;
+		return validate.errors?.map((error) => error.message || '') || [];
 	}
 }

@@ -35,5 +35,5 @@ export interface TValidator {
 	/**
 	 * Return true if argument schema is valid.
 	 */
-	isValidSchema<T>(schema: TJSONSchema, data: T): boolean;
+	isValidSchema<T>(schema: TJSONSchema, data: T): string[];
 }
