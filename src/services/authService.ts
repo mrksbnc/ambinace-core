@@ -17,8 +17,8 @@ import type {
 import bcrypt from 'bcrypt';
 import Log from '@/utils/logger';
 import AppConfig from '@/config/appConfig';
-import type { Prisma } from '@prisma/client';
 import Validator from '@/validators/validator';
+import type { Prisma, User } from '@prisma/client';
 import jwt, { type Algorithm } from 'jsonwebtoken';
 import UserSchema from '@/validators/schemas/userSchema';
 import { AUTH_CONFIG_KEY } from '@/data/constants/config';
@@ -78,10 +78,10 @@ export default class AuthService implements TAuthService {
 	public decodeSession({ token }: TDecodeSessionArgs): TDecodeResult {
 		const algorithm: Algorithm = 'HS512';
 
-		let result: TSession;
+		let session: TSession;
 
 		try {
-			result = jwt.verify(token, this._jwtSecret, { algorithms: [algorithm] }) as TSession;
+			session = jwt.verify(token, this._jwtSecret, { algorithms: [algorithm] }) as TSession;
 		} catch (error) {
 			Log.sharedInstance.baseLogger.error(error);
 			if (error instanceof jwt.TokenExpiredError) {
@@ -99,7 +99,7 @@ export default class AuthService implements TAuthService {
 
 		return {
 			type: 'valid',
-			session: result,
+			session,
 		};
 	}
 
@@ -162,7 +162,7 @@ export default class AuthService implements TAuthService {
 			throw new InvalidArgumentError('email');
 		}
 
-		const user = await this._userReposiory.findByEmail({ email });
+		const user: User | null = await this._userReposiory.findByEmail({ email });
 
 		if (user == null) {
 			throw new ResourceNotFoundError();
@@ -170,7 +170,7 @@ export default class AuthService implements TAuthService {
 
 		const isValidPassword = this.comparePasswordHash({
 			password,
-			hash: 'hash',
+			hash: user.password,
 		});
 
 		if (!isValidPassword) {

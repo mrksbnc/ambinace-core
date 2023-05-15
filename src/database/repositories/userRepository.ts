@@ -1,12 +1,12 @@
 import type {
 	PartialUser,
-	TGetUsersByIds,
 	TUserRepository,
 	TCreateUserArgs,
 	TUpdateUserArgs,
-	TGetUserByIdArgs,
 	TDeleteUserArgs,
 	TRestoreUserArgs,
+	TFindUserByIdArgs,
+	TFindUsersByIdsArgs,
 	TUserRepositoryConstructorArgs,
 } from './userRepository.d';
 import Database from '../database';
@@ -42,7 +42,7 @@ export default class UserRepository implements TUserRepository {
 		return partialUser;
 	}
 
-	async findById({ id }: TGetUserByIdArgs): Promise<PartialUser | null> {
+	async findById({ id }: TFindUserByIdArgs): Promise<PartialUser | null> {
 		const queryResult = await this._delegate.findUnique({
 			where: { id },
 		});
@@ -56,7 +56,7 @@ export default class UserRepository implements TUserRepository {
 		return queryResult;
 	}
 
-	async findManyByIds({ ids }: TGetUsersByIds): Promise<PartialUser[]> {
+	async findManyByIds({ ids }: TFindUsersByIdsArgs): Promise<PartialUser[]> {
 		const queryResult = await this._delegate.findMany({
 			where: { id: { in: ids } },
 		});
