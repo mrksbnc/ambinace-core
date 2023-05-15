@@ -1,22 +1,16 @@
-import type {
-	TAuthController,
-	TLoginRequestBody,
-	TRegisterRequestBody,
-	TRegisterResponseBody,
-	TAuthControllerConstructorArgs,
-} from './authController.d';
 import type { NextFunction } from 'express';
 import type { TRequest, TResponse } from '..';
+import BaseError from '@/error/base/baseError';
+import HttpError from '@/error/base/httpError';
 import AuthService from '@/services/authService';
 import UserService from '@/services/userService';
 import BaseResponse from '@/data/models/baseResponse';
 import type { TAuthService } from '@/services/authService.d';
-import type { TLoginResponseBody } from './authController.d';
 import type { TUserService } from '@/services/userService.d';
-import type { TEncodeResult } from '@/services/authService.d';
-import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
-import type { TPartialUser } from '@/database/repositories/userRepository.d';
+import { ERROR_NAME, RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
+import type { TAuthController, TAuthControllerConstructorArgs } from './authController.d';
+import type { TLoginRequestDto, TLoginResponseDto, TRegisterRequestDto, TRegisterResponseDto } from '../dto';
 
 let sharedInstance: AuthController | null = null;
 
@@ -40,22 +34,16 @@ export default class AuthController implements TAuthController {
 	}
 
 	public register = async (
-		request: TRequest<never, never, TRegisterRequestBody>,
-		response: TResponse,
+		request: TRequest<never, never, TRegisterRequestDto>,
+		response: TResponse<TRegisterResponseDto>,
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const body: TRegisterRequestBody = request.body;
-			const user: TPartialUser = await this._authService.register({ user: body.user });
-			const encodedSession: TEncodeResult = this._authService.encodeSession({ userId: user.id });
-
-			const data: TRegisterResponseBody = {
-				user,
-				token: encodedSession.accessToken,
-			};
+			const requestDto: TRegisterRequestDto = request.body;
+			const data: TRegisterResponseDto = await this._authService.register({ user: requestDto.user });
 
 			response.status(HTTP_STATUS_CODE.CREATED).json(
-				new BaseResponse<TRegisterResponseBody>({
+				new BaseResponse<TRegisterResponseDto>({
 					status: HTTP_STATUS_CODE.CREATED,
 					data,
 				}),
@@ -66,34 +54,30 @@ export default class AuthController implements TAuthController {
 	};
 
 	public login = async (
-		request: TRequest<never, never, TLoginRequestBody>,
-		response: TResponse<TLoginResponseBody>,
+		request: TRequest<never, never, TLoginRequestDto>,
+		response: TResponse<TLoginResponseDto>,
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const { email, password }: TLoginRequestBody = request.body;
+			const { email, password }: TLoginRequestDto = request.body;
 
-			const encodedSession: TEncodeResult = await this._authService.authenticate({ email, password });
-			const user = await this._userService.getById({ id: `${encodedSession.userId}` });
+			const data: TLoginResponseDto = await this._authService.authenticate({ email, password });
 
-			if (user === null) {
-				response.status(HTTP_STATUS_CODE.NOT_FOUND).json(
-					new BaseResponse({
-						status: HTTP_STATUS_CODE.NOT_FOUND,
-						message: RESPONSE_ERROR_MESSAGE.RESOURCE_NOT_FOUND,
+			if (data.user === null) {
+				return next(
+					new BaseError({
+						errorName: ERROR_NAME.INVALID_CREDENTIALS,
+						message: RESPONSE_ERROR_MESSAGE.INVALID_CREDENTIALS,
+						httpError: new HttpError({
+							status: HTTP_STATUS_CODE.UNAUTHORIZED,
+							message: RESPONSE_ERROR_MESSAGE.INVALID_CREDENTIALS,
+						}),
 					}),
 				);
-
-				return next();
 			}
 
-			const data: TLoginResponseBody = {
-				user,
-				token: encodedSession.accessToken,
-			};
-
 			response.status(HTTP_STATUS_CODE.OK).json(
-				new BaseResponse({
+				new BaseResponse<TLoginResponseDto>({
 					status: HTTP_STATUS_CODE.OK,
 					data,
 				}),

@@ -1,5 +1,5 @@
 import type { Activity, Prisma } from '@prisma/client';
-import type { TActivityRepository } from '../database/repositories/activityRepository.d';
+import type { TActivityRepository } from '../../database/repositories/activityRepository';
 
 export type TGetActivityByIdServiceArgs = {
 	id: string;

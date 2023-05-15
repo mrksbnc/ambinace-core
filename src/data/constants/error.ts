@@ -5,6 +5,7 @@ export enum ERROR_NAME {
 	INVALID_ARGUMENT = 'InvalidArgumentError',
 	RESOURCE_NOT_FOUND = 'ResourceNotFoundError',
 	INVALID_DATE_ARGUMENT = 'InvalidArgumentError',
+	INVALID_CREDENTIALS = 'InvalidCredentialsError',
 	INVALID_CONTENT_TYPE = 'InvalidContentTypeError',
 	METHOD_NOT_ALLOWED = 'RequestMethodNotAllowedError',
 	INVALID_EMAIL_ARGUMENT = 'InvalidEmailArgumentError',
@@ -35,4 +36,5 @@ export enum RESPONSE_ERROR_MESSAGE {
 	MISSING_AUTHORIZATION_HEADER = 'Missing Authorization Header',
 	INVALID_EMAIL_ARGUMENT = 'Invalid email received from client',
 	INVALID_DATE_RANGE_ARGUMENT = 'Invalid date range received from client',
+	INVALID_CREDENTIALS = 'Invalid credentials',
 }

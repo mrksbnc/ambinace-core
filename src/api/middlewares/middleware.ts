@@ -6,12 +6,12 @@ import Log from '@/utils/logger';
 import cookieParser from 'cookie-parser';
 import AppConfig from '@/config/appConfig';
 import BaseError from '@/error/base/baseError';
-import type { TMiddleware } from './middleware.d';
 import AuthService from '@/services/authService';
+import type { TMiddleware } from './middleware.d';
+import type { TRequestMethod, TResponse } from '..';
 import BaseResponse from '@/data/models/baseResponse';
 import { API_CONFIG_KEY } from '@/data/constants/config';
 import type { TDecodeResult } from '@/services/authService.d';
-import type { TRequest, TRequestMethod, TResponse } from '..';
 import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 import { type Application, type NextFunction, type Request, type Response, urlencoded, json } from 'express';
@@ -107,7 +107,7 @@ export default class Middleware implements TMiddleware {
 		next();
 	};
 
-	public readonly authHandler = (request: TRequest, response: TResponse, next: NextFunction): void => {
+	public readonly authHandler = (request: Request, response: TResponse, next: NextFunction): void => {
 		const token: string | undefined = request.headers.authorization?.split(' ')[1];
 
 		if (!token) {
@@ -187,11 +187,11 @@ export default class Middleware implements TMiddleware {
 	};
 
 	public register(app: Application): void {
-		app.use(this._requestMethodValidationHandler);
-		app.use(this._contentTypeValidationHandler);
-		app.use(helmet({ hidePoweredBy: true }));
 		app.use(hpp());
 		app.use(cors());
+		app.use(helmet({ hidePoweredBy: true }));
+		app.use(this._requestMethodValidationHandler);
+		app.use(this._contentTypeValidationHandler);
 		app.use(cookieParser());
 		app.use(urlencoded({ extended: true }));
 		app.use(json({ type: 'application/json' }));

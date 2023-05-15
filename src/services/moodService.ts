@@ -7,7 +7,7 @@ import type {
 	TGetMoodByIdServiceArgs,
 	TMoodServiceConstructorArgs,
 	TGetMoodsByUserIdServiceArgs,
-} from './moodService.d';
+} from './moodService';
 import type { Mood } from '@prisma/client';
 import Validator from '@/validators/validator';
 import MoodSchema from '@/validators/schemas/moodSchema';

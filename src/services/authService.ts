@@ -18,6 +18,7 @@ import bcrypt from 'bcrypt';
 import Log from '@/utils/logger';
 import AppConfig from '@/config/appConfig';
 import Validator from '@/validators/validator';
+import type { TLoginResponseDto } from '@/api/dto';
 import type { Prisma, User } from '@prisma/client';
 import jwt, { type Algorithm } from 'jsonwebtoken';
 import UserSchema from '@/validators/schemas/userSchema';
@@ -26,7 +27,7 @@ import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import ResourceNotFoundError from '@/error/resourceNotFoundError';
 import UserRepository from '@/database/repositories/userRepository';
-import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
+import type { TUserRepository } from '@/database/repositories/userRepository.d';
 
 let sharedInstance: AuthService | null = null;
 
@@ -40,7 +41,11 @@ export default class AuthService implements TAuthService {
 			const jwtSecret: string = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_SECRET];
 			const jwtExpiresIn: number = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_EXPIRES_IN];
 
-			sharedInstance = new AuthService({ jwtSecret, jwtExpiresIn, userRepository: UserRepository.sharedInstance });
+			sharedInstance = new AuthService({
+				jwtSecret,
+				jwtExpiresIn,
+				userRepository: UserRepository.sharedInstance,
+			});
 		}
 		return sharedInstance;
 	}
@@ -138,7 +143,7 @@ export default class AuthService implements TAuthService {
 		return result;
 	}
 
-	public async register({ user }: TRegisterArgs): Promise<TPartialUser> {
+	public async register({ user }: TRegisterArgs): Promise<TLoginResponseDto> {
 		if (!Validator.sharedInstance.isValidSchema(UserSchema.sharedInstance.create, user)) {
 			throw new InvalidPayloadError();
 		}
@@ -157,10 +162,17 @@ export default class AuthService implements TAuthService {
 			user: newUser,
 		});
 
-		return createdUser;
+		const { accessToken: token } = this.encodeSession({ userId: createdUser.id });
+
+		const responseDto: TLoginResponseDto = {
+			token,
+			user: createdUser,
+		};
+
+		return responseDto;
 	}
 
-	async authenticate({ email, password }: TAuthenticateArgs): Promise<TEncodeResult> {
+	public async authenticate({ email, password }: TAuthenticateArgs): Promise<TLoginResponseDto> {
 		if (!Validator.sharedInstance.isValidEmail(email)) {
 			throw new InvalidArgumentError('email');
 		}
@@ -181,6 +193,12 @@ export default class AuthService implements TAuthService {
 		}
 
 		const encodedSession = this.encodeSession({ userId: user.id });
-		return encodedSession;
+
+		const responseDto: TLoginResponseDto = {
+			token: encodedSession.accessToken,
+			user: this._userReposiory.mapUser(user),
+		};
+
+		return responseDto;
 	}
 }

@@ -10,7 +10,7 @@ import type {
 	TGetEntriesByUserIdAndDateServiceArgs,
 	TGetEntriesByUserIdAndMoodServiceArgs,
 	TGetEntriesByUserIdAndDateRangeServiceArgs,
-} from './entryService.d';
+} from './entryService';
 import type { Entry } from '@prisma/client';
 import Validator from '@/validators/validator';
 import EntrySchema from '@/validators/schemas/entrySchema';

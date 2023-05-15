@@ -1,28 +1,8 @@
 import type { NextFunction } from 'express';
-import type { Prisma } from '@prisma/client';
 import type { TRequest, TResponse } from '../index.d';
-import type { TUserService } from '@/services/userService.d';
-import type { TAuthService } from '../../services/authService.d';
-import type { TPartialUser } from '@/database/repositories/userRepository.d';
-
-export type TRegisterRequestBody = {
-	user: Prisma.UserCreateInput;
-};
-
-export type TRegisterResponseBody = {
-	token: string;
-	user: TPartialUser;
-};
-
-export type TLoginRequestBody = {
-	email: string;
-	password: string;
-};
-
-export type TLoginResponseBody = {
-	token: string;
-	user: TPartialUser;
-};
+import type { TUserService } from '@/services/userService';
+import type { TAuthService } from '../../services/authService';
+import type { TLoginRequestDto, TLoginResponseDto, TRegisterRequestDto, TRegisterResponseDto } from '../dto';
 
 export type TAuthControllerConstructorArgs = {
 	authService: TAuthService;
@@ -37,8 +17,8 @@ export interface TAuthController {
 	 * if an error occurs.
 	 */
 	register(
-		request: TRequest<never, never, TRegisterRequestBody>,
-		response: TResponse<TRegisterResponseBody>,
+		request: TRequest<never, never, TRegisterRequestDto>,
+		response: TResponse<TRegisterResponseDto>,
 		next: NextFunction,
 	): Promise<void>;
 	/**
@@ -46,8 +26,8 @@ export interface TAuthController {
 	 * if an error occurs.
 	 */
 	login(
-		request: TRequest<never, never, TLoginRequestBody>,
-		response: TResponse<TLoginResponseBody>,
+		request: TRequest<never, never, TLoginRequestDto>,
+		response: TResponse<TLoginResponseDto>,
 		next: NextFunction,
 	): Promise<void>;
 }

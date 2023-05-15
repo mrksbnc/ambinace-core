@@ -39,6 +39,10 @@ export type TRestoreUserArgs = {
  */
 export interface TUserRepository {
 	/**
+	 * Maps a user to a partial user
+	 */
+	mapUser(user: User): TPartialUser | null;
+	/**
 	 * Returns a single user by id or null if user not found
 	 */
 	findById({ id }: TFindUserByIdArgs): Promise<TPartialUser | null>;

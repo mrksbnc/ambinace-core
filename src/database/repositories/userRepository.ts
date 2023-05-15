@@ -30,7 +30,7 @@ export default class UserRepository implements TUserRepository {
 		this._delegate = delegate;
 	}
 
-	private _mapUser(user: User): TPartialUser {
+	public mapUser(user: User): TPartialUser {
 		const partialUser: TPartialUser = {
 			id: user.id,
 			email: user.email,
@@ -46,7 +46,7 @@ export default class UserRepository implements TUserRepository {
 		const queryResult = await this._delegate.findUnique({
 			where: { id },
 		});
-		return queryResult === null ? null : this._mapUser(queryResult);
+		return queryResult === null ? null : this.mapUser(queryResult);
 	}
 
 	async findByEmail({ email }: { email: string }): Promise<User | null> {
@@ -61,12 +61,12 @@ export default class UserRepository implements TUserRepository {
 			where: { id: { in: ids } },
 		});
 
-		return queryResult.map((user) => this._mapUser(user));
+		return queryResult.map((user) => this.mapUser(user));
 	}
 
 	async create({ user }: TCreateUserArgs): Promise<TPartialUser> {
 		const queryResult = await this._delegate.create({ data: user });
-		return this._mapUser(queryResult);
+		return this.mapUser(queryResult);
 	}
 
 	async update({ id, user }: TUpdateUserArgs): Promise<TPartialUser> {
@@ -74,7 +74,7 @@ export default class UserRepository implements TUserRepository {
 			where: { id },
 			data: user,
 		});
-		return this._mapUser(queryResult);
+		return this.mapUser(queryResult);
 	}
 
 	async softDelete({ id }: TDeleteUserArgs): Promise<void> {

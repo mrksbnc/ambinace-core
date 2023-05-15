@@ -1,5 +1,6 @@
 import type { Prisma } from '@prisma/client';
-import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
+import type { TLoginResponseDto, TRegisterResponseDto } from '@/api/dto';
+import type { TUserRepository } from '@/database/repositories/userRepository.d';
 
 /**
  * The session is the payload of the JWT token.
@@ -120,10 +121,10 @@ export interface TAuthService {
 	 *
 	 * @throws InvalidPayloadError if the user payload is not valid.
 	 */
-	register({ user }: TRegisterArgs): Promise<TPartialUser>;
+	register({ user }: TRegisterArgs): Promise<TRegisterResponseDto>;
 	/**
-	 * Authenticates a user.
-	 * Returns a session if the authentication is successful.
+	 * Authenticates a user and returns a login response with a token and the user data.
+	 *
 	 */
-	authenticate({ email, password }: TAuthenticateArgs): Promise<TEncodeResult>;
+	authenticate({ email, password }: TAuthenticateArgs): Promise<TLoginResponseDto>;
 }

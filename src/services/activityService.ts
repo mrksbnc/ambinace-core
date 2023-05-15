@@ -9,14 +9,14 @@ import type {
 	TGetManyByUserIdServiceArgs,
 	TActivityServiceConstructorArgs,
 	TGetManyActivitiesByIdsServiceArgs,
-} from './activityService.d';
+} from './activityService';
 import type { Activity } from '@prisma/client';
 import Validator from '@/validators/validator';
 import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import ActivitySchema from '@/validators/schemas/activitySchema';
 import ActivityRepository from '@/database/repositories/activityRepository';
-import type { TActivityRepository } from '../database/repositories/activityRepository.d';
+import type { TActivityRepository } from '../database/repositories/activityRepository';
 
 let sharedInstance: ActivityService | null = null;
 

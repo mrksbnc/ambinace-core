@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client';
-import type { TAuthService } from './authService';
+import type { TAuthService } from './authService.d';
 import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
 
 export type TGetUserByIdServiceArgs = {

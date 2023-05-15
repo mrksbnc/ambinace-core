@@ -6,10 +6,10 @@ import type {
 	TRestoreUserServiceArgs,
 	TUserServiceConstructorArgs,
 	TGetManyUsersByIdsServiceArgs,
-} from './userService.d';
+} from './userService';
 import AppConfig from '@/config/appConfig';
 import Validator from '../validators/validator';
-import type { TAuthService } from './authService.d';
+import type { TAuthService } from './authService';
 import { AUTH_CONFIG_KEY } from '@/data/constants/config';
 import UserSchema from '@/validators/schemas/userSchema';
 import InvalidPayloadError from '@/error/invalidPayloadError';
