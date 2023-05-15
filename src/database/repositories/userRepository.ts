@@ -1,16 +1,16 @@
-import Database from '../database';
-import type { Prisma, User } from '@prisma/client';
 import type {
-	TGetUsersByIds,
+	TPartialUser,
 	TUserRepository,
 	TCreateUserArgs,
 	TUpdateUserArgs,
-	TGetUserByIdArgs,
 	TDeleteUserArgs,
 	TRestoreUserArgs,
+	TFindUserByIdArgs,
+	TFindUsersByIdsArgs,
 	TUserRepositoryConstructorArgs,
-	PartialUser,
 } from './userRepository.d';
+import Database from '../database';
+import type { Prisma, User } from '@prisma/client';
 
 let sharedInstance: UserRepository | null = null;
 
@@ -19,7 +19,9 @@ export default class UserRepository implements TUserRepository {
 
 	static get sharedInstance(): UserRepository {
 		if (sharedInstance === null) {
-			sharedInstance = new UserRepository({ delegate: Database.sharedInstance.getDefaultClient().user });
+			sharedInstance = new UserRepository({
+				delegate: Database.sharedInstance.getDefaultClient().user,
+			});
 		}
 		return sharedInstance;
 	}
@@ -28,8 +30,8 @@ export default class UserRepository implements TUserRepository {
 		this._delegate = delegate;
 	}
 
-	private _mapUser(user: User): PartialUser {
-		const partialUser: PartialUser = {
+	public mapUser(user: User): TPartialUser {
+		const partialUser: TPartialUser = {
 			id: user.id,
 			email: user.email,
 			name: user.name,
@@ -40,11 +42,11 @@ export default class UserRepository implements TUserRepository {
 		return partialUser;
 	}
 
-	async findById({ id }: TGetUserByIdArgs): Promise<PartialUser | null> {
+	async findById({ id }: TFindUserByIdArgs): Promise<TPartialUser | null> {
 		const queryResult = await this._delegate.findUnique({
 			where: { id },
 		});
-		return queryResult === null ? null : this._mapUser(queryResult);
+		return queryResult === null ? null : this.mapUser(queryResult);
 	}
 
 	async findByEmail({ email }: { email: string }): Promise<User | null> {
@@ -54,25 +56,25 @@ export default class UserRepository implements TUserRepository {
 		return queryResult;
 	}
 
-	async findManyByIds({ ids }: TGetUsersByIds): Promise<PartialUser[]> {
+	async findManyByIds({ ids }: TFindUsersByIdsArgs): Promise<TPartialUser[]> {
 		const queryResult = await this._delegate.findMany({
 			where: { id: { in: ids } },
 		});
 
-		return queryResult.map((user) => this._mapUser(user));
+		return queryResult.map((user) => this.mapUser(user));
 	}
 
-	async create({ user }: TCreateUserArgs): Promise<PartialUser> {
+	async create({ user }: TCreateUserArgs): Promise<TPartialUser> {
 		const queryResult = await this._delegate.create({ data: user });
-		return this._mapUser(queryResult);
+		return this.mapUser(queryResult);
 	}
 
-	async update({ id, user }: TUpdateUserArgs): Promise<PartialUser> {
+	async update({ id, user }: TUpdateUserArgs): Promise<TPartialUser> {
 		const queryResult = await this._delegate.update({
 			where: { id },
 			data: user,
 		});
-		return this._mapUser(queryResult);
+		return this.mapUser(queryResult);
 	}
 
 	async softDelete({ id }: TDeleteUserArgs): Promise<void> {

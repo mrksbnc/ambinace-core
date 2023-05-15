@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client';
+import type { TLoginResponseDto, TRegisterResponseDto } from '@/api/dto';
 import type { TUserRepository } from '@/database/repositories/userRepository.d';
 
 /**
@@ -16,8 +17,9 @@ export type TSession = {
  * The encode result contains the access token and the issued timestamp.
  */
 export type TEncodeResult = {
-	accessToken: string;
 	issued: number;
+	userId: number;
+	accessToken: string;
 };
 /**
  * The decode result can be one of three types:
@@ -31,7 +33,7 @@ export type TEncodeResult = {
 export type TDecodeResult =
 	| {
 			type: 'valid';
-			session: Session;
+			session: TSession;
 		}
 	| {
 			type: 'invalid-token';
@@ -39,7 +41,7 @@ export type TDecodeResult =
 		}
 	| {
 			type: 'expired';
-			session: Session;
+			session: TSession;
 		};
 
 export type TExpirationStatus = 'expired' | 'active' | 'grace';
@@ -116,11 +118,13 @@ export interface TAuthService {
 	comparePasswordHash({ password, hash }: TComparePasswordHashArgs): Promise<boolean>;
 	/**
 	 * Creates a new user.
+	 *
+	 * @throws InvalidPayloadError if the user payload is not valid.
 	 */
-	register({ user }: TRegisterArgs): Promise<void>;
+	register({ user }: TRegisterArgs): Promise<TRegisterResponseDto>;
 	/**
-	 * Authenticates a user.
-	 * Returns a session if the authentication is successful.
+	 * Authenticates a user and returns a login response with a token and the user data.
+	 *
 	 */
-	authenticate({ username, password }: TAuthenticateArgs): Promise<TEncodeResult>;
+	authenticate({ email, password }: TAuthenticateArgs): Promise<TLoginResponseDto>;
 }

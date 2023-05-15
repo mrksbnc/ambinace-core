@@ -20,16 +20,21 @@ const DEFAULT_PRISMA_CLIENT = new PrismaClient({
 	errorFormat: 'pretty',
 });
 
-DEFAULT_PRISMA_CLIENT.$on('query', (e) => {
-	Log.sharedInstance.baseLogger.info(`query on | ${e.target} | duration: ${e.duration}ms`);
-});
-
 DEFAULT_PRISMA_CLIENT.$on('warn', (e) => {
 	Log.sharedInstance.baseLogger.warn(`prisma warning | ${e.message}`);
 });
 
 DEFAULT_PRISMA_CLIENT.$on('error', (e) => {
 	Log.sharedInstance.baseLogger.error(`prisma error | ${e.message}`);
+});
+
+DEFAULT_PRISMA_CLIENT.$use(async (params, next) => {
+	const before = Date.now();
+	const result = await next(params);
+	const after = Date.now();
+
+	Log.sharedInstance.baseLogger.info(`query |  ${params.model}.${params.action} - ${after - before} ms`);
+	return result;
 });
 
 let sharedInstance: Database | null = null;

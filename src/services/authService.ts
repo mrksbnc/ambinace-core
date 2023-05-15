@@ -3,23 +3,27 @@ import type {
 	TAuthService,
 	TEncodeResult,
 	TDecodeResult,
+	TRegisterArgs,
 	TParseTokenArgs,
 	TExpirationStatus,
+	TAuthenticateArgs,
 	TDecodeSessionArgs,
 	TEncodeSessionArgs,
 	TComparePasswordHashArgs,
 	TGeneratePasswordHashArgs,
 	TCheckExpirationStatusArgs,
 	TAuthServiceConstructorArgs,
-	TRegisterArgs,
-	TAuthenticateArgs,
 } from './authService.d';
 import bcrypt from 'bcrypt';
 import Log from '@/utils/logger';
 import AppConfig from '@/config/appConfig';
-import type { Prisma } from '@prisma/client';
+import Validator from '@/validators/validator';
+import type { TLoginResponseDto } from '@/api/dto';
+import type { Prisma, User } from '@prisma/client';
 import jwt, { type Algorithm } from 'jsonwebtoken';
+import UserSchema from '@/validators/schemas/userSchema';
 import { AUTH_CONFIG_KEY } from '@/data/constants/config';
+import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import ResourceNotFoundError from '@/error/resourceNotFoundError';
 import UserRepository from '@/database/repositories/userRepository';
@@ -37,7 +41,11 @@ export default class AuthService implements TAuthService {
 			const jwtSecret: string = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_SECRET];
 			const jwtExpiresIn: number = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_EXPIRES_IN];
 
-			sharedInstance = new AuthService({ jwtSecret, jwtExpiresIn, userRepository: UserRepository.sharedInstance });
+			sharedInstance = new AuthService({
+				jwtSecret,
+				jwtExpiresIn,
+				userRepository: UserRepository.sharedInstance,
+			});
 		}
 		return sharedInstance;
 	}
@@ -65,6 +73,7 @@ export default class AuthService implements TAuthService {
 		});
 
 		const encodeResult: TEncodeResult = {
+			userId,
 			accessToken,
 			issued: session.issued,
 		};
@@ -75,10 +84,10 @@ export default class AuthService implements TAuthService {
 	public decodeSession({ token }: TDecodeSessionArgs): TDecodeResult {
 		const algorithm: Algorithm = 'HS512';
 
-		let result: TSession;
+		let session: TSession;
 
 		try {
-			result = jwt.verify(token, this._jwtSecret, { algorithms: [algorithm] }) as TSession;
+			session = jwt.verify(token, this._jwtSecret, { algorithms: [algorithm] }) as TSession;
 		} catch (error) {
 			Log.sharedInstance.baseLogger.error(error);
 			if (error instanceof jwt.TokenExpiredError) {
@@ -96,7 +105,7 @@ export default class AuthService implements TAuthService {
 
 		return {
 			type: 'valid',
-			session: result,
+			session,
 		};
 	}
 
@@ -122,19 +131,25 @@ export default class AuthService implements TAuthService {
 		return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
 	}
 
-	async generatePasswordHash({ password, saltRounds }: TGeneratePasswordHashArgs): Promise<string> {
+	public async generatePasswordHash({ password, saltRounds }: TGeneratePasswordHashArgs): Promise<string> {
 		const salt = await bcrypt.genSalt(saltRounds);
 		const hash = await bcrypt.hash(password, salt);
 
 		return hash;
 	}
 
-	async comparePasswordHash({ password, hash }: TComparePasswordHashArgs): Promise<boolean> {
+	public async comparePasswordHash({ password, hash }: TComparePasswordHashArgs): Promise<boolean> {
 		const result = await bcrypt.compare(password, hash);
 		return result;
 	}
 
-	public async register({ user }: TRegisterArgs): Promise<void> {
+	public async register({ user }: TRegisterArgs): Promise<TLoginResponseDto> {
+		const schemaValidationResult = Validator.sharedInstance.isValidSchema(UserSchema.sharedInstance.create, user);
+
+		if (schemaValidationResult.length > 0) {
+			throw new InvalidPayloadError(schemaValidationResult);
+		}
+
 		const saltRounds = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.SALT_ROUNDS];
 
 		const password: string = user.password;
@@ -145,28 +160,47 @@ export default class AuthService implements TAuthService {
 			password: hash,
 		};
 
-		await this._userReposiory.create({
+		const createdUser = await this._userReposiory.create({
 			user: newUser,
 		});
+
+		const { accessToken: token } = this.encodeSession({ userId: createdUser.id });
+
+		const responseDto: TLoginResponseDto = {
+			token,
+			user: createdUser,
+		};
+
+		return responseDto;
 	}
 
-	async authenticate({ email, password }: TAuthenticateArgs): Promise<TEncodeResult> {
-		const user = await this._userReposiory.findByEmail({ email });
+	public async authenticate({ email, password }: TAuthenticateArgs): Promise<TLoginResponseDto> {
+		if (!Validator.sharedInstance.isValidEmail(email)) {
+			throw new InvalidArgumentError('email');
+		}
 
-		if (!user) {
+		const user: User | null = await this._userReposiory.findByEmail({ email });
+
+		if (user == null) {
 			throw new ResourceNotFoundError();
 		}
 
 		const isValidPassword = this.comparePasswordHash({
 			password,
-			hash: 'hash',
+			hash: user.password,
 		});
 
 		if (!isValidPassword) {
-			throw new InvalidArgumentError();
+			throw new InvalidArgumentError('password');
 		}
 
 		const encodedSession = this.encodeSession({ userId: user.id });
-		return encodedSession;
+
+		const responseDto: TLoginResponseDto = {
+			token: encodedSession.accessToken,
+			user: this._userReposiory.mapUser(user),
+		};
+
+		return responseDto;
 	}
 }

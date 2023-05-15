@@ -1,16 +1,16 @@
 import type { Prisma, User } from '@prisma/client';
 
-export type PartialUser = Omit<User, 'password'>;
+export type TPartialUser = Omit<User, 'password'>;
 
-export type TGetUserByIdArgs = {
+export type TFindUserByIdArgs = {
 	id: number;
 };
 
-export type TGetUserByEmailArgs = {
+export type TFindUserByEmailArgs = {
 	email: string;
 };
 
-export type TGetUsersByIds = {
+export type TFindUsersByIdsArgs = {
 	ids: number[];
 };
 
@@ -39,25 +39,29 @@ export type TRestoreUserArgs = {
  */
 export interface TUserRepository {
 	/**
+	 * Maps a user to a partial user
+	 */
+	mapUser(user: User): TPartialUser | null;
+	/**
 	 * Returns a single user by id or null if user not found
 	 */
-	findById({ id }: TGetUserByIdArgs): Promise<PartialUser | null>;
+	findById({ id }: TFindUserByIdArgs): Promise<TPartialUser | null>;
 	/**
 	 * Returns a single user by email or null if user not found
 	 */
-	findByEmail({ email }: TGetUserByEmailArgs): Promise<User | null>;
+	findByEmail({ email }: TFindUserByEmailArgs): Promise<User | null>;
 	/**
 	 * Returns a multiple user by the user ids or empty array if no users
 	 */
-	findManyByIds({ ids }: TGetUsersByIds): Promise<PartialUser[]>;
+	findManyByIds({ ids }: TFindUsersByIdsArgs): Promise<TPartialUser[]>;
 	/**
 	 * Creates a new user
 	 */
-	create({ user }: TCreateUserArgs): Promise<PartialUser>;
+	create({ user }: TCreateUserArgs): Promise<TPartialUser>;
 	/**
 	 * Updates an existing user
 	 */
-	update({ id, user }: TUpdateUserArgs): Promise<PartialUser>;
+	update({ id, user }: TUpdateUserArgs): Promise<TPartialUser>;
 	/**
 	 * Soft deletes an existing user
 	 */

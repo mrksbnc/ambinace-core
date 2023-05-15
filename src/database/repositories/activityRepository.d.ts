@@ -1,12 +1,16 @@
-export type TGetActivityByIdArgs = {
+export type TFindActivityByIdArgs = {
 	id: number;
 };
 
-export type TGetActivitiesByUserIdArgs = {
+export type TFindSystemWithUserIdsArgs = {
 	userId: number;
 };
 
-export type TGetActivitiesByIds = {
+export type TFindActivitiesByUserIdArgs = {
+	userId: number;
+};
+
+export type TFindActivitiesByIds = {
 	ids: number[];
 };
 
@@ -38,21 +42,21 @@ export interface TActivityRepository {
 	/**
 	 * Returns a single activity by id or null if activity not found
 	 */
-	findById({ id }: TGetActivityByIdArgs): Promise<Activity | null>;
+	findById({ id }: TFindActivityByIdArgs): Promise<Activity | null>;
 	/**
 	 * Retruns all default activities
 	 */
-	findAll(): Promise<Activity[]>;
+	findAllDefaultWithUser({ userId }: TFindSystemWithUserIdsArgs): Promise<Activity[]>;
 	/**
 	 * Returns a multiple activity by activity ids or empty array if no activities
 	 * were found
 	 */
-	findManyByIds({ ids }: TGetActivitiesByIds): Promise<Activity[]>;
+	findManyByIds({ ids }: TFindActivitiesByIds): Promise<Activity[]>;
 	/**
 	 * Returns a multiple activity by the user id or empty array if no activities
 	 * were found
 	 */
-	findManyByUserId({ userId }: TGetActivitiesByUserIdArgs): Promise<Activity[]>;
+	findManyByUserId({ userId }: TFindActivitiesByUserIdArgs): Promise<Activity[]>;
 	/**
 	 * Creates a new activity
 	 */

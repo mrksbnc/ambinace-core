@@ -1,30 +1,30 @@
-import type { Mood, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
-export type TGetEntryByIdArgs = {
+export type TFindEntryByIdArgs = {
 	id: number;
 };
 
-export type TGetEntriesByUserIdArgs = {
+export type TFindEntriesByUserIdArgs = {
 	userId: number;
 };
 
-export type TGetEntriesByUserIdAndDateArgs = {
+export type TFindEntriesByUserIdAndDateArgs = {
 	userId: number;
 	date: Date;
 };
 
-export type TGetEntriesByUserIdAndMoodArgs = {
+export type TFindEntriesByUserIdAndMoodArgs = {
 	userId: number;
-	mood: Mood;
+	moodId: number;
 };
 
-export type TGetEntriesByUserIdAndDateRangeArgs = {
+export type TFindEntriesByUserIdAndDateRangeArgs = {
 	userId: number;
 	startDate: Date;
 	endDate: Date;
 };
 
-export type TGetEntriesByUserIdArgs = {
+export type TFindEntriesByUserIdArgs = {
 	userId: number;
 };
 
@@ -55,22 +55,22 @@ export interface TEntryRepository {
 	/**
 	 * Returns a single entry by id or null if entry not found
 	 */
-	findById({ id }: TGetEntryByIdArgs): Promise<Entry | null>;
+	findById({ id }: TFindEntryByIdArgs): Promise<Entry | null>;
 	/**
 	 * Returns a multiple entry by the user id or empty array if no entries
 	 * were found
 	 */
-	findByUserId({ userId }: TGetEntriesByUserIdArgs): Promise<Entry[]>;
+	findByUserId({ userId }: TFindEntriesByUserIdArgs): Promise<Entry[]>;
 	/**
 	 * Returns multiple entries by userId and creation date or empty array if no entries
 	 * were found
 	 */
-	findByUserIdAndDate({ userId, date }: TGetEntriesByUserIdAndDateArgs): Promise<Entry[]>;
+	findByUserIdAndDate({ userId, date }: TFindEntriesByUserIdAndDateArgs): Promise<Entry[]>;
 	/**
 	 * Returns multiple entries by userId and a given mood or empty array if no entries
 	 * were found
 	 */
-	findByUserIdAndMood({ userId, mood }: TGetEntriesByUserIdAndMoodArgs): Promise<Entry[]>;
+	findByUserIdAndMood({ userId, mood }: TFindEntriesByUserIdAndMoodArgs): Promise<Entry[]>;
 	/**
 	 * Returns multiple entries by userId in a given date range or empty array if no entries
 	 * were found
@@ -78,17 +78,17 @@ export interface TEntryRepository {
 	 * startDate is inclusive and endDate is exclusive. If no endDate is provided, it will
 	 * default to the current date
 	 */
-	findByUserIdAndDateRange({ userId, startDate, endDate }: TGetEntriesByUserIdAndDateRangeArgs): Promise<Entry[]>;
+	findByUserIdAndDateRange({ userId, startDate, endDate }: TFindEntriesByUserIdAndDateRangeArgs): Promise<Entry[]>;
 	/**
 	 * Rreturns all the active entries by userId or empty array if no entries
 	 * were found
 	 */
-	findActiveByUserId({ userId }: TGetEntriesByUserIdArgs): Promise<Entry[]>;
+	findActiveByUserId({ userId }: TFindEntriesByUserIdArgs): Promise<Entry[]>;
 	/**
 	 * Rreturns all the inactive entries by userId or empty array if no entries
 	 * were found
 	 */
-	findInactiveByUserId({ userId }: TGetEntriesByUserIdArgs): Promise<Entry[]>;
+	findInactiveByUserId({ userId }: TFindEntriesByUserIdArgs): Promise<Entry[]>;
 	/**
 	 * Creates a new entry and returns it
 	 */

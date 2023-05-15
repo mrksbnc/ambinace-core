@@ -7,23 +7,20 @@ new Generator({
 	entry: 'src/index.ts',
 	output: 'dist/index.d.ts',
 }).generate();
-
-const sharedConfig = {
-	entryPoints: ['src/index.ts'],
+/**
+ * @type {import('esbuild').BuildOptions}
+ */
+const buildConfig = {
 	bundle: true,
 	minify: true,
+	format: 'cjs',
+	outdir: 'dist',
+	platform: 'node',
+	entryPoints: ['src/index.ts'],
 	external: Object.keys(dependencies),
+	define: {
+		'process.env.NODE_ENV': '"production"',
+	},
 };
 
-build({
-	...sharedConfig,
-	platform: 'node',
-	outfile: 'dist/index.js',
-});
-
-build({
-	...sharedConfig,
-	format: 'esm',
-	platform: 'neutral',
-	outfile: 'dist/index.esm.js',
-});
+build(buildConfig).catch(() => process.exit(1));

@@ -8,29 +8,29 @@ import { cleanEnv, num, port, str } from 'envalid';
 	cleanEnv(process.env, {
 		PORT: port(),
 		NODE_ENV: str(),
-		DATABASE_URL: str(),
+		BASE_URL: str(),
 		JWT_SECRET: str(),
+		DATABASE_URL: str(),
 		JWT_EXPIRES_IN: str(),
 		JWT_GRACE_PERIOD: str(),
 		BCRYPT_SALT_ROUNDS: num(),
-		BASE_URL: str(),
 	});
 
 	dotenv.config();
-	Log.sharedInstance.baseLogger.info('.env file loaded!');
+	Log.sharedInstance.baseLogger.info('env file validated and loaded!');
 
 	try {
 		await Database.sharedInstance.getDefaultClient().$connect();
 		Log.sharedInstance.baseLogger.info('database initialized!');
 	} catch (error) {
-		Log.sharedInstance.baseLogger.fatal('failed to initialize database! Process will now exit with code 1', error);
+		Log.sharedInstance.baseLogger.error('failed to initialize database! Process will now exit with code 1', { error });
 		process.exit(1);
 	}
 
 	try {
 		Server.sharedInstance.init();
 	} catch (error) {
-		Log.sharedInstance.baseLogger.fatal('failed to initialize server! Process will now exit with code 1', error);
+		Log.sharedInstance.baseLogger.error('failed to initialize server! Process will now exit with code 1', { error });
 		process.exit(1);
 	}
 })();
