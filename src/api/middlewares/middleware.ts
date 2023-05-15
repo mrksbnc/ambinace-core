@@ -26,19 +26,6 @@ export default class Middleware implements TMiddleware {
 		return sharedInstance;
 	}
 
-	public register(app: Application): void {
-		app.use(this._requestMethodValidationHandler);
-		app.use(this._contentTypeValidationHandler);
-		app.use(helmet({ hidePoweredBy: true }));
-		app.use(hpp());
-		app.use(cors());
-		app.use(cookieParser());
-		app.use(urlencoded({ extended: true }));
-		app.use(json({ type: 'application/json' }));
-		app.use(this._httpTrafficLogHandler);
-		app.all('*', this._responseHeaderHandler);
-	}
-
 	private readonly _contentTypeValidationHandler = (request: Request, response: Response, next: NextFunction): void => {
 		if (request.headers['content-type'] === 'application/json') next();
 		else
@@ -198,4 +185,17 @@ export default class Middleware implements TMiddleware {
 			}),
 		);
 	};
+
+	public register(app: Application): void {
+		app.use(this._requestMethodValidationHandler);
+		app.use(this._contentTypeValidationHandler);
+		app.use(helmet({ hidePoweredBy: true }));
+		app.use(hpp());
+		app.use(cors());
+		app.use(cookieParser());
+		app.use(urlencoded({ extended: true }));
+		app.use(json({ type: 'application/json' }));
+		app.use(this._httpTrafficLogHandler);
+		app.all('*', this._responseHeaderHandler);
+	}
 }
