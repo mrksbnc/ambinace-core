@@ -15,7 +15,7 @@ export type TGetEntriesByUserIdAndDateServiceArgs = {
 
 export type TGetEntriesByUserIdAndMoodServiceArgs = {
 	userId: string;
-	mood: Mood;
+	moodId: string;
 };
 
 export type TGetEntriesByUserIdAndDateRangeServiceArgs = {

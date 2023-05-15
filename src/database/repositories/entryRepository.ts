@@ -1,17 +1,17 @@
-import Database from '../database';
 import type {
 	TCreateEntryArgs,
 	TDeleteEntryArgs,
 	TEntryRepository,
 	TUpdateEntryArgs,
 	TRestoreEntryArgs,
-	TGetEntryByIdArgs,
-	TGetEntriesByUserIdArgs,
-	TGetEntriesByUserIdAndMoodArgs,
-	TGetEntriesByUserIdAndDateArgs,
+	TFindEntryByIdArgs,
+	TFindEntriesByUserIdArgs,
+	TFindEntriesByUserIdAndMoodArgs,
+	TFindEntriesByUserIdAndDateArgs,
 	TEntryRepositoryConstructorArgs,
-	TGetEntriesByUserIdAndDateRangeArgs,
+	TFindEntriesByUserIdAndDateRangeArgs,
 } from './entryRepository.d';
+import Database from '../database';
 import type { Entry, Prisma } from '@prisma/client';
 
 let sharedInstance: EntryRepository | null = null;
@@ -32,17 +32,17 @@ export default class EntryRepository implements TEntryRepository {
 		this._delegate = delegate;
 	}
 
-	async findById({ id }: TGetEntryByIdArgs): Promise<Entry | null> {
+	async findById({ id }: TFindEntryByIdArgs): Promise<Entry | null> {
 		const queryResult = await this._delegate.findUnique({ where: { id }, rejectOnNotFound: false });
 		return queryResult;
 	}
 
-	async findByUserId({ userId }: TGetEntriesByUserIdArgs): Promise<Entry[]> {
+	async findByUserId({ userId }: TFindEntriesByUserIdArgs): Promise<Entry[]> {
 		const queryResult = await this._delegate.findMany({ where: { userId } });
 		return queryResult;
 	}
 
-	async findByUserIdAndDate({ userId, date }: TGetEntriesByUserIdAndDateArgs): Promise<Entry[]> {
+	async findByUserIdAndDate({ userId, date }: TFindEntriesByUserIdAndDateArgs): Promise<Entry[]> {
 		const queryResult = await this._delegate.findMany({ where: { userId, createdAt: date } });
 		return queryResult;
 	}
@@ -51,7 +51,7 @@ export default class EntryRepository implements TEntryRepository {
 		userId,
 		startDate,
 		endDate,
-	}: TGetEntriesByUserIdAndDateRangeArgs): Promise<Entry[]> {
+	}: TFindEntriesByUserIdAndDateRangeArgs): Promise<Entry[]> {
 		const queryResult = await this._delegate.findMany({
 			where: { userId, createdAt: { gte: startDate, lte: endDate } },
 		});
@@ -59,17 +59,17 @@ export default class EntryRepository implements TEntryRepository {
 		return queryResult;
 	}
 
-	async findByUserIdAndMood({ userId, mood }: TGetEntriesByUserIdAndMoodArgs): Promise<Entry[]> {
-		const queryResult = await this._delegate.findMany({ where: { userId, mood } });
+	async findByUserIdAndMood({ userId, moodId }: TFindEntriesByUserIdAndMoodArgs): Promise<Entry[]> {
+		const queryResult = await this._delegate.findMany({ where: { userId, moodId } });
 		return queryResult;
 	}
 
-	async findActiveByUserId({ userId }: TGetEntriesByUserIdArgs): Promise<Entry[]> {
+	async findActiveByUserId({ userId }: TFindEntriesByUserIdArgs): Promise<Entry[]> {
 		const queryResult = await this._delegate.findMany({ where: { userId, isActive: true } });
 		return queryResult;
 	}
 
-	async findInactiveByUserId({ userId }: TGetEntriesByUserIdArgs): Promise<Entry[]> {
+	async findInactiveByUserId({ userId }: TFindEntriesByUserIdArgs): Promise<Entry[]> {
 		const queryResult = await this._delegate.findMany({ where: { userId, isActive: false } });
 		return queryResult;
 	}

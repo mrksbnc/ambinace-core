@@ -131,14 +131,14 @@ export default class AuthService implements TAuthService {
 		return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
 	}
 
-	async generatePasswordHash({ password, saltRounds }: TGeneratePasswordHashArgs): Promise<string> {
+	public async generatePasswordHash({ password, saltRounds }: TGeneratePasswordHashArgs): Promise<string> {
 		const salt = await bcrypt.genSalt(saltRounds);
 		const hash = await bcrypt.hash(password, salt);
 
 		return hash;
 	}
 
-	async comparePasswordHash({ password, hash }: TComparePasswordHashArgs): Promise<boolean> {
+	public async comparePasswordHash({ password, hash }: TComparePasswordHashArgs): Promise<boolean> {
 		const result = await bcrypt.compare(password, hash);
 		return result;
 	}

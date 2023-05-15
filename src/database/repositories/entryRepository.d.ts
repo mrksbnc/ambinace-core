@@ -15,7 +15,7 @@ export type TFindEntriesByUserIdAndDateArgs = {
 
 export type TFindEntriesByUserIdAndMoodArgs = {
 	userId: number;
-	mood: Mood;
+	moodId: number;
 };
 
 export type TFindEntriesByUserIdAndDateRangeArgs = {

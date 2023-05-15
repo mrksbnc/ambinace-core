@@ -116,15 +116,21 @@ export default class EntryService implements TEntryService {
 		return repositoryResult;
 	}
 
-	public async getByUserIdAndMood({ userId, mood }: TGetEntriesByUserIdAndMoodServiceArgs): Promise<Entry[]> {
+	public async getByUserIdAndMood({ userId, moodId }: TGetEntriesByUserIdAndMoodServiceArgs): Promise<Entry[]> {
 		if (!Validator.sharedInstance.isValidId(userId)) {
 			throw new InvalidArgumentError('userId');
 		}
 
+		if (!Validator.sharedInstance.isValidId(moodId)) {
+			throw new InvalidArgumentError('moodId');
+		}
+
 		const userIdNum: number = parseInt(userId, 10);
+		const moodIdNum: number = parseInt(moodId, 10);
+
 		const repositoryResult: Entry[] = await this.repository.findByUserIdAndMood({
 			userId: userIdNum,
-			mood,
+			moodId: moodIdNum,
 		});
 
 		return repositoryResult;

@@ -7,7 +7,7 @@ import type {
 	TGetMoodByIdServiceArgs,
 	TMoodServiceConstructorArgs,
 	TGetMoodsByUserIdServiceArgs,
-} from './moodService';
+} from './moodService.d';
 import type { Mood } from '@prisma/client';
 import Validator from '@/validators/validator';
 import MoodSchema from '@/validators/schemas/moodSchema';
@@ -68,8 +68,10 @@ export default class MoodService implements TMoodService {
 	}
 
 	public async create({ mood }: TCreateMoodServiceArgs): Promise<Mood> {
-		if (!Validator.sharedInstance.isValidSchema(MoodSchema.sharedInstance.create, mood)) {
-			throw new InvalidPayloadError();
+		const schemaValidationResult = Validator.sharedInstance.isValidSchema(MoodSchema.sharedInstance.create, mood);
+
+		if (schemaValidationResult.length > 0) {
+			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
 		const repositoryResult = await this._moodRepository.create({ mood });
@@ -81,8 +83,10 @@ export default class MoodService implements TMoodService {
 			throw new InvalidArgumentError('id');
 		}
 
-		if (!Validator.sharedInstance.isValidSchema(MoodSchema.sharedInstance.update, mood)) {
-			throw new InvalidPayloadError();
+		const schemaValidationResult = Validator.sharedInstance.isValidSchema(MoodSchema.sharedInstance.create, mood);
+
+		if (schemaValidationResult.length > 0) {
+			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
 		const idNum: number = parseInt(id, 10);
