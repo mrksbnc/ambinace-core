@@ -1,4 +1,4 @@
-import type { Mood, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
 export type TFindEntryByIdArgs = {
 	id: number;
