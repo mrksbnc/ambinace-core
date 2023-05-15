@@ -19,10 +19,11 @@
 		"test": "jest --coverage",
 		"type-check": "tsc --noEmit",
 		"lint:fix": "yarn lint --fix",
+		"build": "sh scripts/build.sh",
+		"setup": "sh scripts/setup.sh",
 		"lint": "eslint . --ext .ts,.js",
 		"format": "yarn prettier --write src",
-		"format:check": "yarn prettier --check src",
-		"build": "rm -rf dist && node scripts/build.js"
+		"format:check": "yarn prettier --check src"
 	},
 	"keywords": [
 		"REST",
