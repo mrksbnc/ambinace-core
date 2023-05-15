@@ -1,7 +1,7 @@
 import BaseResponse from '@/data/models/baseResponse';
 import type { NextFunction, Request, Response } from 'express';
+import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
-import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/responseMessage';
 
 export default function contentTypeValidator(request: Request, response: Response, next: NextFunction): void {
 	if (request.headers['content-type'] === 'application/json') next();

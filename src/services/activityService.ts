@@ -2,11 +2,11 @@ import type {
 	TActivityService,
 	TUpdateActivityServiceArgs,
 	TCreateActivityServiceArgs,
-	TGetActivityByIdServiceArgs,
 	TGetAllDefaultWithUserArgs,
-	TGetManyByUserIdServiceArgs,
 	TDeleteActivityServiceArgs,
+	TGetActivityByIdServiceArgs,
 	TRestoreActivityServiceArgs,
+	TGetManyByUserIdServiceArgs,
 	TActivityServiceConstructorArgs,
 	TGetManyActivitiesByIdsServiceArgs,
 } from './activityService.d';

@@ -1,6 +1,6 @@
-import { API_CONFIG_KEY, APP_CONFIG_KEY, AUTH_CONFIG_KEY, ENABLED_HTTP_REQUEST_METHODS } from '@/data/constants/config';
 import { name, version } from '../../package.json';
 import type { TAppConfig, TAmbianceConfig, TApiConfig, TAuthConfig } from './appConfig.d';
+import { API_CONFIG_KEY, APP_CONFIG_KEY, AUTH_CONFIG_KEY, ENABLED_HTTP_REQUEST_METHODS } from '@/data/constants/config';
 
 let sharedInstance: AppConfig | null = null;
 

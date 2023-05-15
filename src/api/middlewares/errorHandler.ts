@@ -2,8 +2,8 @@ import Log from '@/utils/logger';
 import BaseError from '@/error/base/baseError';
 import BaseResponse from '@/data/models/baseResponse';
 import type { NextFunction, Request, Response } from 'express';
+import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
-import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/responseMessage';
 
 export default function errorHanlder(
 	error: unknown,
