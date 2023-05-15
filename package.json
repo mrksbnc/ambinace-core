@@ -24,6 +24,10 @@
 		"format:check": "yarn prettier --check src",
 		"build": "rm -rf dist && node scripts/build.js"
 	},
+	"engines": {
+		"node": "18.16.0",
+		"npm": "9.5.1"
+	},
 	"keywords": [
 		"REST",
 		"Api",
