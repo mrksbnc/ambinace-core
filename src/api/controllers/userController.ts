@@ -6,17 +6,17 @@ import type {
 	TGetManyUserByIdsResponseDto,
 	TGetUserRequestDto,
 } from '../dto';
+import HttpError from '@/error/base/httpError';
+import BaseError from '@/error/base/baseError';
 import UserService from '@/services/userService';
+import BaseResponse from '@/data/models/baseResponse';
 import type { TUserService } from '@/services/userService.d';
 import type { NextFunction, Request, Response } from 'express';
 import type { TBaseResponse } from '@/data/models/baseResponse.d';
+import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
 import type { TDeleteUserRequestParams, TGetUserRequestParams } from '../request';
 import type { TUserController, TUserControllerConstructorArgs } from './userController.d';
-import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
-import BaseResponse from '@/data/models/baseResponse';
-import BaseError from '@/error/base/baseError';
 import { ERROR_MESSAGE, ERROR_NAME, RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
-import HttpError from '@/error/base/httpError';
 
 let sharedInstance: UserController | null = null;
 

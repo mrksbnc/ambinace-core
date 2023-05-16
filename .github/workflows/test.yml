@@ -1,10 +1,11 @@
-name: CI
+name: 'Test Code'
+
 on:
   pull_request:
     branches: [main, dev]
 
 jobs:
-  test:
+  action:
     runs-on: ubuntu-latest
 
     steps:

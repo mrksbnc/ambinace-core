@@ -4,7 +4,7 @@
 	"description": "Api service for Ambinace project",
 	"main": "index.js",
 	"homepage": "git@github.com:mrksbnc/ambinace-core.git/README.md",
-	"author": "Bence Markus<bence.markus@outlook.com>",
+	"author": "Bence Markus<markusbence@outlook.com>",
 	"private": true,
 	"repository": {
 		"type": "git",

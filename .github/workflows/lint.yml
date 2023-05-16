@@ -1,10 +1,11 @@
-name: CI
+name: Lint Code
+
 on:
   pull_request:
     branches: [main, dev]
 
 jobs:
-  lint:
+  action:
     runs-on: ubuntu-latest
 
     steps:

@@ -40,7 +40,7 @@ export type TGetUserResponseDto = {
 	user: TPartialUser;
 };
 /**
- * Request DTO definition for the get many by ids endpoints.
+ * Request DTO definition for the get many by ids endpoint.
  */
 export type TGetManyByIdsRequestDto = {
 	ids: string[];

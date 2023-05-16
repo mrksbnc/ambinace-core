@@ -36,7 +36,7 @@ export default class UserRoute implements TRoute {
 		 * TODO: Add authentication middleware.
 		 */
 		router.get(this._concatSegment('get/:id'), this._userController.get);
-		router.post(this._concatSegment('get/many'), this._userController.getMany);
+		router.put(this._concatSegment('get/many'), this._userController.getMany);
 		router.put(this._concatSegment('update/:id'), this._userController.update);
 		router.put(this._concatSegment('delete/soft/:id'), this._userController.softDelete);
 		router.put(this._concatSegment('restore/:id'), this._userController.softDelete);
