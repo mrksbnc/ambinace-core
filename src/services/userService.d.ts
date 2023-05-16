@@ -1,19 +1,13 @@
-import type { Prisma } from '@prisma/client';
+import type {
+	TGetUserResponseDto,
+	TDeleteUserRequestDto,
+	TUpdateUserRequestDto,
+	TRestoreUserRequestDto,
+	TUpdateUserResponseDto,
+	TGetManyByIdsRequestDto,
+} from '@/api/dto.d';
 import type { TAuthService } from './authService.d';
-import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
-
-export type TGetUserByIdServiceArgs = {
-	id: string;
-};
-
-export type TGetManyUsersByIdsServiceArgs = {
-	ids: string[];
-};
-
-export type TUpdateUserServiceArgs = {
-	id: string;
-	user: Prisma.UserUpdateInput;
-};
+import type { TUserRepository } from '@/database/repositories/userRepository.d';
 
 export type TDeleteUserServiceArgs = {
 	id: string;
@@ -37,34 +31,34 @@ export interface TUserService {
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id.
 	 */
-	getById({ id }: TGetUserByIdServiceArgs): Promise<TPartialUser | null>;
+	getById({ id }: TGetUserRequestDto): Promise<TGetUserResponseDto>;
 	/**
 	 * Returns a single user or null if user not exists in the database
 	 * using the injected repository.
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id.
 	 */
-	getManyByIds({ ids }: TGetManyUsersByIdsServiceArgs): Promise<TPartialUser[]>;
+	getManyByIds({ ids }: TGetManyByIdsRequestDto): Promise<TGetManyByIdsResponseDto>;
 	/**
 	 * Updates an existing user in the database using the injected repository.
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id.
 	 * @throws InvalidPayloadError if the user payload is not valid.
 	 */
-	update({ id, user }: TUpdateUserServiceArgs): Promise<TPartialUser>;
+	update({ id, user }: TUpdateUserRequestDto): Promise<TUpdateUserResponseDto>;
 	/**
 	 * Soft deletes an existing user in the database using the injected repository.
 	 * This is the preferred way to delete a user.
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id.
 	 */
-	softDelete({ id }: TDeleteUserServiceArgs): Promise<void>;
+	softDelete({ id }: TDeleteUserRequestDto): Promise<void>;
 	/**
 	 * Restores a soft deleted user in the database using the injected repository.
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id.
 	 */
-	restore({ id }: TRestoreUserServiceArgs): Promise<void>;
+	restore({ id }: TRestoreUserRequestDto): Promise<void>;
 	/**
 	 * Permanently deletes an existing user in the database using the injected repository.
 	 *
@@ -74,5 +68,5 @@ export interface TUserService {
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id.
 	 */
-	hardDelete({ id }: TDeleteUserServiceArgs): Promise<void>;
+	hardDelete({ id }: TDeleteUserRequestDto): Promise<void>;
 }

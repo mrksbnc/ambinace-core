@@ -1,8 +1,10 @@
 import Log from '@/utils/logger';
 import AuthRoute from './authRoute';
+import UserRoute from './userRoute';
+import type { TRoute } from './route';
+import type { TRouter } from './router.d';
 import AppConfig from '@/config/appConfig';
 import type { Application } from 'express';
-import type { TRoute, TRouter } from './router.d';
 import Middleware from '../middlewares/middleware';
 import { API_CONFIG_KEY } from '@/data/constants/config';
 
@@ -19,7 +21,7 @@ export default class Router implements TRouter {
 	}
 
 	constructor() {
-		this.routes = [AuthRoute.sharedInstance];
+		this.routes = [AuthRoute.sharedInstance, UserRoute.sharedInstance];
 	}
 
 	public register(app: Application): void {

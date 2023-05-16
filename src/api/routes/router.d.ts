@@ -1,9 +1,4 @@
-import type { Application, Router } from 'express';
-
-export interface TRoute {
-	path: string;
-	router: Router;
-}
+import type { Application } from 'express';
 /**
  * Interface definition for base router class.
  */

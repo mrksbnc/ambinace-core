@@ -22,8 +22,8 @@ export default class Validator implements TValidator {
 		this._ajv = new Ajv();
 	}
 
-	public isValidId(id: string): boolean {
-		return isInt(id, { min: 1 });
+	public isValidId(id: string | number): boolean {
+		return isInt(String(id), { min: 1 });
 	}
 
 	public isValidEmail(email: string): boolean {

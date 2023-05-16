@@ -38,8 +38,8 @@ model Activity {
   id        Int      @id @default(autoincrement())
   name      String
   icon      String
-  createdAt DateTime @default(now())
   userId    Int?     @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   isActive  Boolean  @default(true) @map("is_active")
 
@@ -50,8 +50,8 @@ model Mood {
   id        Int      @id @default(autoincrement())
   name      String
   icon      String
-  createdAt DateTime @default(now())
   userId    Int?     @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   isActive  Boolean  @default(true) @map("is_active")
 
