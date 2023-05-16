@@ -54,18 +54,18 @@ export interface TUserController {
 		next: NextFunction,
 	): Promise<void>;
 	/**
-	 * Hard deletes a user by id or calls the next middleware function
-	 */
-	hardDelete(
-		request: Request<TDeleteUserRequestParams, never, never>,
-		response: Response<TBaseResponse<never>>,
-		next: NextFunction,
-	): Promise<void>;
-	/**
 	 * Restores a soft deleted user by id or calls the next middleware function
 	 */
 	restore(
 		request: Request<TRestoreUserRequestParams, never, never>,
+		response: Response<TBaseResponse<never>>,
+		next: NextFunction,
+	): Promise<void>;
+	/**
+	 * Hard deletes a user by id or calls the next middleware function
+	 */
+	hardDelete(
+		request: Request<TDeleteUserRequestParams, never, never>,
 		response: Response<TBaseResponse<never>>,
 		next: NextFunction,
 	): Promise<void>;

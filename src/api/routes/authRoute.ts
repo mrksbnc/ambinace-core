@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import type { TRoute } from './router.d';
 import AuthController from '../controllers/authController';
-import type { TAuthRouteConstructorArgs } from './authRoute.d';
+import type { TRoute, TRouteConstructorArgs } from './route.d';
 import type { TAuthController } from '../controllers/authController.d';
 
 let sharedInstance: AuthRoute | null = null;
@@ -12,7 +11,7 @@ export default class AuthRoute implements TRoute {
 	static get sharedInstance(): AuthRoute {
 		if (sharedInstance === null) {
 			sharedInstance = new AuthRoute({
-				authController: AuthController.sharedInstance,
+				controller: AuthController.sharedInstance,
 			});
 		}
 		return sharedInstance;
@@ -21,8 +20,8 @@ export default class AuthRoute implements TRoute {
 	public readonly path = '/auth';
 	public readonly router: Router;
 
-	public constructor({ authController }: TAuthRouteConstructorArgs) {
-		this._authController = authController;
+	public constructor({ controller }: TRouteConstructorArgs<TAuthController>) {
+		this._authController = controller;
 
 		const r = Router();
 		this.router = this._register(r);
