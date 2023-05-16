@@ -1,12 +1,10 @@
 import type { NextFunction } from 'express';
-import type { TRequest, TResponse } from '../index.d';
-import type { TUserService } from '@/services/userService';
-import type { TAuthService } from '../../services/authService';
-import type { TLoginRequestDto, TLoginResponseDto, TRegisterRequestDto, TRegisterResponseDto } from '../dto';
+import type { TAuthService } from '../../services/authService.d';
+import type { TBaseResponse } from '@/data/models/baseResponse.d';
+import type { TLoginRequestDto, TLoginResponseDto, TRegisterRequestDto, TRegisterResponseDto } from '../dto.d';
 
 export type TAuthControllerConstructorArgs = {
 	authService: TAuthService;
-	userService: TUserService;
 };
 /**
  * Interface definition for the auth controller.
@@ -17,8 +15,8 @@ export interface TAuthController {
 	 * if an error occurs.
 	 */
 	register(
-		request: TRequest<never, never, TRegisterRequestDto>,
-		response: TResponse<TRegisterResponseDto>,
+		request: Request<never, never, TRegisterRequestDto>,
+		response: Response<TBaseResponse<TRegisterResponseDto>, TLocals>,
 		next: NextFunction,
 	): Promise<void>;
 	/**
@@ -26,8 +24,8 @@ export interface TAuthController {
 	 * if an error occurs.
 	 */
 	login(
-		request: TRequest<never, never, TLoginRequestDto>,
-		response: TResponse<TLoginResponseDto>,
+		request: Request<never, never, TLoginRequestDto>,
+		response: Response<TBaseResponse<TLoginResponseDto>>,
 		next: NextFunction,
 	): Promise<void>;
 }

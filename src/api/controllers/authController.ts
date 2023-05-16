@@ -2,10 +2,8 @@ import type { TLocals } from '..';
 import BaseError from '@/error/base/baseError';
 import HttpError from '@/error/base/httpError';
 import AuthService from '@/services/authService';
-import UserService from '@/services/userService';
 import BaseResponse from '@/data/models/baseResponse';
 import type { TAuthService } from '@/services/authService.d';
-import type { TUserService } from '@/services/userService.d';
 import type { NextFunction, Request, Response } from 'express';
 import type { TBaseResponse } from '@/data/models/baseResponse.d';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
@@ -17,31 +15,30 @@ let sharedInstance: AuthController | null = null;
 
 export default class AuthController implements TAuthController {
 	private readonly _authService: TAuthService;
-	private readonly _userService: TUserService;
 
 	static get sharedInstance(): AuthController {
 		if (sharedInstance === null) {
 			sharedInstance = new AuthController({
 				authService: AuthService.sharedInstance,
-				userService: UserService.sharedInstance,
 			});
 		}
 		return sharedInstance;
 	}
 
-	public constructor({ authService, userService }: TAuthControllerConstructorArgs) {
+	public constructor({ authService }: TAuthControllerConstructorArgs) {
 		this._authService = authService;
-		this._userService = userService;
 	}
 
 	public register = async (
-		request: Request,
+		request: Request<never, never, TRegisterRequestDto>,
 		response: Response<TBaseResponse<TRegisterResponseDto>, TLocals>,
 		next: NextFunction,
 	): Promise<void> => {
 		try {
 			const requestDto: TRegisterRequestDto = request.body;
-			const data: TRegisterResponseDto = await this._authService.register({ user: requestDto.user });
+			const data: TRegisterResponseDto = await this._authService.register({
+				user: requestDto.user,
+			});
 
 			response.status(HTTP_STATUS_CODE.CREATED).json(
 				new BaseResponse<TRegisterResponseDto>({
@@ -62,7 +59,10 @@ export default class AuthController implements TAuthController {
 		try {
 			const { email, password }: TLoginRequestDto = request.body;
 
-			const data: TLoginResponseDto = await this._authService.authenticate({ email, password });
+			const data: TLoginResponseDto = await this._authService.authenticate({
+				email,
+				password,
+			});
 
 			if (data.user === null) {
 				return next(

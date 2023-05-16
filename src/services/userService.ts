@@ -1,12 +1,13 @@
 import type {
-	TUserService,
-	TDeleteUserServiceArgs,
-	TUpdateUserServiceArgs,
-	TGetUserByIdServiceArgs,
-	TRestoreUserServiceArgs,
-	TUserServiceConstructorArgs,
-	TGetManyUsersByIdsServiceArgs,
-} from './userService.d';
+	TGetUserRequestDto,
+	TGetUserResponseDto,
+	TUpdateUserRequestDto,
+	TDeleteUserRequestDto,
+	TUpdateUserResponseDto,
+	TRestoreUserRequestDto,
+	TGetManyByIdsRequestDto,
+	TGetManyUserByIdsResponseDto,
+} from '@/api/dto.d';
 import AuthService from './authService';
 import AppConfig from '@/config/appConfig';
 import Validator from '../validators/validator';
@@ -16,6 +17,7 @@ import { AUTH_CONFIG_KEY } from '@/data/constants/config';
 import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import UserRepository from '@/database/repositories/userRepository';
+import type { TUserService, TUserServiceConstructorArgs } from './userService.d';
 import type { TPartialUser, TUserRepository } from '@/database/repositories/userRepository.d';
 
 let sharedInstance: UserService | null = null;
@@ -38,18 +40,22 @@ export default class UserService implements TUserService {
 		this._authService = authService;
 	}
 
-	public async getById({ id }: TGetUserByIdServiceArgs): Promise<TPartialUser | null> {
+	public async getById({ id }: TGetUserRequestDto): Promise<TGetUserResponseDto> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
 
 		const idNum: number = parseInt(id, 10);
-		const repositoryResult = await this._userRepository.findById({ id: idNum });
+		const repositoryResult: TPartialUser | null = await this._userRepository.findById({ id: idNum });
 
-		return repositoryResult;
+		const dto: TGetUserResponseDto = {
+			user: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async getManyByIds({ ids }: TGetManyUsersByIdsServiceArgs): Promise<TPartialUser[]> {
+	public async getManyByIds({ ids }: TGetManyByIdsRequestDto): Promise<TGetManyUserByIdsResponseDto> {
 		const invalidId = ids.find((id) => !Validator.sharedInstance.isValidId(id));
 
 		if (invalidId !== undefined) {
@@ -57,12 +63,15 @@ export default class UserService implements TUserService {
 		}
 
 		const idsNum: number[] = ids.map((id) => parseInt(id, 10));
-		const repositoryResult = await this._userRepository.findManyByIds({ ids: idsNum });
+		const repositoryResult: TPartialUser[] = await this._userRepository.findManyByIds({ ids: idsNum });
 
-		return repositoryResult;
+		const dto: TGetManyUserByIdsResponseDto = {
+			users: repositoryResult,
+		};
+		return dto;
 	}
 
-	public async update({ id, user }: TUpdateUserServiceArgs): Promise<TPartialUser> {
+	public async update({ id, user }: TUpdateUserRequestDto): Promise<TUpdateUserResponseDto> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -85,12 +94,16 @@ export default class UserService implements TUserService {
 		}
 
 		const idNum: number = parseInt(id, 10);
-		const repositoryResult = await this._userRepository.update({ id: idNum, user });
+		const repositoryResult: TPartialUser = await this._userRepository.update({ id: idNum, user });
 
-		return repositoryResult;
+		const dto: TUpdateUserResponseDto = {
+			user: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async softDelete({ id }: TDeleteUserServiceArgs): Promise<void> {
+	public async softDelete({ id }: TDeleteUserRequestDto): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -99,7 +112,7 @@ export default class UserService implements TUserService {
 		await this._userRepository.softDelete({ id: idNum });
 	}
 
-	public async restore({ id }: TRestoreUserServiceArgs): Promise<void> {
+	public async restore({ id }: TRestoreUserRequestDto): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -108,7 +121,7 @@ export default class UserService implements TUserService {
 		await this._userRepository.restore({ id: idNum });
 	}
 
-	public async hardDelete({ id }: TDeleteUserServiceArgs): Promise<void> {
+	public async hardDelete({ id }: TDeleteUserRequestDto): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
