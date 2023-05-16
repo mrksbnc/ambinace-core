@@ -2,12 +2,12 @@ name: 'CodeQL'
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
   pull_request:
     branches: [main]
 
 jobs:
-  action:
+  run-code-ql:
     runs-on: ubuntu-latest
 
     permissions:
