@@ -1,4 +1,5 @@
-name: Type Check Code
+name: Type-check
+
 on:
   pull_request:
     branches: [main, dev]
