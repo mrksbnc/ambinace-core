@@ -1,3 +1,4 @@
+import type jwt from 'jsonwebtoken';
 import type { Prisma } from '@prisma/client';
 import type { TLoginResponseDto, TRegisterResponseDto } from '@/api/dto';
 import type { TUserRepository } from '@/database/repositories/userRepository.d';
@@ -8,11 +9,11 @@ import type { TUserRepository } from '@/database/repositories/userRepository.d';
  * The expiration timestamp is the issued timestamp plus the expiration duration.
  * The expiration duration is the value of the JWT_EXPIRES_IN config key.
  */
-export type TSession = {
+export interface TSession extends jwt.JwtPayload {
 	userId: number;
-	issued: number;
-	expiresAt: number;
-};
+	exp?: number;
+	iat?: number;
+}
 /**
  * The encode result contains the access token and the issued timestamp.
  */

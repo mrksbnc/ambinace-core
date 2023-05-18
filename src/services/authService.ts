@@ -58,24 +58,20 @@ export default class AuthService implements TAuthService {
 
 	public encodeSession({ userId }: TEncodeSessionArgs): TEncodeResult {
 		const algorithm: Algorithm = 'HS512';
-		const issued: number = Date.now();
-		const expires: number = this._jwtExpiresIn;
 
 		const session: TSession = {
 			userId,
-			issued: issued,
-			expiresAt: issued + expires,
 		};
 
 		const accessToken: string = jwt.sign(session, this._jwtSecret, {
 			algorithm,
-			expiresIn: expires,
+			expiresIn: this._jwtExpiresIn,
 		});
 
 		const encodeResult: TEncodeResult = {
 			userId,
 			accessToken,
-			issued: session.issued,
+			issued: Date.now(),
 		};
 
 		return encodeResult;
@@ -112,7 +108,7 @@ export default class AuthService implements TAuthService {
 	public checkExpirationStatus({ session }: TCheckExpirationStatusArgs): TExpirationStatus {
 		const now = Date.now();
 
-		if (session.expiresAt > now) {
+		if (session?.exp && session?.exp > now) {
 			return 'active';
 		}
 		/**
