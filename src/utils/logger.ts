@@ -25,9 +25,10 @@ export default class Log implements TLog {
 		}
 
 		this.baseLogger = this._createBaseLogger();
-		this.baseLogger.info(`****************************************`);
-		this.baseLogger.info(`* __logConstructor: Created log directory at: ${this._logPath}`);
-		this.baseLogger.info('* __logConstructor: Logger initialized...', { path: this._logPath });
+		this.createInfoMessageBlock([
+			`__logConstructor: Created log directory at: ${this._logPath}`,
+			'__logConstructor: Logger initialized...',
+		]);
 	}
 
 	private _createBaseLogger(): Logger {
@@ -61,5 +62,27 @@ export default class Log implements TLog {
 				}),
 			],
 		});
+	}
+
+	public createBlockSeparator(): void {
+		this.baseLogger.info(`----------------------------------------------`);
+	}
+
+	public createMessageLine(message: string): void {
+		this.baseLogger.info(`* ${message}`);
+	}
+
+	public createInfoMessageBlock(message: string | string[]): void {
+		if (typeof message === 'string') {
+			this.baseLogger.info(`* ${message}`);
+			this.createBlockSeparator();
+			return;
+		}
+
+		this.createBlockSeparator();
+		for (const line of message) {
+			this.baseLogger.info(`* ${line}`);
+		}
+		this.createBlockSeparator();
 	}
 }

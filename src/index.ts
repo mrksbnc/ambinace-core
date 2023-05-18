@@ -5,14 +5,16 @@ import Database from './database/database';
 import { cleanEnv, num, port, str } from 'envalid';
 
 (async (): Promise<void> => {
-	Log.sharedInstance.baseLogger.info(`****************************************`);
-	Log.sharedInstance.baseLogger.info(`* Beginning server initialization process...`);
-	Log.sharedInstance.baseLogger.info(`* Process started at ${new Date().toJSON()}`);
-	Log.sharedInstance.baseLogger.info(`* NODE_ENV: ${process.env.NODE_ENV}`);
-	Log.sharedInstance.baseLogger.info(`* PID: ${process.pid}`);
-	Log.sharedInstance.baseLogger.info(`**********************************************`);
+	const start = performance.now();
 
-	Log.sharedInstance.baseLogger.info('* validating env file...');
+	Log.sharedInstance.createInfoMessageBlock([
+		'Beginning server initialization process...',
+		`Process started at ${new Date().toJSON()}`,
+		`NODE_ENV: ${process.env.NODE_ENV}`,
+		`PID: ${process.pid}`,
+	]);
+
+	Log.sharedInstance.createInfoMessageBlock('validating env file...');
 	cleanEnv(process.env, {
 		PORT: port(),
 		NODE_ENV: str(),
@@ -25,13 +27,14 @@ import { cleanEnv, num, port, str } from 'envalid';
 	});
 
 	dotenv.config();
-	Log.sharedInstance.baseLogger.info('* env file validated and loaded!');
-	Log.sharedInstance.baseLogger.info(`**********************************************`);
+	Log.sharedInstance.createInfoMessageBlock('env file validated and loaded!');
 
 	try {
-		Log.sharedInstance.baseLogger.info('* Trying to initialize database connection...');
+		Log.sharedInstance.createInfoMessageBlock(['Trying to establish database connection...']);
+
 		await Database.sharedInstance.getDefaultClient().$connect();
-		Log.sharedInstance.baseLogger.info('* Database connection established successfully!');
+
+		Log.sharedInstance.createInfoMessageBlock(['Database connection established successfully!']);
 	} catch (error) {
 		Log.sharedInstance.baseLogger.error('failed to initialize database! Process will now exit with code 1', { error });
 		process.exit(1);
@@ -43,4 +46,11 @@ import { cleanEnv, num, port, str } from 'envalid';
 		Log.sharedInstance.baseLogger.error('failed to initialize server! Process will now exit with code 1', { error });
 		process.exit(1);
 	}
+
+	const end = performance.now() - start;
+	Log.sharedInstance.createInfoMessageBlock([
+		'Server initialization process completed!',
+		`Process completed in ${end}ms`,
+	]);
+	Log.sharedInstance.createBlockSeparator();
 })();

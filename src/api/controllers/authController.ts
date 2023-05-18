@@ -35,15 +35,12 @@ export default class AuthController implements TAuthController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TRegisterRequestDto = request.body;
-			const data: TRegisterResponseDto = await this._authService.register({
-				user: requestDto.user,
-			});
+			const dto: TRegisterResponseDto = await this._authService.register(request.body);
 
 			response.status(HTTP_STATUS_CODE.CREATED).json(
 				new BaseResponse<TRegisterResponseDto>({
+					data: dto,
 					status: HTTP_STATUS_CODE.CREATED,
-					data,
 				}),
 			);
 		} catch (error) {
@@ -57,12 +54,7 @@ export default class AuthController implements TAuthController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const { email, password }: TLoginRequestDto = request.body;
-
-			const data: TLoginResponseDto = await this._authService.authenticate({
-				email,
-				password,
-			});
+			const data: TLoginResponseDto = await this._authService.authenticate(request.body);
 
 			if (data.user === null) {
 				return next(
@@ -79,8 +71,8 @@ export default class AuthController implements TAuthController {
 
 			response.status(HTTP_STATUS_CODE.OK).json(
 				new BaseResponse<TLoginResponseDto>({
-					status: HTTP_STATUS_CODE.OK,
 					data,
+					status: HTTP_STATUS_CODE.OK,
 				}),
 			);
 		} catch (error) {
