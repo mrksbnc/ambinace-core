@@ -8,6 +8,10 @@ import type { TRoute, TRouteConstructorArgs, TRouteMeta } from './route.d';
 let sharedInstance: MoodRoute | null = null;
 
 export default class MoodRoute implements TRoute {
+	public readonly path = '/mood';
+	public readonly router: Router;
+	public metaLogs: string[] = [];
+
 	private readonly _moodController: TMoodController;
 
 	private readonly _meta: TRouteMeta[] = [
@@ -77,10 +81,6 @@ export default class MoodRoute implements TRoute {
 		}
 		return sharedInstance;
 	}
-
-	public readonly path = '/mood';
-	public readonly router: Router;
-	public metaLogs: string[] = [];
 
 	public constructor({ controller }: TRouteConstructorArgs<TMoodController>) {
 		this._moodController = controller;

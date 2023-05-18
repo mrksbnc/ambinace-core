@@ -1,14 +1,17 @@
 import { Router } from 'express';
-import AppConfig from '@/config/appConfig';
+import RouteMeta from './routeMeta';
 import { concatSegmentHelper } from './routeHelper';
 import UserController from '../controllers/userController';
 import type { TUserController } from '../controllers/userController.d';
 import type { TRoute, TRouteConstructorArgs, TRouteMeta } from './route.d';
-import RouteMeta from './routeMeta';
 
 let sharedInstance: UserRoute | null = null;
 
 export default class UserRoute implements TRoute {
+	public readonly path = '/user';
+	public readonly router: Router;
+	public metaLogs: string[] = [];
+
 	private readonly _userController: TUserController;
 
 	private readonly _meta: TRouteMeta[] = [
@@ -64,10 +67,6 @@ export default class UserRoute implements TRoute {
 		}
 		return sharedInstance;
 	}
-
-	public readonly path = '/user';
-	public readonly router: Router;
-	public metaLogs: string[] = [];
 
 	public constructor({ controller }: TRouteConstructorArgs<TUserController>) {
 		this._userController = controller;

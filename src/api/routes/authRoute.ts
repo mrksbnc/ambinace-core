@@ -8,6 +8,10 @@ import type { TRoute, TRouteConstructorArgs, TRouteMeta } from './route.d';
 let sharedInstance: AuthRoute | null = null;
 
 export default class AuthRoute implements TRoute {
+	public readonly path = '/auth';
+	public readonly router: Router;
+	public metaLogs: string[] = [];
+
 	private readonly _authController: TAuthController;
 
 	private readonly _meta: TRouteMeta[] = [
@@ -35,10 +39,6 @@ export default class AuthRoute implements TRoute {
 		}
 		return sharedInstance;
 	}
-
-	public readonly path = '/auth';
-	public readonly router: Router;
-	public metaLogs: string[] = [];
 
 	constructor({ controller }: TRouteConstructorArgs<TAuthController>) {
 		this._authController = controller;

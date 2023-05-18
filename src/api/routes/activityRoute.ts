@@ -8,6 +8,10 @@ import type { TActivityController } from '../controllers/activityController.d';
 let sharedInstance: ActivityRoute | null = null;
 
 export default class ActivityRoute implements TRoute {
+	public metaLogs: string[] = [];
+	public readonly router: Router;
+	public readonly path = '/activity';
+
 	private readonly _activityController: TActivityController;
 
 	private readonly _meta: TRouteMeta[] = [
@@ -84,10 +88,6 @@ export default class ActivityRoute implements TRoute {
 		}
 		return sharedInstance;
 	}
-
-	public metaLogs: string[] = [];
-	public readonly router: Router;
-	public readonly path = '/activity';
 
 	public constructor({ controller }: TRouteConstructorArgs<TActivityController>) {
 		this._activityController = controller;
