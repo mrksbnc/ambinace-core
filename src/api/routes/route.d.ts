@@ -4,21 +4,39 @@ import type { IRouterMatcher, Router } from 'express';
  * Used to define the controller that handles the route
  */
 export type TRouteControllerKey =
-	| 'MoodController'
-	| 'AuthController'
-	| 'UserController'
-	| 'EntryController'
-	| 'ActivityController';
+	| 'moodController'
+	| 'authController'
+	| 'userController'
+	| 'entryController'
+	| 'activityController';
 /**
- * Route meta data used to define the route and the controller that handles the route
- * with the appropriate method
+ * Interface definition for the meta data of a route
+ *
+ * Route meta data used to define the behavior of the given route
+ * and enable more detailed logging
  */
-export type TRouteMetaData = {
+export interface TRouteMeta {
 	path: string;
 	fullPath: string;
 	method: IRouterMatcher;
 	controller: TRouteControllerKey;
-	__handler: (router: Router) => ReturnType<Router['get'] | Router['post'] | Router['put'] | Router['delete']>;
+	__handler: (
+		router: Router,
+		path: string,
+	) => ReturnType<Router['get'] | Router['post'] | Router['put'] | Router['delete']>;
+}
+/**
+ * Type definition for the constructor arguments for the meta data
+ * class
+ */
+export type TRouteMetaConstructorArgs = {
+	path: string;
+	method: IRouterMatcher;
+	controller: TRouteControllerKey;
+	__handler: (
+		router: Router,
+		path: string,
+	) => ReturnType<Router['get'] | Router['post'] | Router['put'] | Router['delete']>;
 };
 /**
  * Interface defintion for the a standard API route
@@ -26,7 +44,7 @@ export type TRouteMetaData = {
 export interface TRoute {
 	path: string;
 	router: Router;
-	meta: TRouteMetaData[];
+	metaLogs: string[];
 }
 /**
  * Interface definition for the constructor arguments for a standard API route

@@ -4,7 +4,7 @@ import type { Prisma } from '@prisma/client';
 let sharedInstance: EntrySchema | null = null;
 
 export default class EntrySchema {
-	static get sharedInstance(): EntrySchema {
+	public static get sharedInstance(): EntrySchema {
 		if (sharedInstance === null) {
 			sharedInstance = new EntrySchema();
 		}

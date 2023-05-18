@@ -25,7 +25,7 @@ export default class UserService implements TUserService {
 	private readonly _authService: TAuthService;
 	private readonly _userRepository: TUserRepository;
 
-	static get sharedInstance(): UserService {
+	public static get sharedInstance(): UserService {
 		if (sharedInstance === null) {
 			const authService: TAuthService = AuthService.sharedInstance;
 			const userRepository: TUserRepository = UserRepository.sharedInstance;

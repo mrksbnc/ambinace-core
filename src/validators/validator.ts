@@ -11,7 +11,7 @@ let sharedInstance: Validator | null = null;
 export default class Validator implements TValidator {
 	private readonly _ajv: Ajv;
 
-	static get sharedInstance(): Validator {
+	public static get sharedInstance(): Validator {
 		if (sharedInstance === null) {
 			sharedInstance = new Validator();
 		}

@@ -19,7 +19,7 @@ import { type Application, type NextFunction, type Request, type Response, urlen
 let sharedInstance: Middleware | null = null;
 
 export default class Middleware implements TMiddleware {
-	static get sharedInstance(): Middleware {
+	public static get sharedInstance(): Middleware {
 		if (sharedInstance === null) {
 			sharedInstance = new Middleware();
 		}

@@ -9,7 +9,6 @@ import type {
 	TUpdateMoodRequestDto,
 	TUpdateMoodResponseDto,
 	TCreateMoodResponseDto,
-	TGetMoodByIdRequestDto,
 	TGetMoodByIdResponseDto,
 	TGetMoodsByUserIdResponseDto,
 	TGetDefaultMoodsWithUserResponseDto,
@@ -30,7 +29,7 @@ let sharedInstance: TMoodController | null = null;
 export default class MoodController implements TMoodController {
 	private readonly _moodService: TMoodService;
 
-	static get sharedInstance(): TMoodController {
+	public static get sharedInstance(): TMoodController {
 		if (sharedInstance === null) {
 			sharedInstance = new MoodController({
 				moodService: MoodService.sharedInstance,

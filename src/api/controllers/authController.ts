@@ -16,7 +16,7 @@ let sharedInstance: AuthController | null = null;
 export default class AuthController implements TAuthController {
 	private readonly _authService: TAuthService;
 
-	static get sharedInstance(): AuthController {
+	public static get sharedInstance(): AuthController {
 		if (sharedInstance === null) {
 			sharedInstance = new AuthController({
 				authService: AuthService.sharedInstance,

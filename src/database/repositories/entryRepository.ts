@@ -19,7 +19,7 @@ let sharedInstance: EntryRepository | null = null;
 export default class EntryRepository implements TEntryRepository {
 	private readonly _delegate: Prisma.EntryDelegate<false>;
 
-	static get sharedInstance(): EntryRepository {
+	public static get sharedInstance(): EntryRepository {
 		if (sharedInstance === null) {
 			sharedInstance = new EntryRepository({
 				delegate: Database.sharedInstance.getDefaultClient().entry,

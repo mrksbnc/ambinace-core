@@ -17,7 +17,7 @@ let sharedInstance: UserRepository | null = null;
 export default class UserRepository implements TUserRepository {
 	private readonly _delegate: Prisma.UserDelegate<false>;
 
-	static get sharedInstance(): UserRepository {
+	public static get sharedInstance(): UserRepository {
 		if (sharedInstance === null) {
 			sharedInstance = new UserRepository({
 				delegate: Database.sharedInstance.getDefaultClient().user,

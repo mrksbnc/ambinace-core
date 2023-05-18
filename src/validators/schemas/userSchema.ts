@@ -4,7 +4,7 @@ import type { Prisma } from '@prisma/client';
 let sharedInstance: UserSchema | null = null;
 
 export default class UserSchema {
-	static get sharedInstance(): UserSchema {
+	public static get sharedInstance(): UserSchema {
 		if (sharedInstance === null) {
 			sharedInstance = new UserSchema();
 		}

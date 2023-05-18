@@ -17,7 +17,7 @@ let sharedInstance: ActivityRepository | null = null;
 export default class ActivityRepository implements TActivityRepository {
 	private readonly _delegate: Prisma.ActivityDelegate<false>;
 
-	static get sharedInstance(): ActivityRepository {
+	public static get sharedInstance(): ActivityRepository {
 		if (sharedInstance === null) {
 			sharedInstance = new ActivityRepository({
 				delegate: Database.sharedInstance.getDefaultClient().activity,

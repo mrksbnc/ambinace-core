@@ -22,7 +22,7 @@ let sharedInstance: MoodService | null = null;
 export default class MoodService implements TMoodService {
 	private readonly _moodRepository: TMoodRepository;
 
-	static get sharedInstance(): MoodService {
+	public static get sharedInstance(): MoodService {
 		if (sharedInstance === null) {
 			sharedInstance = new MoodService({
 				moodRepository: MoodRepository.sharedInstance,

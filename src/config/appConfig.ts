@@ -22,7 +22,7 @@ export default class AppConfig implements TAppConfig {
 		[API_CONFIG_KEY.ENABLED_HTTP_REQUEST_METHODS]: [],
 	};
 
-	static get sharedInstance(): AppConfig {
+	public static get sharedInstance(): AppConfig {
 		if (sharedInstance === null) {
 			sharedInstance = new AppConfig();
 		}

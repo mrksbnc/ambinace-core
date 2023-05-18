@@ -36,7 +36,7 @@ export default class AuthService implements TAuthService {
 	private readonly _jwtExpiresIn: number;
 	private readonly _userReposiory: TUserRepository;
 
-	static get sharedInstance(): AuthService {
+	public static get sharedInstance(): AuthService {
 		if (sharedInstance === null) {
 			const jwtSecret: string = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_SECRET];
 			const jwtExpiresIn: number = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_EXPIRES_IN];

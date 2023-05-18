@@ -28,7 +28,7 @@ let sharedInstance: ActivityService | null = null;
 export default class ActivityService implements TActivityService {
 	private readonly _activityRepository: TActivityRepository;
 
-	static get sharedInstance(): ActivityService {
+	public static get sharedInstance(): ActivityService {
 		if (sharedInstance === null) {
 			sharedInstance = new ActivityService({
 				activityRepository: ActivityRepository.sharedInstance,
