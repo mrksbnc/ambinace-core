@@ -4,7 +4,6 @@ import type {
 	TUpdateUserResponseDto,
 	TGetManyByIdsRequestDto,
 	TGetManyUserByIdsResponseDto,
-	TGetUserRequestDto,
 } from '../dto';
 import HttpError from '@/error/base/httpError';
 import BaseError from '@/error/base/baseError';
@@ -42,13 +41,9 @@ export default class UserController implements TUserController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TGetUserRequestDto = {
-				id: request.params.id,
-			};
+			const dto: TGetUserResponseDto = await this._userService.getById(request.params);
 
-			const data: TGetUserResponseDto = await this._userService.getById(requestDto);
-
-			if (data.user === null) {
+			if (dto.user === null) {
 				next(
 					new BaseError({
 						message: ERROR_MESSAGE.RESOURCE_NOT_FOUND,
@@ -63,7 +58,7 @@ export default class UserController implements TUserController {
 
 			response.status(HTTP_STATUS_CODE.OK).json(
 				new BaseResponse<TGetUserResponseDto>({
-					data,
+					data: dto,
 					status: HTTP_STATUS_CODE.OK,
 				}),
 			);
@@ -78,16 +73,11 @@ export default class UserController implements TUserController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TGetManyByIdsRequestDto = {
-				ids: request.body.ids,
-			};
-
-			const data: TGetManyUserByIdsResponseDto = await this._userService.getManyByIds(requestDto);
+			const dto: TGetManyUserByIdsResponseDto = await this._userService.getManyByIds(request.body);
 
 			response.status(HTTP_STATUS_CODE.OK).json(
 				new BaseResponse<TGetManyUserByIdsResponseDto>({
-					data,
-					status: HTTP_STATUS_CODE.OK,
+					data: dto,
 				}),
 			);
 		} catch (error) {
@@ -101,17 +91,11 @@ export default class UserController implements TUserController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TUpdateUserRequestDto = {
-				id: request.body.id,
-				user: request.body.user,
-			};
-
-			const data: TUpdateUserResponseDto = await this._userService.update(requestDto);
+			const dto: TUpdateUserResponseDto = await this._userService.update(request.body);
 
 			response.status(HTTP_STATUS_CODE.OK).json(
 				new BaseResponse<TUpdateUserResponseDto>({
-					data,
-					status: HTTP_STATUS_CODE.OK,
+					data: dto,
 				}),
 			);
 		} catch (error) {
@@ -125,11 +109,7 @@ export default class UserController implements TUserController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TDeleteRequestParams = {
-				id: request.params.id,
-			};
-
-			await this._userService.softDelete(requestDto);
+			await this._userService.softDelete(request.params);
 
 			response.status(HTTP_STATUS_CODE.NO_CONTENT).json(
 				new BaseResponse<never>({
@@ -147,11 +127,7 @@ export default class UserController implements TUserController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TDeleteRequestParams = {
-				id: request.params.id,
-			};
-
-			await this._userService.restore(requestDto);
+			await this._userService.restore(request.params);
 
 			response.status(HTTP_STATUS_CODE.NO_CONTENT).json(
 				new BaseResponse<never>({
@@ -169,11 +145,7 @@ export default class UserController implements TUserController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TDeleteRequestParams = {
-				id: request.params.id,
-			};
-
-			await this._userService.hardDelete(requestDto);
+			await this._userService.hardDelete(request.params);
 
 			response.status(HTTP_STATUS_CODE.NO_CONTENT).json(
 				new BaseResponse<never>({

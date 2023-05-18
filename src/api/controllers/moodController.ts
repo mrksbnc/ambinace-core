@@ -49,11 +49,7 @@ export default class MoodController implements TMoodController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TGetMoodByIdRequestDto = {
-				id: request.params.id,
-			};
-
-			const dto: TGetMoodByIdResponseDto = await this._moodService.getById(requestDto);
+			const dto: TGetMoodByIdResponseDto = await this._moodService.getById(request.params);
 
 			if (dto.mood === null) {
 				return next(
@@ -69,7 +65,7 @@ export default class MoodController implements TMoodController {
 			}
 
 			response.status(HTTP_STATUS_CODE.OK).json(
-				new BaseResponse({
+				new BaseResponse<TGetMoodByIdResponseDto>({
 					data: dto,
 				}),
 			);
@@ -84,11 +80,7 @@ export default class MoodController implements TMoodController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TGetByUserIdRequestParams = {
-				userId: request.params.userId,
-			};
-
-			const dto: TGetMoodsByUserIdResponseDto = await this._moodService.getByUserId(requestDto);
+			const dto: TGetMoodsByUserIdResponseDto = await this._moodService.getByUserId(request.params);
 
 			response.status(HTTP_STATUS_CODE.OK).json(
 				new BaseResponse<TGetMoodsByUserIdResponseDto>({
@@ -106,11 +98,7 @@ export default class MoodController implements TMoodController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TGetByUserIdRequestParams = {
-				userId: request.params.userId,
-			};
-
-			const dto: TGetDefaultMoodsWithUserResponseDto = await this._moodService.getDefaultsWithUser(requestDto);
+			const dto: TGetDefaultMoodsWithUserResponseDto = await this._moodService.getDefaultsWithUser(request.params);
 
 			response.status(HTTP_STATUS_CODE.OK).json(
 				new BaseResponse<TGetDefaultMoodsWithUserResponseDto>({
@@ -128,11 +116,7 @@ export default class MoodController implements TMoodController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TCreateMoodRequestDto = {
-				mood: request.body.mood,
-			};
-
-			const dto: TCreateMoodResponseDto = await this._moodService.create(requestDto);
+			const dto: TCreateMoodResponseDto = await this._moodService.create(request.body);
 
 			response.status(HTTP_STATUS_CODE.CREATED).json(
 				new BaseResponse<TCreateMoodResponseDto>({
@@ -150,12 +134,7 @@ export default class MoodController implements TMoodController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TUpdateMoodRequestDto = {
-				id: request.body.id,
-				mood: request.body.mood,
-			};
-
-			const dto: TUpdateMoodResponseDto = await this._moodService.update(requestDto);
+			const dto: TUpdateMoodResponseDto = await this._moodService.update(request.body);
 
 			response.status(HTTP_STATUS_CODE.OK).json(
 				new BaseResponse<TUpdateMoodResponseDto>({
@@ -173,11 +152,13 @@ export default class MoodController implements TMoodController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TDeleteRequestParams = {
-				id: request.params.id,
-			};
+			await this._moodService.softDelete(request.params);
 
-			await this._moodService.softDelete(requestDto);
+			response.status(HTTP_STATUS_CODE.NO_CONTENT).json(
+				new BaseResponse<never>({
+					status: HTTP_STATUS_CODE.NO_CONTENT,
+				}),
+			);
 		} catch (error) {
 			next(error);
 		}
@@ -189,11 +170,13 @@ export default class MoodController implements TMoodController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TRestoreRequestParams = {
-				id: request.params.id,
-			};
+			await this._moodService.restore(request.params);
 
-			await this._moodService.restore(requestDto);
+			response.status(HTTP_STATUS_CODE.NO_CONTENT).json(
+				new BaseResponse<never>({
+					status: HTTP_STATUS_CODE.NO_CONTENT,
+				}),
+			);
 		} catch (error) {
 			next(error);
 		}
@@ -205,11 +188,13 @@ export default class MoodController implements TMoodController {
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TDeleteRequestParams = {
-				id: request.params.id,
-			};
+			await this._moodService.hardDelete(request.params);
 
-			await this._moodService.hardDelete(requestDto);
+			response.status(HTTP_STATUS_CODE.NO_CONTENT).json(
+				new BaseResponse<never>({
+					status: HTTP_STATUS_CODE.NO_CONTENT,
+				}),
+			);
 		} catch (error) {
 			next(error);
 		}

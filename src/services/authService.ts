@@ -58,24 +58,20 @@ export default class AuthService implements TAuthService {
 
 	public encodeSession({ userId }: TEncodeSessionArgs): TEncodeResult {
 		const algorithm: Algorithm = 'HS512';
-		const issued: number = Date.now();
-		const expires: number = this._jwtExpiresIn;
 
 		const session: TSession = {
 			userId,
-			issued: issued,
-			expiresAt: issued + expires,
 		};
 
 		const accessToken: string = jwt.sign(session, this._jwtSecret, {
 			algorithm,
-			expiresIn: expires,
+			expiresIn: this._jwtExpiresIn,
 		});
 
 		const encodeResult: TEncodeResult = {
 			userId,
 			accessToken,
-			issued: session.issued,
+			issued: Date.now(),
 		};
 
 		return encodeResult;
@@ -112,7 +108,7 @@ export default class AuthService implements TAuthService {
 	public checkExpirationStatus({ session }: TCheckExpirationStatusArgs): TExpirationStatus {
 		const now = Date.now();
 
-		if (session.expiresAt > now) {
+		if (session?.exp && session?.exp > now) {
 			return 'active';
 		}
 		/**
@@ -150,9 +146,15 @@ export default class AuthService implements TAuthService {
 			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
-		const saltRounds = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.SALT_ROUNDS];
+		const existingUser: User | null = await this._userReposiory.findByEmail({ email: user.email });
+
+		if (existingUser) {
+			throw new InvalidArgumentError('email');
+		}
 
 		const password: string = user.password;
+		const saltRounds = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.SALT_ROUNDS];
+
 		const hash = await this.generatePasswordHash({ password, saltRounds });
 
 		const newUser: Prisma.UserCreateInput = {
@@ -164,14 +166,16 @@ export default class AuthService implements TAuthService {
 			user: newUser,
 		});
 
-		const { accessToken: token } = this.encodeSession({ userId: createdUser.id });
+		const { accessToken: token } = this.encodeSession({
+			userId: createdUser.id,
+		});
 
-		const responseDto: TLoginResponseDto = {
+		const dto: TLoginResponseDto = {
 			token,
 			user: createdUser,
 		};
 
-		return responseDto;
+		return dto;
 	}
 
 	public async authenticate({ email, password }: TAuthenticateArgs): Promise<TLoginResponseDto> {
@@ -185,7 +189,7 @@ export default class AuthService implements TAuthService {
 			throw new ResourceNotFoundError();
 		}
 
-		const isValidPassword = this.comparePasswordHash({
+		const isValidPassword = await this.comparePasswordHash({
 			password,
 			hash: user.password,
 		});
@@ -196,11 +200,11 @@ export default class AuthService implements TAuthService {
 
 		const encodedSession = this.encodeSession({ userId: user.id });
 
-		const responseDto: TLoginResponseDto = {
+		const dto: TLoginResponseDto = {
 			token: encodedSession.accessToken,
 			user: this._userReposiory.mapUser(user),
 		};
 
-		return responseDto;
+		return dto;
 	}
 }

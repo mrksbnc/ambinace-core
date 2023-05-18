@@ -68,6 +68,7 @@ export default class UserService implements TUserService {
 		const dto: TGetManyUserByIdsResponseDto = {
 			users: repositoryResult,
 		};
+
 		return dto;
 	}
 
