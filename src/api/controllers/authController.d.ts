@@ -1,4 +1,4 @@
-import type { NextFunction } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import type { TAuthService } from '../../services/authService.d';
 import type { TBaseResponse } from '@/data/models/baseResponse.d';
 import type { TLoginRequestDto, TLoginResponseDto, TRegisterRequestDto, TRegisterResponseDto } from '../dto.d';

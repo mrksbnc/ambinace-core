@@ -1,78 +1,160 @@
-import type { Prisma } from '@prisma/client';
+import type { Mood, Prisma } from '@prisma/client';
 import type { TPartialUser } from '@/database/repositories/userRepository';
-/**
- * Request DTO definition for the register endpoint.
- */
+
 export type TRegisterRequestDto = {
 	user: Prisma.UserCreateInput;
 };
-/**
- * Response DTO definition for the register endpoint.
- */
+
 export type TRegisterResponseDto = {
 	user: TPartialUser;
 	token: string;
 };
-/**
- * Request DTO definition for the login endpoint.
- */
+
 export type TLoginRequestDto = {
 	email: string;
 	password: string;
 };
-/**
- * Response DTO definition for the login endpoint.
- */
+
 export type TLoginResponseDto = {
 	user: TPartialUser;
 	token: string;
 };
-/**
- * Request DTO definition for the get user endpoint.
- */
+
 export type TGetUserRequestDto = {
 	id: string;
 };
-/**
- * Response DTO definition for the get user endpoint.
- */
+
 export type TGetUserResponseDto = {
 	user: TPartialUser;
 };
-/**
- * Request DTO definition for the get many by ids endpoint.
- */
+
 export type TGetManyByIdsRequestDto = {
 	ids: string[];
 };
-/**
- * Response DTO definition for the get many users endpoint.
- */
+
 export type TGetManyUserByIdsResponseDto = {
 	users: TPartialUser[];
 };
-/**
- * Request DTO definition for the update user endpoint.
- */
+
 export type TUpdateUserRequestDto = {
 	id: string;
 	user: Prisma.UserUpdateInput;
 };
-/**
- * Response DTO definition for the update user endpoint.
- */
+
 export type TUpdateUserResponseDto = {
 	user: TPartialUser;
 };
-/**
- * Request DTO definition for the delete user endpoint.
- */
+
 export type TDeleteUserRequestDto = {
 	id: string;
 };
-/**
- * Request DTO definition for the restore user endpoint.
- */
+
 export type TRestoreUserRequestDto = {
+	id: string;
+};
+
+export type TGetMoodByIdRequestDto = {
+	id: string;
+};
+
+export type TGetMoodsByUserIdRequestDto = {
+	userId: string;
+};
+
+export type TGetMoodByIdResponseDto = {
+	mood: Mood | null;
+};
+
+export type TGetMoodsByUserIdResponseDto = {
+	moods: Mood[];
+};
+
+export type TGetDefaultsWithUserRequestDto = {
+	userId: string;
+};
+
+export type TGetDefaultMoodsWithUserResponseDto = {
+	moods: Mood[];
+};
+
+export type TCreateMoodRequestDto = {
+	mood: Prisma.MoodCreateInput;
+};
+
+export type TCreateMoodResponseDto = {
+	mood: Mood;
+};
+
+export type TUpdateMoodRequestDto = {
+	id: string;
+	mood: Prisma.MoodUpdateInput;
+};
+
+export type TUpdateMoodResponseDto = {
+	mood: Mood;
+};
+
+export type TDeleteMoodRequestDto = {
+	id: string;
+};
+
+export type TRestoreMoodRequestDto = {
+	id: string;
+};
+
+export type TGetActivityByIdRequestDto = {
+	id: string;
+};
+
+export type TGetActivityByIdResponseDto = {
+	activity: Activity | null;
+};
+
+export type TGetDefaultsWithUserRequestDto = {
+	userId: string;
+};
+
+export type TGetDefaultActivitiesWithUserResponseDto = {
+	activities: Activity[];
+};
+
+export type TGetManyActivityByIdListRequestDto = {
+	ids: string[];
+};
+
+export type TGetActivitiesByIdListResponseDto = {
+	activities: Activity[];
+};
+
+export type TGetActivitiesByUserIdRequestDto = {
+	userId: string;
+};
+
+export type TGetActivitiesByUserIdResponseDto = {
+	activities: Activity[];
+};
+
+export type TCreateActivityRequestDto = {
+	activity: Prisma.ActivityCreateInput;
+};
+
+export type TCreateActivityResponseDto = {
+	activity: Activity;
+};
+
+export type TUpdateActivityRequestDto = {
+	id: string;
+	activity: Prisma.ActivityUpdateInput;
+};
+
+export type TUpdateActivityResponseDto = {
+	activity: Activity;
+};
+
+export type TDeleteActivityRequestDto = {
+	id: string;
+};
+
+export type TRestoreActivityRequestDto = {
 	id: string;
 };

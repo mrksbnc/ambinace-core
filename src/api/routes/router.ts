@@ -1,11 +1,12 @@
 import Log from '@/utils/logger';
 import AuthRoute from './authRoute';
+import MoodRoute from './moodRoute';
 import UserRoute from './userRoute';
-import type { TRoute } from './route';
 import type { TRouter } from './router.d';
 import AppConfig from '@/config/appConfig';
 import type { Application } from 'express';
 import Middleware from '../middlewares/middleware';
+import type { TRoute, TRouteMetaData } from './route';
 import { API_CONFIG_KEY } from '@/data/constants/config';
 
 let sharedInstance: Router | null = null;
@@ -21,15 +22,20 @@ export default class Router implements TRouter {
 	}
 
 	constructor() {
-		this.routes = [AuthRoute.sharedInstance, UserRoute.sharedInstance];
+		this.routes = [AuthRoute.sharedInstance, UserRoute.sharedInstance, MoodRoute.sharedInstance];
 	}
 
 	public register(app: Application): void {
-		const basePath: string = AppConfig.sharedInstance.api[API_CONFIG_KEY.BASE_URL];
-
 		this.routes.forEach((route: TRoute) => {
+			Log.sharedInstance.baseLogger.info(`**********************************************`);
+			Log.sharedInstance.baseLogger.info(`* Mounting routes for ${route.path}`);
+			Log.sharedInstance.baseLogger.info(`**********************************************`);
+
 			app.use(AppConfig.sharedInstance.api[API_CONFIG_KEY.BASE_URL], route.router);
-			Log.sharedInstance.baseLogger.info(`path registered: ${basePath}${route.path}`);
+
+			route.meta.forEach((meta: TRouteMetaData) => {
+				Log.sharedInstance.baseLogger.info(`__handler: ${meta.controller} ${meta.method} ${meta.fullPath}`);
+			});
 		});
 
 		app.use(Middleware.sharedInstance.routeNotFoundHandler);

@@ -1,15 +1,15 @@
-export type TGetUserRequestParams = {
+export type TGetByIdRequestParams = {
 	id: string;
 };
 
-export type TGetManyUsersRequestParams = {
-	ids: string[];
+export type TGetByUserIdRequestParams = {
+	userId: string;
 };
 
-export type TDeleteUserRequestParams = {
+export type TDeleteRequestParams = {
 	id: string;
 };
 
-export type TRestoreUserRequestParams = {
+export type TRestoreRequestParams = {
 	id: string;
 };

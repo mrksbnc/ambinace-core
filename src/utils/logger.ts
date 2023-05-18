@@ -25,7 +25,9 @@ export default class Log implements TLog {
 		}
 
 		this.baseLogger = this._createBaseLogger();
-		this.baseLogger.info('logger initialized!', { path: this._logPath });
+		this.baseLogger.info(`****************************************`);
+		this.baseLogger.info(`* __logConstructor: Created log directory at: ${this._logPath}`);
+		this.baseLogger.info('* __logConstructor: Logger initialized...', { path: this._logPath });
 	}
 
 	private _createBaseLogger(): Logger {

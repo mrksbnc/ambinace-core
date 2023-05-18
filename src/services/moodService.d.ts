@@ -1,33 +1,16 @@
+import type {
+	TCreateMoodRequestDto,
+	TUpdateMoodRequestDto,
+	TDeleteMoodRequestDto,
+	TCreateMoodResponseDto,
+	TGetMoodByIdRequestDto,
+	TRestoreMoodRequestDto,
+	TUpdateMoodResponseDto,
+	TGetMoodByIdResponseDto,
+	TGetMoodsByUserIdRequestDto,
+	TGetMoodsByUserIdResponseDto,
+} from '@/api/dto';
 import type { TMoodRepository } from '@/database/repositories/moodRepository.d';
-
-export type TGetMoodByIdServiceArgs = {
-	id: string;
-};
-
-export type TGetMoodsByUserIdServiceArgs = {
-	userId: string;
-};
-
-export type TGetDefaultsWithUserServiceArgs = {
-	userId: string;
-};
-
-export type TCreateMoodServiceArgs = {
-	mood: Prisma.MoodCreateInput;
-};
-
-export type TUpdateMoodServiceArgs = {
-	id: string;
-	mood: Prisma.MoodUpdateInput;
-};
-
-export type TDeleteMoodServiceArgs = {
-	id: string;
-};
-
-export type TRestoreMoodServiceArgs = {
-	id: string;
-};
 
 export type TMoodServiceConstructorArgs = {
 	moodRepository: TMoodRepository;
@@ -42,47 +25,47 @@ export interface TMoodService {
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id
 	 */
-	getById({ id }: TGetMoodByIdServiceArgs): Promise<Mood | null>;
+	getById({ id }: TGetMoodByIdRequestDto): Promise<TGetMoodByIdResponseDto>;
 	/**
 	 * Uses the dependency injected repository to return multiple moods by userId or empty
 	 * array if no moods were found
 	 *
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
 	 */
-	getByUserId({ userId }: TGetMoodsByUserIdServiceArgs): Promise<Mood[]>;
+	getByUserId({ userId }: TGetMoodsByUserIdRequestDto): Promise<TGetMoodsByUserIdResponseDto>;
 	/**
 	 * Uses the dependency injected repository to return the default and user created moods
 	 * or empty array if no moods were found
 	 *
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
 	 */
-	getDefaultsWithUser({ userId }: TGetDefaultsWithUserServiceArgs): Promise<Mood[]>;
+	getDefaultsWithUser({ userId }: TGetMoodsByUserIdServiceArgs): Promise<TGetMoodsByUserIdResponseDto>;
 	/**
 	 * Uses the dependency injected repository to create a mood
 	 *
 	 * @throws InvalidArgumentError if the mood is not valid
 	 */
-	create({ mood }: TCreateMoodServiceArgs): Promise<Mood>;
+	create({ mood }: TCreateMoodRequestDto): Promise<TCreateMoodResponseDto>;
 	/**
 	 * Uses the dependency injected repository to update a mood
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id
 	 * @throws InvalidPayloadError if the mood is not valid
 	 */
-	update({ id, mood }: TUpdateMoodServiceArgs): Promise<Mood>;
+	update({ id, mood }: TUpdateMoodRequestDto): Promise<TUpdateMoodResponseDto>;
 	/**
 	 * Uses the dependency injected repository to soft delete a mood
 	 * This is the preferred method of deleting a mood
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id
 	 */
-	softDelete({ id }: TDeleteMoodServiceArgs): Promise<void>;
+	softDelete({ id }: TDeleteMoodRequestDto): Promise<void>;
 	/**
 	 * Uses the dependency injected repository to restore a soft deleted mood
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id
 	 */
-	restore({ id }: TRestoreMoodServiceArgs): Promise<void>;
+	restore({ id }: TRestoreMoodRequestDto): Promise<void>;
 	/**
 	 * Uses the dependency injected repository to permanently delete a mood
 	 * This is not the preferred method of deleting a mood
@@ -90,5 +73,5 @@ export interface TMoodService {
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id
 	 */
-	hardDelete({ id }: TDeleteMoodServiceArgs): Promise<void>;
+	hardDelete({ id }: TDeleteMoodRequestDto): Promise<void>;
 }

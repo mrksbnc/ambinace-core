@@ -14,7 +14,7 @@ import type { TUserService } from '@/services/userService.d';
 import type { NextFunction, Request, Response } from 'express';
 import type { TBaseResponse } from '@/data/models/baseResponse.d';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
-import type { TDeleteUserRequestParams, TGetUserRequestParams } from '../request';
+import type { TDeleteRequestParams, TGetByIdRequestParams } from '../request';
 import type { TUserController, TUserControllerConstructorArgs } from './userController.d';
 import { ERROR_MESSAGE, ERROR_NAME, RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 
@@ -37,7 +37,7 @@ export default class UserController implements TUserController {
 	}
 
 	public get = async (
-		request: Request<TGetUserRequestParams, never, never>,
+		request: Request<TGetByIdRequestParams, never, never>,
 		response: Response<TBaseResponse<TGetUserResponseDto>>,
 		next: NextFunction,
 	): Promise<void> => {
@@ -120,12 +120,12 @@ export default class UserController implements TUserController {
 	};
 
 	public softDelete = async (
-		request: Request<TDeleteUserRequestParams, never, never>,
+		request: Request<TDeleteRequestParams, never, never>,
 		response: Response<TBaseResponse<never>>,
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TDeleteUserRequestParams = {
+			const requestDto: TDeleteRequestParams = {
 				id: request.params.id,
 			};
 
@@ -142,12 +142,12 @@ export default class UserController implements TUserController {
 	};
 
 	public restore = async (
-		request: Request<TDeleteUserRequestParams, never, never>,
+		request: Request<TDeleteRequestParams, never, never>,
 		response: Response<TBaseResponse<never>>,
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TDeleteUserRequestParams = {
+			const requestDto: TDeleteRequestParams = {
 				id: request.params.id,
 			};
 
@@ -164,12 +164,12 @@ export default class UserController implements TUserController {
 	};
 
 	public hardDelete = async (
-		request: Request<TDeleteUserRequestParams, never, never>,
+		request: Request<TDeleteRequestParams, never, never>,
 		response: Response<TBaseResponse<never>>,
 		next: NextFunction,
 	): Promise<void> => {
 		try {
-			const requestDto: TDeleteUserRequestParams = {
+			const requestDto: TDeleteRequestParams = {
 				id: request.params.id,
 			};
 
