@@ -1,25 +1,36 @@
 # Ambiance core
 
-Ambiance core is the backend service of the Ambiance project. It is responsible for the following tasks:
+Ambiance core is the main API service for the Ambiance project.
 
 ## Prerequisites
 
-Ambiance core is built using Node.js and Express.js. To run the service, you will need to install the following:
+Ambiance core is built using Node.js and Express. To run the service, you will need to install the following:
 
 - [Node.js, latest LTS](https://nodejs.org/en/)
 - [PostgreSQL, latest version](https://www.postgresql.org/download/)
 - [Redis, latest version](https://redis.io/download)
 - [Yarn, latest version](https://yarnpkg.com/en/docs/install)
-- [Docker, latest version](https://docs.docker.com/install/)
-- [Docker Compose, latest version](https://docs.docker.com/compose/install/)
 
-## Installation
+## Setup
 
-To install the project dependencies, run the following commands:
+To be able to start the API service, you will need to create a `.env` file in the root of the project. This file will contain the environment variables that the service will use. The
+enviroment values are listed in the `.env.example` file.
+
+To create the `.env` file, run the following command:
 
 ```bash
-  yarn install
+	cp .env.example .env
 ```
+
+You will need to fill in the values in the `.env` file with the correct ones for your environment.
+
+After this run the following command to init the project:
+
+```bash
+	yarn setup
+```
+
+This will install the project dependencies and run the database migrations.
 
 ## Running the service in development mode
 
@@ -43,22 +54,6 @@ This will run the already built service.
 
 ```bash
   yarn build
-```
-
-## Running the service in a Docker container
-
-To run the service in a Docker container, run the following commands:
-
-```bash
-  docker-compose up
-```
-
-## Running the service in a Docker container in production mode
-
-To run the service in a Docker container in production mode, run the following commands:
-
-```bash
-  docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 ```
 
 ## Running type checking
