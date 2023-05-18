@@ -104,7 +104,7 @@ export default class ActivityRoute implements TRoute {
 		this._meta.forEach((meta: TRouteMeta, index: number) => {
 			meta.__handler(router, meta.path);
 			this.metaLogs.push(
-				` __register:  ${index + 1} | ${meta.controller} | ${meta.method.toUpperCase()}  ${meta.fullPath}`,
+				`__register:  ${index + 1} | ${meta.controller} | ${meta.method.toUpperCase()}  ${meta.fullPath}`,
 			);
 		});
 

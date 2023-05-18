@@ -1,42 +1,42 @@
 import type { Mood, Prisma } from '@prisma/client';
 
-export type TFindMoodByIdArgs = {
+export declare type TFindMoodByIdArgs = {
 	id: number;
 };
 
-export type TFindDefaultsWithUserArgs = {
+export declare type TFindDefaultsWithUserArgs = {
 	userId: number;
 };
 
-export type TFindMoodsByUserIdArgs = {
+export declare type TFindMoodsByUserIdArgs = {
 	userId: number;
 };
 
-export type TCreateMoodArgs = {
+export declare type TCreateMoodArgs = {
 	mood: Prisma.MoodCreateInput;
 };
 
-export type TUpdateMoodArgs = {
+export declare type TUpdateMoodArgs = {
 	id: number;
 	mood: Prisma.MoodUpdateInput;
 };
 
-export type TDeleteMoodArgs = {
+export declare type TDeleteMoodArgs = {
 	id: number;
 };
 
-export type TRestoreMoodArgs = {
+export declare type TRestoreMoodArgs = {
 	id: number;
 };
 
-export type TMoodRepositoryConstructorArgs = {
+export declare type TMoodRepositoryConstructorArgs = {
 	delegate: MoodRepository;
 };
 
 /**
  * Interface definition for MoodRepositories
  */
-export interface TMoodRepository {
+export declare interface TMoodRepository {
 	/**
 	 * Uses the dependency injected delegate to return a single mood by id or null if
 	 * the mood not found

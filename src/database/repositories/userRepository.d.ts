@@ -1,43 +1,43 @@
 import type { Prisma, User } from '@prisma/client';
 
-export type TPartialUser = Omit<User, 'password'>;
+export declare type TPartialUser = Omit<User, 'password'>;
 
-export type TFindUserByIdArgs = {
+export declare type TFindUserByIdArgs = {
 	id: number;
 };
 
-export type TFindUserByEmailArgs = {
+export declare type TFindUserByEmailArgs = {
 	email: string;
 };
 
-export type TFindUsersByIdsArgs = {
+export declare type TFindUsersByIdsArgs = {
 	ids: number[];
 };
 
-export type TCreateUserArgs = {
+export declare type TCreateUserArgs = {
 	user: Prisma.UserCreateInput;
 };
 
-export type TUserRepositoryConstructorArgs = {
+export declare type TUserRepositoryConstructorArgs = {
 	delegate: Prisma.UserDelegate<false>;
 };
 
-export type TUpdateUserArgs = {
+export declare type TUpdateUserArgs = {
 	id: number;
 	user: Prisma.UserUpdateInput;
 };
 
-export type TDeleteUserArgs = {
+export declare type TDeleteUserArgs = {
 	id: number;
 };
 
-export type TRestoreUserArgs = {
+export declare type TRestoreUserArgs = {
 	id: number;
 };
 /**
  * Interface definition for UserRepository
  */
-export interface TUserRepository {
+export declare interface TUserRepository {
 	/**
 	 * Maps a user to a partial user
 	 */

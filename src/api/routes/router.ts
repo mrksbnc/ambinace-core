@@ -40,7 +40,11 @@ export default class Router implements TRouter {
 
 			app.use(AppConfig.sharedInstance.api[API_CONFIG_KEY.BASE_URL], route.router);
 
-			Log.sharedInstance.createInfoMessageBlock([`__register: Routes for ${route.path} mounted`, ...route.metaLogs]);
+			Log.sharedInstance.createInfoMessageBlock([
+				`__register: Routes for ${route.path} mounted `,
+				'',
+				...route.metaLogs,
+			]);
 		});
 
 		app.use(Middleware.sharedInstance.routeNotFoundHandler);

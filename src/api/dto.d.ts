@@ -1,160 +1,160 @@
 import type { Mood, Prisma } from '@prisma/client';
 import type { TPartialUser } from '@/database/repositories/userRepository';
 
-export type TRegisterRequestDto = {
+export declare type TRegisterRequestDto = {
 	user: Prisma.UserCreateInput;
 };
 
-export type TRegisterResponseDto = {
+export declare type TRegisterResponseDto = {
 	user: TPartialUser;
 	token: string;
 };
 
-export type TLoginRequestDto = {
+export declare type TLoginRequestDto = {
 	email: string;
 	password: string;
 };
 
-export type TLoginResponseDto = {
+export declare type TLoginResponseDto = {
 	user: TPartialUser;
 	token: string;
 };
 
-export type TGetUserRequestDto = {
+export declare type TGetUserRequestDto = {
 	id: string;
 };
 
-export type TGetUserResponseDto = {
+export declare type TGetUserResponseDto = {
 	user: TPartialUser;
 };
 
-export type TGetManyByIdsRequestDto = {
+export declare type TGetManyByIdsRequestDto = {
 	ids: string[];
 };
 
-export type TGetManyUserByIdsResponseDto = {
+export declare type TGetManyUserByIdsResponseDto = {
 	users: TPartialUser[];
 };
 
-export type TUpdateUserRequestDto = {
+export declare type TUpdateUserRequestDto = {
 	id: string;
 	user: Prisma.UserUpdateInput;
 };
 
-export type TUpdateUserResponseDto = {
+export declare type TUpdateUserResponseDto = {
 	user: TPartialUser;
 };
 
-export type TDeleteUserRequestDto = {
+export declare type TDeleteUserRequestDto = {
 	id: string;
 };
 
-export type TRestoreUserRequestDto = {
+export declare type TRestoreUserRequestDto = {
 	id: string;
 };
 
-export type TGetMoodByIdRequestDto = {
+export declare type TGetMoodByIdRequestDto = {
 	id: string;
 };
 
-export type TGetMoodsByUserIdRequestDto = {
+export declare type TGetMoodsByUserIdRequestDto = {
 	userId: string;
 };
 
-export type TGetMoodByIdResponseDto = {
+export declare type TGetMoodByIdResponseDto = {
 	mood: Mood | null;
 };
 
-export type TGetMoodsByUserIdResponseDto = {
+export declare type TGetMoodsByUserIdResponseDto = {
 	moods: Mood[];
 };
 
-export type TGetDefaultsWithUserRequestDto = {
+export declare type TGetDefaultsWithUserRequestDto = {
 	userId: string;
 };
 
-export type TGetDefaultMoodsWithUserResponseDto = {
+export declare type TGetDefaultMoodsWithUserResponseDto = {
 	moods: Mood[];
 };
 
-export type TCreateMoodRequestDto = {
+export declare type TCreateMoodRequestDto = {
 	mood: Prisma.MoodCreateInput;
 };
 
-export type TCreateMoodResponseDto = {
+export declare type TCreateMoodResponseDto = {
 	mood: Mood;
 };
 
-export type TUpdateMoodRequestDto = {
+export declare type TUpdateMoodRequestDto = {
 	id: string;
 	mood: Prisma.MoodUpdateInput;
 };
 
-export type TUpdateMoodResponseDto = {
+export declare type TUpdateMoodResponseDto = {
 	mood: Mood;
 };
 
-export type TDeleteMoodRequestDto = {
+export declare type TDeleteMoodRequestDto = {
 	id: string;
 };
 
-export type TRestoreMoodRequestDto = {
+export declare type TRestoreMoodRequestDto = {
 	id: string;
 };
 
-export type TGetActivityByIdRequestDto = {
+export declare type TGetActivityByIdRequestDto = {
 	id: string;
 };
 
-export type TGetActivityByIdResponseDto = {
+export declare type TGetActivityByIdResponseDto = {
 	activity: Activity | null;
 };
 
-export type TGetDefaultsWithUserRequestDto = {
+export declare type TGetDefaultsWithUserRequestDto = {
 	userId: string;
 };
 
-export type TGetDefaultActivitiesWithUserResponseDto = {
+export declare type TGetDefaultActivitiesWithUserResponseDto = {
 	activities: Activity[];
 };
 
-export type TGetManyActivityByIdListRequestDto = {
+export declare type TGetManyActivityByIdListRequestDto = {
 	ids: string[];
 };
 
-export type TGetActivitiesByIdListResponseDto = {
+export declare type TGetActivitiesByIdListResponseDto = {
 	activities: Activity[];
 };
 
-export type TGetActivitiesByUserIdRequestDto = {
+export declare type TGetActivitiesByUserIdRequestDto = {
 	userId: string;
 };
 
-export type TGetActivitiesByUserIdResponseDto = {
+export declare type TGetActivitiesByUserIdResponseDto = {
 	activities: Activity[];
 };
 
-export type TCreateActivityRequestDto = {
+export declare type TCreateActivityRequestDto = {
 	activity: Prisma.ActivityCreateInput;
 };
 
-export type TCreateActivityResponseDto = {
+export declare type TCreateActivityResponseDto = {
 	activity: Activity;
 };
 
-export type TUpdateActivityRequestDto = {
+export declare type TUpdateActivityRequestDto = {
 	id: string;
 	activity: Prisma.ActivityUpdateInput;
 };
 
-export type TUpdateActivityResponseDto = {
+export declare type TUpdateActivityResponseDto = {
 	activity: Activity;
 };
 
-export type TDeleteActivityRequestDto = {
+export declare type TDeleteActivityRequestDto = {
 	id: string;
 };
 
-export type TRestoreActivityRequestDto = {
+export declare type TRestoreActivityRequestDto = {
 	id: string;
 };

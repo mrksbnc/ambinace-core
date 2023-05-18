@@ -3,7 +3,7 @@ import type { ERROR_MESSAGE, ERROR_NAME } from '@/data/constants/error';
 /**
  * Interface for the BaseError class.
  */
-export type TBaseError = {
+export declare type TBaseError = {
 	/**
 	 * The error message to be logged for debugging purposes.
 	 */
@@ -20,7 +20,7 @@ export type TBaseError = {
 /**
  * Constructor arguments for the BaseError class.
  */
-export type TBaseErrorConstructorArgs = {
+export declare type TBaseErrorConstructorArgs = {
 	/**
 	 * The error message to be logged for debugging purposes.
 	 */

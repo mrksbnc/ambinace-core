@@ -9,22 +9,22 @@ import type {
 import type { TAuthService } from './authService.d';
 import type { TUserRepository } from '@/database/repositories/userRepository.d';
 
-export type TDeleteUserServiceArgs = {
+export declare type TDeleteUserServiceArgs = {
 	id: string;
 };
 
-export type TRestoreUserServiceArgs = {
+export declare type TRestoreUserServiceArgs = {
 	id: string;
 };
 
-export type TUserServiceConstructorArgs = {
+export declare type TUserServiceConstructorArgs = {
 	userRepository: TUserRepository;
 	authService: TAuthService;
 };
 /**
  * Interface definition for the user service.
  */
-export interface TUserService {
+export declare interface TUserService {
 	/**
 	 * Returns a single user or null if user not exists in the database
 	 * using the injected repository.

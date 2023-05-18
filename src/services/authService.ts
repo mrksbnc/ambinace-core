@@ -116,7 +116,7 @@ export default class AuthService implements TAuthService {
 		 */
 		const gracePeriod = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_GRACE_PERIOD];
 
-		if (session.expiresAt + gracePeriod > now) {
+		if (session?.exp && session.exp + gracePeriod > now) {
 			return 'grace';
 		}
 

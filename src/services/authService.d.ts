@@ -9,7 +9,7 @@ import type { TUserRepository } from '@/database/repositories/userRepository.d';
  * The expiration timestamp is the issued timestamp plus the expiration duration.
  * The expiration duration is the value of the JWT_EXPIRES_IN config key.
  */
-export interface TSession extends jwt.JwtPayload {
+export declare interface TSession extends jwt.JwtPayload {
 	userId: number;
 	exp?: number;
 	iat?: number;
@@ -17,7 +17,7 @@ export interface TSession extends jwt.JwtPayload {
 /**
  * The encode result contains the access token and the issued timestamp.
  */
-export type TEncodeResult = {
+export declare type TEncodeResult = {
 	issued: number;
 	userId: number;
 	accessToken: string;
@@ -31,7 +31,7 @@ export type TEncodeResult = {
  * The session property will be null if the token is invalid.
  */
 // prettier-ignore
-export type TDecodeResult =
+export declare type TDecodeResult =
 	| {
 			type: 'valid';
 			session: TSession;
@@ -45,44 +45,44 @@ export type TDecodeResult =
 			session: TSession;
 		};
 
-export type TExpirationStatus = 'expired' | 'active' | 'grace';
+export declare type TExpirationStatus = 'expired' | 'active' | 'grace';
 
-export type TEncodeSessionArgs = {
+export declare type TEncodeSessionArgs = {
 	userId: number;
 };
 
-export type TDecodeSessionArgs = {
+export declare type TDecodeSessionArgs = {
 	token: string;
 };
 
-export type TCheckExpirationStatusArgs = {
+export declare type TCheckExpirationStatusArgs = {
 	session: TSession;
 };
 
-export type TParseTokenArgs = {
+export declare type TParseTokenArgs = {
 	token: string;
 };
 
-export type TGeneratePasswordHashArgs = {
+export declare type TGeneratePasswordHashArgs = {
 	password: string;
 	saltRounds: number;
 };
 
-export type TComparePasswordHashArgs = {
+export declare type TComparePasswordHashArgs = {
 	password: string;
 	hash: string;
 };
 
-export type TRegisterArgs = {
+export declare type TRegisterArgs = {
 	user: Prisma.UserCreateInput;
 };
 
-export type TAuthenticateArgs = {
+export declare type TAuthenticateArgs = {
 	email: string;
 	password: string;
 };
 
-export type TAuthServiceConstructorArgs = {
+export declare type TAuthServiceConstructorArgs = {
 	jwtSecret: string;
 	jwtExpiresIn: number;
 	userRepository: TUserRepository;
@@ -90,7 +90,7 @@ export type TAuthServiceConstructorArgs = {
 /**
  * Interface definition for AuthServices
  */
-export interface TAuthService {
+export declare interface TAuthService {
 	/**
 	 * Encodes a session into a JWT token pair.
 	 * Default algorithm is HS512.

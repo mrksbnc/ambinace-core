@@ -1,53 +1,53 @@
 import type { TEntryRepository } from '@/database/repositories/entryRepository';
 
-export type TGetEntryByIdServiceArgs = {
+export declare type TGetEntryByIdServiceArgs = {
 	id: string;
 };
 
-export type TGetEntriesByUserIdServiceArgs = {
+export declare type TGetEntriesByUserIdServiceArgs = {
 	userId: string;
 };
 
-export type TGetEntriesByUserIdAndDateServiceArgs = {
+export declare type TGetEntriesByUserIdAndDateServiceArgs = {
 	userId: string;
 	date: string;
 };
 
-export type TGetEntriesByUserIdAndMoodServiceArgs = {
+export declare type TGetEntriesByUserIdAndMoodServiceArgs = {
 	userId: string;
 	moodId: string;
 };
 
-export type TGetEntriesByUserIdAndDateRangeServiceArgs = {
+export declare type TGetEntriesByUserIdAndDateRangeServiceArgs = {
 	userId: string;
 	startDate: string;
 	endDate?: string;
 };
 
-export type TCreateEntryServiceArgs = {
+export declare type TCreateEntryServiceArgs = {
 	entry: Prisma.EntryCreateInput;
 };
 
-export type TUpdateEntryServiceArgs = {
+export declare type TUpdateEntryServiceArgs = {
 	id: string;
 	entry: Prisma.EntryUpdateInput;
 };
 
-export type TDeleteEntryServiceArgs = {
+export declare type TDeleteEntryServiceArgs = {
 	id: string;
 };
 
-export type TRestoreEntryServiceArgs = {
+export declare type TRestoreEntryServiceArgs = {
 	id: string;
 };
 
-export type TEntryServiceConstructorArgs = {
+export declare type TEntryServiceConstructorArgs = {
 	repository: TEntryRepository;
 };
 /**
  * Interface definition for EntryServices
  */
-export interface TEntryService {
+export declare interface TEntryService {
 	/**
 	 * Uses the dependency injected repository to return a single entry by id or null if
 	 * the entry not found

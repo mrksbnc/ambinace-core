@@ -3,7 +3,7 @@ import type { APP_CONFIG_KEY, API_CONFIG_KEY, AUTH_CONFIG_KEY } from '../data/co
 /**
  * Interface for the AppConfig class.
  */
-export type TAppConfig = {
+export declare type TAppConfig = {
 	readonly api: TApiConfig;
 	readonly auth: TAuthConfig;
 	readonly app: TAmbianceConfig;
@@ -11,7 +11,7 @@ export type TAppConfig = {
 /**
  * Definition for app config keys.
  */
-export type TAmbianceConfig = {
+export declare type TAmbianceConfig = {
 	[APP_CONFIG_KEY.ENV]: string;
 	[APP_CONFIG_KEY.PORT]: number;
 	[APP_CONFIG_KEY.NAME]: string;
@@ -20,7 +20,7 @@ export type TAmbianceConfig = {
 /**
  * Definition for auth config keys.
  */
-export type TAuthConfig = {
+export declare type TAuthConfig = {
 	[AUTH_CONFIG_KEY.JWT_SECRET]: string;
 	[AUTH_CONFIG_KEY.SALT_ROUNDS]: number;
 	[AUTH_CONFIG_KEY.JWT_EXPIRES_IN]: number;
@@ -29,7 +29,7 @@ export type TAuthConfig = {
 /**
  * Definition for api config keys.
  */
-export type TApiConfig = {
+export declare type TApiConfig = {
 	[API_CONFIG_KEY.BASE_URL]: string;
 	[API_CONFIG_KEY.ENABLED_HTTP_REQUEST_METHODS]: TRequestMethod[];
 };

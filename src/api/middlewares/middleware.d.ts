@@ -3,7 +3,7 @@ import type { Application, NextFunction, Request, Response } from 'express';
 /**
  * Interface definition for base middleware class.
  */
-export interface TMiddleware {
+export declare interface TMiddleware {
 	/**
 	 * Registers middleware on the argument express application.
 	 */

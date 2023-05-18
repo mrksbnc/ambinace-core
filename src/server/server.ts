@@ -35,7 +35,7 @@ export default class Server implements TServer {
 		Router.sharedInstance.register(this._app);
 
 		this._app.listen(port, () => {
-			Log.sharedInstance.baseLogger.info(`${name} v${version} is running on port ${port}!`);
+			Log.sharedInstance.baseLogger.info(`${name} v${version} is running on port ${port}`);
 		});
 	}
 }

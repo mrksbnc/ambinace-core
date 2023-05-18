@@ -19,13 +19,13 @@ import type {
 import type { TBaseResponse } from '@/data/models/baseResponse';
 import type { TActivityService } from '@/services/activityService.d';
 
-export type TActivityControllerConstructorArgs = {
+export declare type TActivityControllerConstructorArgs = {
 	activityService: TActivityService;
 };
 /**
  * Interface definition for the activity controller.
  */
-export interface TActivityController {
+export declare interface TActivityController {
 	/**
 	 * Returns a single activity or calls the next middleware if activity not exists
 	 * in the database

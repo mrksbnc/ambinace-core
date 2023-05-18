@@ -10,13 +10,13 @@ import type { NextFunction, Request, Response } from 'express';
 import type { TBaseResponse } from '@/data/models/baseResponse.d';
 import type { TDeleteRequestParams, TGetByIdRequestParams, TRestoreRequestParams } from '../request.d';
 
-export type TUserControllerConstructorArgs = {
+export declare type TUserControllerConstructorArgs = {
 	userService: TUserService;
 };
 /**
  * Interface definition for the auth controller.
  */
-export interface TUserController {
+export declare interface TUserController {
 	/**
 	 * Returns a user by id or calls the next middleware function
 	 * if an error occurs.

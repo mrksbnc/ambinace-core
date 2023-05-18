@@ -2,7 +2,7 @@ import type { Application } from 'express';
 /**
  * Interface definition for the application server.
  */
-export interface TServer {
+export declare interface TServer {
 	/**
 	 * Returns the express application from the
 	 * server instance.

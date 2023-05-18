@@ -1,7 +1,7 @@
 import type { JSONSchemaType } from 'ajv';
 import type { Prisma } from '@prisma/client';
 
-export type TJSONSchema = JSONSchemaType<
+export declare type TJSONSchema = JSONSchemaType<
 	| Prisma.UserCreateInput
 	| Prisma.ActivityCreateInput
 	| Prisma.EntryCreateInput
@@ -15,7 +15,7 @@ export type TJSONSchema = JSONSchemaType<
 /**
  * Interface definition for Validatior class.
  */
-export interface TValidator {
+export declare interface TValidator {
 	/**
 	 * Returns true if the id is a valid number greater than 0.
 	 */
