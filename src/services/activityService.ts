@@ -1,15 +1,19 @@
 import type {
-	TActivityService,
-	TUpdateActivityServiceArgs,
-	TCreateActivityServiceArgs,
-	TGetAllDefaultWithUserArgs,
-	TDeleteActivityServiceArgs,
-	TGetActivityByIdServiceArgs,
-	TRestoreActivityServiceArgs,
-	TGetManyByUserIdServiceArgs,
-	TActivityServiceConstructorArgs,
-	TGetManyActivitiesByIdsServiceArgs,
-} from './activityService.d';
+	TCreateActivityRequestDto,
+	TUpdateActivityRequestDto,
+	TDeleteActivityRequestDto,
+	TUpdateActivityResponseDto,
+	TRestoreActivityRequestDto,
+	TCreateActivityResponseDto,
+	TGetActivityByIdRequestDto,
+	TGetActivityByIdResponseDto,
+	TGetDefaultsWithUserRequestDto,
+	TGetActivitiesByUserIdRequestDto,
+	TGetActivitiesByUserIdResponseDto,
+	TGetActivitiesByIdListResponseDto,
+	TGetManyActivityByIdListRequestDto,
+	TGetDefaultActivitiesWithUserResponseDto,
+} from '@/api/dto.d';
 import type { Activity } from '@prisma/client';
 import Validator from '@/validators/validator';
 import InvalidPayloadError from '@/error/invalidPayloadError';
@@ -17,6 +21,7 @@ import InvalidArgumentError from '@/error/invalidArgumentError';
 import ActivitySchema from '@/validators/schemas/activitySchema';
 import ActivityRepository from '@/database/repositories/activityRepository';
 import type { TActivityRepository } from '../database/repositories/activityRepository.d';
+import type { TActivityService, TActivityServiceConstructorArgs } from './activityService.d';
 
 let sharedInstance: ActivityService | null = null;
 
@@ -36,7 +41,7 @@ export default class ActivityService implements TActivityService {
 		this._activityRepository = activityRepository;
 	}
 
-	public async getById({ id }: TGetActivityByIdServiceArgs): Promise<Activity | null> {
+	public async getById({ id }: TGetActivityByIdRequestDto): Promise<TGetActivityByIdResponseDto> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -44,10 +49,16 @@ export default class ActivityService implements TActivityService {
 		const numId: number = parseInt(id, 10);
 		const repositoryResult: Activity | null = await this._activityRepository.findById({ id: numId });
 
-		return repositoryResult;
+		const dto: TGetActivityByIdResponseDto = {
+			activity: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async getAllDefaultWithUser({ userId }: TGetAllDefaultWithUserArgs): Promise<Activity[]> {
+	public async getDefaultsWithUser({
+		userId,
+	}: TGetDefaultsWithUserRequestDto): Promise<TGetDefaultActivitiesWithUserResponseDto> {
 		if (!Validator.sharedInstance.isValidId(userId)) {
 			throw new InvalidArgumentError('userId');
 		}
@@ -55,10 +66,14 @@ export default class ActivityService implements TActivityService {
 		const numUserId: number = parseInt(userId, 10);
 		const repositoryResult: Activity[] = await this._activityRepository.findAllDefaultWithUser({ userId: numUserId });
 
-		return repositoryResult;
+		const dto: TGetDefaultActivitiesWithUserResponseDto = {
+			activities: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async getManyByIds({ ids }: TGetManyActivitiesByIdsServiceArgs): Promise<Activity[]> {
+	public async getManyByIds({ ids }: TGetManyActivityByIdListRequestDto): Promise<TGetActivitiesByIdListResponseDto> {
 		const invalidId = ids.find((id) => !Validator.sharedInstance.isValidId(id));
 
 		if (invalidId !== undefined) {
@@ -68,10 +83,16 @@ export default class ActivityService implements TActivityService {
 		const numIds: number[] = ids.map((id) => parseInt(id, 10));
 		const repositoryResult: Activity[] = await this._activityRepository.findManyByIds({ ids: numIds });
 
-		return repositoryResult;
+		const dto: TGetActivitiesByIdListResponseDto = {
+			activities: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async getManyByUserId({ userId }: TGetManyByUserIdServiceArgs): Promise<Activity[]> {
+	public async getManyByUserId({
+		userId,
+	}: TGetActivitiesByUserIdRequestDto): Promise<TGetActivitiesByUserIdResponseDto> {
 		if (!Validator.sharedInstance.isValidId(userId)) {
 			throw new InvalidArgumentError('userId');
 		}
@@ -81,10 +102,14 @@ export default class ActivityService implements TActivityService {
 			userId: numUserId,
 		});
 
-		return repositoryResult;
+		const dto: TGetActivitiesByUserIdResponseDto = {
+			activities: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async create({ activity }: TCreateActivityServiceArgs): Promise<Activity> {
+	public async create({ activity }: TCreateActivityRequestDto): Promise<TCreateActivityResponseDto> {
 		const schemaValidationResult = Validator.sharedInstance.isValidSchema(
 			ActivitySchema.sharedInstance.create,
 			activity,
@@ -94,11 +119,16 @@ export default class ActivityService implements TActivityService {
 			throw new InvalidPayloadError(schemaValidationResult);
 		}
 
-		const repositoryResult: Promise<Activity> = await this._activityRepository.create({ activity });
-		return repositoryResult;
+		const repositoryResult: Activity = await this._activityRepository.create({ activity });
+
+		const dto: TCreateActivityResponseDto = {
+			activity: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async update({ id, activity }: TUpdateActivityServiceArgs): Promise<Activity> {
+	public async update({ id, activity }: TUpdateActivityRequestDto): Promise<TUpdateActivityResponseDto> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -115,10 +145,14 @@ export default class ActivityService implements TActivityService {
 		const numId: number = parseInt(id, 10);
 		const repositoryResult: Promise<Activity> = await this._activityRepository.update({ id: numId, activity });
 
-		return repositoryResult;
+		const dto: TUpdateActivityResponseDto = {
+			activity: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async softDelete({ id }: TDeleteActivityServiceArgs): Promise<void> {
+	public async softDelete({ id }: TDeleteActivityRequestDto): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -127,7 +161,7 @@ export default class ActivityService implements TActivityService {
 		await this._activityRepository.softDelete({ id: numId });
 	}
 
-	public async restore({ id }: TRestoreActivityServiceArgs): Promise<void> {
+	public async restore({ id }: TRestoreActivityRequestDto): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -136,7 +170,7 @@ export default class ActivityService implements TActivityService {
 		await this._activityRepository.restore({ id: numId });
 	}
 
-	public async hardDelete({ id }: TDeleteActivityServiceArgs): Promise<void> {
+	public async hardDelete({ id }: TDeleteActivityRequestDto): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}

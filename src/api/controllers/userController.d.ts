@@ -5,10 +5,10 @@ import type {
 	TGetManyByIdsRequestDto,
 	TGetManyUserByIdsResponseDto,
 } from '../dto';
-import type { NextFunction } from 'express';
 import type { TUserService } from '@/services/userService.d';
+import type { NextFunction, Request, Response } from 'express';
 import type { TBaseResponse } from '@/data/models/baseResponse.d';
-import type { TDeleteUserRequestParams, TGetUserRequestParams, TRestoreUserRequestParams } from '../request.d';
+import type { TDeleteRequestParams, TGetByIdRequestParams, TRestoreRequestParams } from '../request.d';
 
 export type TUserControllerConstructorArgs = {
 	userService: TUserService;
@@ -22,7 +22,7 @@ export interface TUserController {
 	 * if an error occurs.
 	 */
 	get(
-		request: Request<TGetUserRequestParams, never, never>,
+		request: Request<TGetByIdRequestParams, never, never>,
 		response: Response<TBaseResponse<TGetUserResponseDto>>,
 		next: NextFunction,
 	): Promise<void>;
@@ -49,7 +49,7 @@ export interface TUserController {
 	 * if an error occurs.
 	 */
 	softDelete(
-		request: Request<TDeleteUserRequestParams, never, never>,
+		request: Request<TDeleteRequestParams, never, never>,
 		response: Response<TBaseResponse<never>>,
 		next: NextFunction,
 	): Promise<void>;
@@ -57,7 +57,7 @@ export interface TUserController {
 	 * Restores a soft deleted user by id or calls the next middleware function
 	 */
 	restore(
-		request: Request<TRestoreUserRequestParams, never, never>,
+		request: Request<TRestoreRequestParams, never, never>,
 		response: Response<TBaseResponse<never>>,
 		next: NextFunction,
 	): Promise<void>;
@@ -65,7 +65,7 @@ export interface TUserController {
 	 * Hard deletes a user by id or calls the next middleware function
 	 */
 	hardDelete(
-		request: Request<TDeleteUserRequestParams, never, never>,
+		request: Request<TDeleteRequestParams, never, never>,
 		response: Response<TBaseResponse<never>>,
 		next: NextFunction,
 	): Promise<void>;

@@ -1,19 +1,20 @@
 import type {
-	TMoodService,
-	TCreateMoodServiceArgs,
-	TUpdateMoodServiceArgs,
-	TDeleteMoodServiceArgs,
-	TRestoreMoodServiceArgs,
-	TGetMoodByIdServiceArgs,
-	TMoodServiceConstructorArgs,
-	TGetMoodsByUserIdServiceArgs,
-} from './moodService.d';
-import type { Mood } from '@prisma/client';
+	TUpdateMoodRequestDto,
+	TCreateMoodRequestDto,
+	TGetMoodByIdRequestDto,
+	TCreateMoodResponseDto,
+	TRestoreMoodRequestDto,
+	TUpdateMoodResponseDto,
+	TGetMoodByIdResponseDto,
+	TGetMoodsByUserIdRequestDto,
+	TGetMoodsByUserIdResponseDto,
+} from '@/api/dto';
 import Validator from '@/validators/validator';
 import MoodSchema from '@/validators/schemas/moodSchema';
 import InvalidPayloadError from '@/error/invalidPayloadError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import MoodRepository from '@/database/repositories/moodRepository';
+import type { TMoodService, TMoodServiceConstructorArgs } from './moodService.d';
 import type { TMoodRepository } from '@/database/repositories/moodRepository.d';
 
 let sharedInstance: MoodService | null = null;
@@ -34,7 +35,7 @@ export default class MoodService implements TMoodService {
 		this._moodRepository = moodRepository;
 	}
 
-	public async getById({ id }: TGetMoodByIdServiceArgs): Promise<Mood | null> {
+	public async getById({ id }: TGetMoodByIdRequestDto): Promise<TGetMoodByIdResponseDto> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -42,10 +43,14 @@ export default class MoodService implements TMoodService {
 		const idNum: number = parseInt(id, 10);
 		const repositoryResult = await this._moodRepository.findById({ id: idNum });
 
-		return repositoryResult;
+		const dto: TGetMoodByIdResponseDto = {
+			mood: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async getByUserId({ userId }: TGetMoodsByUserIdServiceArgs): Promise<Mood[]> {
+	public async getByUserId({ userId }: TGetMoodsByUserIdRequestDto): Promise<TGetMoodsByUserIdResponseDto> {
 		if (!Validator.sharedInstance.isValidId(userId)) {
 			throw new InvalidArgumentError('userId');
 		}
@@ -53,10 +58,14 @@ export default class MoodService implements TMoodService {
 		const userIdNum: number = parseInt(userId, 10);
 		const repositoryResult = await this._moodRepository.findByUserId({ userId: userIdNum });
 
-		return repositoryResult;
+		const dto: TGetMoodsByUserIdResponseDto = {
+			moods: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async getDefaultsWithUser({ userId }: TGetMoodsByUserIdServiceArgs): Promise<Mood[]> {
+	public async getDefaultsWithUser({ userId }: TGetMoodsByUserIdRequestDto): Promise<TGetMoodsByUserIdResponseDto> {
 		if (!Validator.sharedInstance.isValidId(userId)) {
 			throw new InvalidArgumentError('userId');
 		}
@@ -64,10 +73,14 @@ export default class MoodService implements TMoodService {
 		const userIdNum: number = parseInt(userId, 10);
 		const repositoryResult = await this._moodRepository.findDefaultsWithUser({ userId: userIdNum });
 
-		return repositoryResult;
+		const dto: TGetMoodsByUserIdResponseDto = {
+			moods: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async create({ mood }: TCreateMoodServiceArgs): Promise<Mood> {
+	public async create({ mood }: TCreateMoodRequestDto): Promise<TCreateMoodResponseDto> {
 		const schemaValidationResult = Validator.sharedInstance.isValidSchema(MoodSchema.sharedInstance.create, mood);
 
 		if (schemaValidationResult.length > 0) {
@@ -75,10 +88,15 @@ export default class MoodService implements TMoodService {
 		}
 
 		const repositoryResult = await this._moodRepository.create({ mood });
-		return repositoryResult;
+
+		const dto: TCreateMoodResponseDto = {
+			mood: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async update({ id, mood }: TUpdateMoodServiceArgs): Promise<Mood> {
+	public async update({ id, mood }: TUpdateMoodRequestDto): Promise<TUpdateMoodResponseDto> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -95,10 +113,14 @@ export default class MoodService implements TMoodService {
 			mood,
 		});
 
-		return repositoryResult;
+		const dto: TUpdateMoodResponseDto = {
+			mood: repositoryResult,
+		};
+
+		return dto;
 	}
 
-	public async softDelete({ id }: TDeleteMoodServiceArgs): Promise<void> {
+	public async softDelete({ id }: TUpdateMoodRequestDto): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -107,7 +129,7 @@ export default class MoodService implements TMoodService {
 		await this._moodRepository.softDelete({ id: idNum });
 	}
 
-	public async restore({ id }: TRestoreMoodServiceArgs): Promise<void> {
+	public async restore({ id }: TRestoreMoodRequestDto): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
@@ -116,7 +138,7 @@ export default class MoodService implements TMoodService {
 		await this._moodRepository.restore({ id: idNum });
 	}
 
-	public async hardDelete({ id }: TDeleteMoodServiceArgs): Promise<void> {
+	public async hardDelete({ id }: TUpdateMoodRequestDto): Promise<void> {
 		if (!Validator.sharedInstance.isValidId(id)) {
 			throw new InvalidArgumentError('id');
 		}
