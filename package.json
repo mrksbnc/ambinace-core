@@ -6,6 +6,13 @@
 	"homepage": "git@github.com:mrksbnc/ambinace-core.git/README.md",
 	"author": "Bence Markus<markusbence@outlook.com>",
 	"private": true,
+	"license": "SEE LICENSE IN LICENSE.md",
+	"files": [
+		"dist/**/*"
+	],
+	"publishConfig": {
+		"tag": "latest"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git@github.com:mrksbnc/ambinace-core.git"
@@ -33,7 +40,6 @@
 		"Prisma",
 		"Postgres"
 	],
-	"license": "ISC",
 	"dependencies": {
 		"@prisma/client": "^4.14.0",
 		"ajv": "^8.12.0",

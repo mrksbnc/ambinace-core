@@ -14,7 +14,7 @@ import { API_CONFIG_KEY } from '@/data/constants/config';
 import type { TDecodeResult } from '@/services/authService.d';
 import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
-import { type Application, type NextFunction, type Request, type Response, urlencoded, json } from 'express';
+import express, { type Application, type NextFunction, type Request, type Response, urlencoded, json } from 'express';
 
 let sharedInstance: Middleware | null = null;
 
@@ -187,6 +187,7 @@ export default class Middleware implements TMiddleware {
 	};
 
 	public register(app: Application): void {
+		app.use(express.static('public'));
 		app.use(this._httpTrafficLogHandler);
 		app.use(hpp());
 		app.use(cors());
