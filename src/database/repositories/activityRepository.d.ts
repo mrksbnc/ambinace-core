@@ -1,44 +1,44 @@
-export type TFindActivityByIdArgs = {
+export declare type TFindActivityByIdArgs = {
 	id: number;
 };
 
-export type TFindSystemWithUserIdsArgs = {
+export declare type TFindSystemWithUserIdsArgs = {
 	userId: number;
 };
 
-export type TFindActivitiesByUserIdArgs = {
+export declare type TFindActivitiesByUserIdArgs = {
 	userId: number;
 };
 
-export type TFindActivitiesByIds = {
+export declare type TFindActivitiesByIds = {
 	ids: number[];
 };
 
-export type TCreateActivityArgs = {
+export declare type TCreateActivityArgs = {
 	activity: Prisma.ActivityCreateInput;
 };
 
-export type TUpdateActivityArgs = {
+export declare type TUpdateActivityArgs = {
 	id: number;
 	activity: Prisma.ActivityUpdateInput;
 };
 
-export type TDeleteActivityArgs = {
+export declare type TDeleteActivityArgs = {
 	id: number;
 };
 
-export type TRestoreActivityArgs = {
+export declare type TRestoreActivityArgs = {
 	id: number;
 };
 
-export type TActivityRepositoryConstructorArgs = {
+export declare type TActivityRepositoryConstructorArgs = {
 	delegate: Prisma.ActivityDelegate<false>;
 };
 
 /**
  * Interface definition for ActivityRepository
  */
-export interface TActivityRepository {
+export declare interface TActivityRepository {
 	/**
 	 * Returns a single activity by id or null if activity not found
 	 */

@@ -26,7 +26,7 @@ export default class UserController implements TUserController {
 		this._userService = userService;
 	}
 
-	static get sharedInstance(): UserController {
+	public static get sharedInstance(): UserController {
 		if (!sharedInstance) {
 			sharedInstance = new UserController({
 				userService: UserService.sharedInstance,

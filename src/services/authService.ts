@@ -36,7 +36,7 @@ export default class AuthService implements TAuthService {
 	private readonly _jwtExpiresIn: number;
 	private readonly _userReposiory: TUserRepository;
 
-	static get sharedInstance(): AuthService {
+	public static get sharedInstance(): AuthService {
 		if (sharedInstance === null) {
 			const jwtSecret: string = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_SECRET];
 			const jwtExpiresIn: number = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_EXPIRES_IN];
@@ -116,7 +116,7 @@ export default class AuthService implements TAuthService {
 		 */
 		const gracePeriod = AppConfig.sharedInstance.auth[AUTH_CONFIG_KEY.JWT_GRACE_PERIOD];
 
-		if (session.expiresAt + gracePeriod > now) {
+		if (session?.exp && session.exp + gracePeriod > now) {
 			return 'grace';
 		}
 

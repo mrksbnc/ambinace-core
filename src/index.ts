@@ -9,12 +9,15 @@ import { cleanEnv, num, port, str } from 'envalid';
 
 	Log.sharedInstance.createInfoMessageBlock([
 		'Beginning server initialization process...',
+		'',
 		`Process started at ${new Date().toJSON()}`,
+		'',
 		`NODE_ENV: ${process.env.NODE_ENV}`,
+		'',
 		`PID: ${process.pid}`,
 	]);
 
-	Log.sharedInstance.createInfoMessageBlock('validating env file...');
+	Log.sharedInstance.createInfoMessageBlock(['', 'validating env file...', '']);
 	cleanEnv(process.env, {
 		PORT: port(),
 		NODE_ENV: str(),
@@ -27,14 +30,14 @@ import { cleanEnv, num, port, str } from 'envalid';
 	});
 
 	dotenv.config();
-	Log.sharedInstance.createInfoMessageBlock('env file validated and loaded!');
+	Log.sharedInstance.createInfoMessageBlock(['', 'env file validated and loaded ', '']);
 
 	try {
-		Log.sharedInstance.createInfoMessageBlock(['Trying to establish database connection...']);
+		Log.sharedInstance.createInfoMessageBlock(['', 'Trying to establish database connection...', '']);
 
 		await Database.sharedInstance.getDefaultClient().$connect();
 
-		Log.sharedInstance.createInfoMessageBlock(['Database connection established successfully!']);
+		Log.sharedInstance.createInfoMessageBlock(['', 'Database connection established successfully ', '']);
 	} catch (error) {
 		Log.sharedInstance.baseLogger.error('failed to initialize database! Process will now exit with code 1', { error });
 		process.exit(1);
@@ -49,7 +52,8 @@ import { cleanEnv, num, port, str } from 'envalid';
 
 	const end = performance.now() - start;
 	Log.sharedInstance.createInfoMessageBlock([
-		'Server initialization process completed!',
+		'Server initialization process completed ',
+		'',
 		`Process completed in ${end}ms`,
 	]);
 	Log.sharedInstance.createBlockSeparator();

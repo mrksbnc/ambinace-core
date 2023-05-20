@@ -15,13 +15,13 @@ import type {
 } from '@/api/dto';
 import type { TActivityRepository } from '../../database/repositories/activityRepository';
 
-export type TActivityServiceConstructorArgs = {
+export declare type TActivityServiceConstructorArgs = {
 	activityRepository: TActivityRepository;
 };
 /**
  * Interface definition for the activity service.
  */
-export interface TActivityService {
+export declare interface TActivityService {
 	/**
 	 * Returns a single activity or null if activity not exists in the database
 	 * using the injected repository.

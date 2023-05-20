@@ -1,6 +1,6 @@
 import type { Logger } from 'winston';
 
-export type TLog = {
+export declare type TLog = {
 	readonly baseLogger: Logger;
 	createInfoMessageBlock(message: string | string[]): void;
 };

@@ -1,16 +1,86 @@
 import { Router } from 'express';
-import AppConfig from '@/config/appConfig';
+import RouteMeta from './routeMeta';
 import { concatSegmentHelper } from './routeHelper';
 import ActivityController from '../controllers/activityController';
+import type { TRoute, TRouteConstructorArgs, TRouteMeta } from './route.d';
 import type { TActivityController } from '../controllers/activityController.d';
-import type { TRoute, TRouteConstructorArgs, TRouteMetaData } from './route.d';
 
 let sharedInstance: ActivityRoute | null = null;
 
 export default class ActivityRoute implements TRoute {
+	public metaLogs: string[] = [];
+	public readonly router: Router;
+	public readonly path = '/activity';
+
 	private readonly _activityController: TActivityController;
 
-	static get sharedInstance(): ActivityRoute {
+	private readonly _meta: TRouteMeta[] = [
+		new RouteMeta({
+			method: 'get',
+			controller: 'activityController',
+			path: this._concatSegment(['get', ':id']),
+			__handler: (router: Router, path: string): ReturnType<Router['get']> =>
+				router.get(path, this._activityController.get),
+		}),
+		new RouteMeta({
+			method: 'get',
+			controller: 'activityController',
+			path: this._concatSegment(['get', 'many', 'default', ':userId']),
+			__handler: (router: Router, path: string): ReturnType<Router['get']> =>
+				router.get(path, this._activityController.getDefaultsWithUser),
+		}),
+		new RouteMeta({
+			method: 'get',
+			controller: 'activityController',
+			path: this._concatSegment(['get', 'many', ':userId']),
+			__handler: (router: Router, path: string): ReturnType<Router['get']> =>
+				router.get(path, this._activityController.getManyByUserId),
+		}),
+		new RouteMeta({
+			method: 'put',
+			controller: 'activityController',
+			path: this._concatSegment(['get', 'many']),
+			__handler: (router: Router, path: string): ReturnType<Router['put']> =>
+				router.put(path, this._activityController.getManyByIds),
+		}),
+		new RouteMeta({
+			method: 'post',
+			controller: 'activityController',
+			path: this._concatSegment('create'),
+			__handler: (router: Router, path: string): ReturnType<Router['post']> =>
+				router.post(path, this._activityController.create),
+		}),
+		new RouteMeta({
+			method: 'put',
+			controller: 'activityController',
+			path: this._concatSegment('update'),
+			__handler: (router: Router, path: string): ReturnType<Router['put']> =>
+				router.put(path, this._activityController.update),
+		}),
+		new RouteMeta({
+			method: 'put',
+			controller: 'activityController',
+			path: this._concatSegment(['delete', 'soft', ':id']),
+			__handler: (router: Router, path: string): ReturnType<Router['put']> =>
+				router.put(path, this._activityController.softDelete),
+		}),
+		new RouteMeta({
+			method: 'put',
+			controller: 'activityController',
+			path: this._concatSegment(['restore', ':id']),
+			__handler: (router: Router, path: string): ReturnType<Router['put']> =>
+				router.put(path, this._activityController.restore),
+		}),
+		new RouteMeta({
+			method: 'delete',
+			controller: 'activityController',
+			path: this._concatSegment(['delete', 'hard', ':id']),
+			__handler: (router: Router, path: string): ReturnType<Router['delete']> =>
+				router.delete(path, this._activityController.hardDelete),
+		}),
+	];
+
+	public static get sharedInstance(): ActivityRoute {
 		if (sharedInstance === null) {
 			sharedInstance = new ActivityRoute({
 				controller: ActivityController.sharedInstance,
@@ -18,86 +88,6 @@ export default class ActivityRoute implements TRoute {
 		}
 		return sharedInstance;
 	}
-
-	public readonly path = '/activity';
-	public readonly router: Router;
-	public readonly meta: TRouteMetaData[] = [
-		{
-			method: 'get',
-			controller: 'ActivityController',
-			path: this._concatSegment(['get', ':id']),
-			fullPath: `${AppConfig.sharedInstance.api.basePath}${this._concatSegment(['get', ':id'])}`,
-			__handler: (router: Router): ReturnType<Router['get']> =>
-				router.get(this._concatSegment(['get', ':id']), this._activityController.get),
-		},
-		{
-			method: 'get',
-			controller: 'ActivityController',
-			path: this._concatSegment(['get', 'many', 'default', ':userId']),
-			fullPath: `${AppConfig.sharedInstance.api.basePath}${this._concatSegment(['get', 'many', 'default', ':userId'])}`,
-			__handler: (router: Router): ReturnType<Router['get']> =>
-				router.get(
-					this._concatSegment(['get', 'many', 'default', ':userId']),
-					this._activityController.getDefaultsWithUser,
-				),
-		},
-		{
-			method: 'get',
-			controller: 'ActivityController',
-			path: this._concatSegment(['get', 'many', ':userId']),
-			fullPath: `${AppConfig.sharedInstance.api.basePath}${this._concatSegment(['get', 'many', ':userId'])}`,
-			__handler: (router: Router): ReturnType<Router['get']> =>
-				router.get(this._concatSegment(['get', 'many', ':userId']), this._activityController.getManyByUserId),
-		},
-		{
-			method: 'put',
-			controller: 'ActivityController',
-			path: this._concatSegment(['get', 'many']),
-			fullPath: `${AppConfig.sharedInstance.api.basePath}${this._concatSegment(['get', 'many'])}`,
-			__handler: (router: Router): ReturnType<Router['put']> =>
-				router.put(this._concatSegment(['get', 'many']), this._activityController.getManyByIds),
-		},
-		{
-			method: 'post',
-			controller: 'ActivityController',
-			path: this._concatSegment('create'),
-			fullPath: `${AppConfig.sharedInstance.api.basePath}${this._concatSegment('create')}`,
-			__handler: (router: Router): ReturnType<Router['post']> =>
-				router.post(this._concatSegment('create'), this._activityController.create),
-		},
-		{
-			method: 'put',
-			controller: 'ActivityController',
-			path: this._concatSegment('update'),
-			fullPath: `${AppConfig.sharedInstance.api.basePath}${this._concatSegment('update')}`,
-			__handler: (router: Router): ReturnType<Router['put']> =>
-				router.put(this._concatSegment('update'), this._activityController.update),
-		},
-		{
-			method: 'put',
-			controller: 'ActivityController',
-			path: this._concatSegment(['delete', 'soft', ':id']),
-			fullPath: `${AppConfig.sharedInstance.api.basePath}${this._concatSegment(['delete', 'soft', ':id'])}`,
-			__handler: (router: Router): ReturnType<Router['put']> =>
-				router.put(this._concatSegment(['delete', 'soft', ':id']), this._activityController.softDelete),
-		},
-		{
-			method: 'put',
-			controller: 'ActivityController',
-			path: this._concatSegment(['restore', ':id']),
-			fullPath: `${AppConfig.sharedInstance.api.basePath}${this._concatSegment(['restore', ':id'])}`,
-			__handler: (router: Router): ReturnType<Router['put']> =>
-				router.put(this._concatSegment(['restore', ':id']), this._activityController.restore),
-		},
-		{
-			method: 'delete',
-			controller: 'ActivityController',
-			path: this._concatSegment(['delete', 'hard', ':id']),
-			fullPath: `${AppConfig.sharedInstance.api.basePath}${this._concatSegment(['delete', 'hard', ':id'])}`,
-			__handler: (router: Router): ReturnType<Router['delete']> =>
-				router.delete(this._concatSegment(['delete', 'hard', ':id']), this._activityController.hardDelete),
-		},
-	];
 
 	public constructor({ controller }: TRouteConstructorArgs<TActivityController>) {
 		this._activityController = controller;
@@ -111,11 +101,11 @@ export default class ActivityRoute implements TRoute {
 	}
 
 	private _register(router: Router): Router {
-		/**
-		 * TODO: Add authentication middleware.
-		 */
-		this.meta.forEach((meta) => {
-			meta.__handler(router);
+		this._meta.forEach((meta: TRouteMeta, index: number) => {
+			meta.__handler(router, meta.path);
+			this.metaLogs.push(
+				`__register:  ${index + 1} | ${meta.controller} | ${meta.method.toUpperCase()}  ${meta.fullPath}`,
+			);
 		});
 
 		return router;

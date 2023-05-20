@@ -2,7 +2,7 @@ import type HTTP_STATUS_CODE from '../constants/httpStatusCode';
 /**
  * Interface for the BaseResponse class.
  */
-export interface TBaseResponse<T = null> {
+export declare interface TBaseResponse<T = null> {
 	/**
 	 * The data to be returned.
 	 */
@@ -28,7 +28,7 @@ export interface TBaseResponse<T = null> {
 /**
  * Constructor arguments for the BaseResponse class.
  */
-export type BaseResponseConstructorArgs<T = null> = {
+export declare type BaseResponseConstructorArgs<T = null> = {
 	/**
 	 * The data to be returned. If the request was not successful, this should be null.
 	 * @default null

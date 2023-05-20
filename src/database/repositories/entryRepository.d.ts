@@ -1,57 +1,57 @@
 import type { Prisma } from '@prisma/client';
 
-export type TFindEntryByIdArgs = {
+export declare type TFindEntryByIdArgs = {
 	id: number;
 };
 
-export type TFindEntriesByUserIdArgs = {
+export declare type TFindEntriesByUserIdArgs = {
 	userId: number;
 };
 
-export type TFindEntriesByUserIdAndDateArgs = {
+export declare type TFindEntriesByUserIdAndDateArgs = {
 	userId: number;
 	date: Date;
 };
 
-export type TFindEntriesByUserIdAndMoodArgs = {
+export declare type TFindEntriesByUserIdAndMoodArgs = {
 	userId: number;
 	moodId: number;
 };
 
-export type TFindEntriesByUserIdAndDateRangeArgs = {
+export declare type TFindEntriesByUserIdAndDateRangeArgs = {
 	userId: number;
 	startDate: Date;
 	endDate: Date;
 };
 
-export type TFindEntriesByUserIdArgs = {
+export declare type TFindEntriesByUserIdArgs = {
 	userId: number;
 };
 
-export type TCreateEntryArgs = {
+export declare type TCreateEntryArgs = {
 	entry: Prisma.EntryCreateInput;
 };
 
-export type TUpdateEntryArgs = {
+export declare type TUpdateEntryArgs = {
 	id: number;
 	entry: Prisma.EntryUpdateInput;
 };
 
-export type TDeleteEntryArgs = {
+export declare type TDeleteEntryArgs = {
 	id: number;
 };
 
-export type TRestoreEntryArgs = {
+export declare type TRestoreEntryArgs = {
 	id: number;
 };
 
-export type TEntryRepositoryConstructorArgs = {
+export declare type TEntryRepositoryConstructorArgs = {
 	delegate: Prisma.EntryDelegate<false>;
 };
 /**
  * Interface definition for EntryRepository
  */
-export interface TEntryRepository {
+export declare interface TEntryRepository {
 	/**
 	 * Returns a single entry by id or null if entry not found
 	 */

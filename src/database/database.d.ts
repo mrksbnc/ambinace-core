@@ -4,7 +4,7 @@ import type { PrismaClient } from '@prisma/client';
  * database service to connect with Prisma and provide wrapper for some of
  * the Client methods.
  */
-export type TDatabase = {
+export declare type TDatabase = {
 	/**
 	 * Initializes the database service. (Connects to the database.)
 	 */

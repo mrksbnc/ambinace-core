@@ -15,7 +15,7 @@ let sharedInstance: MoodRepository | null = null;
 export default class MoodRepository implements TMoodRepository {
 	private readonly delegate: Prisma.MoodDelegate<false>;
 
-	static get sharedInstance(): MoodRepository {
+	public static get sharedInstance(): MoodRepository {
 		if (sharedInstance === null) {
 			sharedInstance = new MoodRepository({
 				delegate: Database.sharedInstance.getDefaultClient().mood,

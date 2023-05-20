@@ -17,13 +17,13 @@ import type { TMoodService } from '@/services/moodService.d';
 import type { NextFunction, Request, Response } from 'express';
 import type { TBaseResponse } from '@/data/models/baseResponse.d';
 
-export type TMoodControllerConstructorArgs = {
+export declare type TMoodControllerConstructorArgs = {
 	moodService: TMoodService;
 };
 /**
  * Interface definition for the mood controller.
  */
-export interface TMoodController {
+export declare interface TMoodController {
 	/**
 	 * Returns a mood by id or calls the next middleware function
 	 * if an error occurs.

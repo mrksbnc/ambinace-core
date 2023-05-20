@@ -4,7 +4,7 @@ import type { Prisma } from '@prisma/client';
 let sharedInstance: MoodSchema | null = null;
 
 export default class MoodSchema {
-	static get sharedInstance(): MoodSchema {
+	public static get sharedInstance(): MoodSchema {
 		if (sharedInstance === null) {
 			sharedInstance = new MoodSchema();
 		}

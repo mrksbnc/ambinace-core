@@ -32,7 +32,7 @@ let sharedInstance: ActivityController | null = null;
 export default class ActivityController implements TActivityController {
 	private readonly _activityService: TActivityService;
 
-	static get sharedInstance(): ActivityController {
+	public static get sharedInstance(): ActivityController {
 		if (sharedInstance === null) {
 			sharedInstance = new ActivityController({
 				activityService: ActivityService.sharedInstance,

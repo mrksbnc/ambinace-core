@@ -4,7 +4,7 @@ import type { Prisma } from '@prisma/client';
 let sharedInstance: ActivitySchema | null = null;
 
 export default class ActivitySchema {
-	static get sharedInstance(): ActivitySchema {
+	public static get sharedInstance(): ActivitySchema {
 		if (sharedInstance === null) {
 			sharedInstance = new ActivitySchema();
 		}

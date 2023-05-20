@@ -8,7 +8,7 @@ let sharedInstance: Log | null = null;
 export default class Log implements TLog {
 	private readonly _logPath: string | null = null;
 
-	static get sharedInstance(): Log {
+	public static get sharedInstance(): Log {
 		if (sharedInstance === null) {
 			sharedInstance = new Log();
 		}
@@ -26,8 +26,9 @@ export default class Log implements TLog {
 
 		this.baseLogger = this._createBaseLogger();
 		this.createInfoMessageBlock([
+			'__logConstructor: Logger initialized ',
+			'',
 			`__logConstructor: Created log directory at: ${this._logPath}`,
-			'__logConstructor: Logger initialized...',
 		]);
 	}
 
