@@ -13,6 +13,6 @@ Ambiance core is built using Node.js and Express. To run the service, you will n
 
 ## For more information
 
-- See [docs/setup.md](docs/setup.md).
-- See [docs/server.md](docs/server.md).
-- See [docs/prisma.md](docs/prisma.md).
+- See [Setup](docs/setup.md).
+- See [Server](docs/server.md).
+- See [Prisma](docs/prisma.md).
