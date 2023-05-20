@@ -9,14 +9,6 @@ import type {
 import type { TAuthService } from './authService.d';
 import type { TUserRepository } from '@/database/repositories/userRepository.d';
 
-export declare type TDeleteUserServiceArgs = {
-	id: string;
-};
-
-export declare type TRestoreUserServiceArgs = {
-	id: string;
-};
-
 export declare type TUserServiceConstructorArgs = {
 	userRepository: TUserRepository;
 	authService: TAuthService;

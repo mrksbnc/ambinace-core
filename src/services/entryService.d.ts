@@ -1,45 +1,26 @@
+import type {
+	TCreateEntryRequestDto,
+	TGetEntryByIdRequestDto,
+	TGetEntryByIdResponseDto,
+	TGetEntriesByUserIdRequestDto,
+	TGetEntriesByUserIdResponseDto,
+	TGetActiveEntriesByUserIdRequestDto,
+	TGetActiveEntriesByUserIdResponseDto,
+	TGetEntriesByUserIdAndDateRequestDto,
+	TGetEntriesByUserIdAndMoodRequestDto,
+	TGetInactiveEntriesByUserIdRequestDto,
+	TGetEntriesByUserIdAndDateResponseDto,
+	TGetEntriesByUserIdAndMoodResponseDto,
+	TGetInactiveEntriesByUserIdResponseDto,
+	TGetEntriesByUserIdAndDateRangeRequestDto,
+	TGetEntriesByUserIdAndDateRangeResponseDto,
+	TCreateEntryResponseDto,
+	TUpdateEntryRequestDto,
+	TUpdateEntryResponseDto,
+	TDeleteEntryRequestDto,
+	TRestoreEntryRequestDto,
+} from '@/api/dto';
 import type { TEntryRepository } from '@/database/repositories/entryRepository';
-
-export declare type TGetEntryByIdServiceArgs = {
-	id: string;
-};
-
-export declare type TGetEntriesByUserIdServiceArgs = {
-	userId: string;
-};
-
-export declare type TGetEntriesByUserIdAndDateServiceArgs = {
-	userId: string;
-	date: string;
-};
-
-export declare type TGetEntriesByUserIdAndMoodServiceArgs = {
-	userId: string;
-	moodId: string;
-};
-
-export declare type TGetEntriesByUserIdAndDateRangeServiceArgs = {
-	userId: string;
-	startDate: string;
-	endDate?: string;
-};
-
-export declare type TCreateEntryServiceArgs = {
-	entry: Prisma.EntryCreateInput;
-};
-
-export declare type TUpdateEntryServiceArgs = {
-	id: string;
-	entry: Prisma.EntryUpdateInput;
-};
-
-export declare type TDeleteEntryServiceArgs = {
-	id: string;
-};
-
-export declare type TRestoreEntryServiceArgs = {
-	id: string;
-};
 
 export declare type TEntryServiceConstructorArgs = {
 	repository: TEntryRepository;
@@ -54,14 +35,14 @@ export declare interface TEntryService {
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id
 	 */
-	getById({ id }: TGetEntryByIdServiceArgs): Promise<Entry | null>;
+	getById({ id }: TGetEntryByIdRequestDto): Promise<TGetEntryByIdResponseDto>;
 	/**
 	 * Uses the dependency injected repository to return multiple entries by userId or empty
 	 * array if no entries were found
 	 *
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
 	 */
-	getByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]>;
+	getByUserId({ userId }: TGetEntriesByUserIdRequestDto): Promise<TGetEntriesByUserIdResponseDto>;
 	/**
 	 * Uses the dependency injected repository to return a multiple entries by userId and date
 	 * or empty array if no entries were found
@@ -69,14 +50,10 @@ export declare interface TEntryService {
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
 	 * @throws InvalidArgumentError if the date is not a valid past or now date
 	 */
-	getByUserIdAndDate({ userId, date }: TGetEntriesByUserIdAndDateServiceArgs): Promise<Entry[]>;
-	/**
-	 * Uses the dependency injected repository to return a multiple entries by userId and mood
-	 * or empty array if no entries were found
-	 *
-	 * @throws InvalidArgumentError if the userId is not a valid numeric id
-	 */
-	getByUserIdAndMood({ userId, mood }: TGetEntriesByUserIdAndMoodServiceArgs): Promise<Entry[]>;
+	getByUserIdAndDate({
+		userId,
+		date,
+	}: TGetEntriesByUserIdAndDateRequestDto): Promise<TGetEntriesByUserIdAndDateResponseDto>;
 	/**
 	 * Uses the dependency injected repository to return a multiple entries by userId and date
 	 * range or empty array if no entries were found
@@ -88,47 +65,63 @@ export declare interface TEntryService {
 	 * @throws InvalidArgumentError if the startDate or endDate are not valid past or now dates
 	 * @throws InvalidDateRangeArgumentError if the startDate is greater than the endDate
 	 */
-	getByUserIdAndDateRange({ userId, startDate, endDate }: TGetEntriesByUserIdAndDateRangeServiceArgs): Promise<Entry[]>;
+	getByUserIdAndDateRange({
+		userId,
+		startDate,
+		endDate,
+	}: TGetEntriesByUserIdAndDateRangeRequestDto): Promise<TGetEntriesByUserIdAndDateRangeResponseDto>;
 	/**
 	 * Uses the dependency injected repository to return all the active entries by userId or
 	 * empty array if no entries were found
 	 *
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
 	 */
-	getActiveByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]>;
+	getActiveByUserId({ userId }: TGetActiveEntriesByUserIdRequestDto): Promise<TGetActiveEntriesByUserIdResponseDto>;
 	/**
 	 * Uses the dependency injected repository to return all the inactive entries by userId or
 	 * empty array if no entries were found
 	 *
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
 	 */
-	getInactiveByUserId({ userId }: TGetEntriesByUserIdServiceArgs): Promise<Entry[]>;
+	getInactiveByUserId({
+		userId,
+	}: TGetInactiveEntriesByUserIdRequestDto): Promise<TGetInactiveEntriesByUserIdResponseDto>;
+	/**
+	 * Uses the dependency injected repository to return a multiple entries by userId and mood
+	 * or empty array if no entries were found
+	 *
+	 * @throws InvalidArgumentError if the userId is not a valid numeric id
+	 */
+	getByUserIdAndMood({
+		userId,
+		moodId,
+	}: TGetEntriesByUserIdAndMoodRequestDto): Promise<TGetEntriesByUserIdAndMoodResponseDto>;
 	/**
 	 * Uses the dependency injected repository to create a new entry and returns it
 	 *
 	 * @throws InvalidPayloadError if the entry payload is invalid
 	 */
-	create({ entry }: TCreateEntryServiceArgs): Promise<Entry>;
+	create({ entry }: TCreateEntryRequestDto): Promise<TCreateEntryResponseDto>;
 	/**
 	 * Uses the dependency injected repository to update an existing entry and returns it
 	 *
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
 	 * @throws InvalidPayloadError if the entry payload is invalid
 	 */
-	update({ id, entry }: TUpdateEntryServiceArgs): Promise<Entry>;
+	update({ id, entry }: TUpdateEntryRequestDto): Promise<TUpdateEntryResponseDto>;
 	/**
 	 * Uses the dependency injected repository to soft delete an entry
 	 * This is the preferred way to delete an entry
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id
 	 */
-	softDelete({ id }: TDeleteEntryServiceArgs): Promise<void>;
+	softDelete({ id }: TDeleteEntryRequestDto): Promise<void>;
 	/**
 	 * Uses the dependency injected repository to restore a soft deleted entry
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id
 	 */
-	restore({ id }: TRestoreEntryServiceArgs): Promise<Entry>;
+	restore({ id }: TRestoreEntryRequestDto): Promise<Entry>;
 	/**
 	 * Uses the dependency injected repository to permanently delete an entry
 	 * This is not the preferred way to delete an entry
@@ -136,5 +129,5 @@ export declare interface TEntryService {
 	 *
 	 * @throws InvalidArgumentError if the id is not a valid numeric id
 	 */
-	hardDelete({ id }: TDeleteEntryServiceArgs): Promise<void>;
+	hardDelete({ id }: TDeleteEntryRequestDto): Promise<void>;
 }

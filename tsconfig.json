@@ -15,6 +15,7 @@
 		"resolveJsonModule": true,
 		"moduleResolution": "node",
 		"forceConsistentCasingInFileNames": true,
+		"typeRoots": ["node_modules/@types", "src/**/*.d.ts"],
 		"paths": {
 			"@/*": ["src/*"]
 		}

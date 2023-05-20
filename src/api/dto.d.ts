@@ -65,6 +65,10 @@ export declare type TGetMoodByIdResponseDto = {
 	mood: Mood | null;
 };
 
+export declare type TGetDefaultsWithUserIdRequestDto = {
+	userId: string;
+};
+
 export declare type TGetMoodsByUserIdResponseDto = {
 	moods: Mood[];
 };
@@ -156,5 +160,90 @@ export declare type TDeleteActivityRequestDto = {
 };
 
 export declare type TRestoreActivityRequestDto = {
+	id: string;
+};
+
+export declare type TGetEntryByIdRequestDto = {
+	id: string;
+};
+
+export declare type TGetEntryByIdResponseDto = {
+	entry: Entry | null;
+};
+
+export declare type TGetEntriesByUserIdRequestDto = {
+	userId: string;
+};
+
+export declare type TGetEntriesByUserIdResponseDto = {
+	entries: Entry[];
+};
+
+export declare type TGetEntriesByUserIdAndDateRequestDto = {
+	userId: string;
+	date: string;
+};
+
+export declare type TGetEntriesByUserIdAndDateResponseDto = {
+	entries: Entry[];
+};
+
+export declare type TGetEntriesByUserIdAndDateRangeRequestDto = {
+	userId: string;
+	startDate: string;
+	endDate?: string;
+};
+
+export declare type TGetEntriesByUserIdAndDateRangeResponseDto = {
+	entries: Entry[];
+};
+
+export declare type TGetActiveEntriesByUserIdRequestDto = {
+	userId: string;
+};
+
+export declare type TGetActiveEntriesByUserIdResponseDto = {
+	entries: Entry[];
+};
+
+export declare type TGetInactiveEntriesByUserIdRequestDto = {
+	userId: string;
+};
+
+export declare type TGetInactiveEntriesByUserIdResponseDto = {
+	entries: Entry[];
+};
+
+export declare type TGetEntriesByUserIdAndMoodRequestDto = {
+	userId: string;
+	moodId: string;
+};
+
+export declare type TGetEntriesByUserIdAndMoodResponseDto = {
+	entries: Entry[];
+};
+
+export declare type TCreateEntryRequestDto = {
+	entry: Prisma.EntryCreateInput;
+};
+
+export declare type TCreateEntryResponseDto = {
+	entry: Entry;
+};
+
+export declare type TUpdateEntryRequestDto = {
+	id: string;
+	entry: Prisma.EntryUpdateInput;
+};
+
+export declare type TUpdateEntryResponseDto = {
+	entry: Entry;
+};
+
+export declare type TDeleteEntryRequestDto = {
+	id: string;
+};
+
+export declare type TRestoreEntryRequestDto = {
 	id: string;
 };

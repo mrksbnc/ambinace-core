@@ -9,6 +9,7 @@ import type {
 	TGetMoodByIdResponseDto,
 	TGetMoodsByUserIdRequestDto,
 	TGetMoodsByUserIdResponseDto,
+	TGetDefaultsWithUserIdRequestDto,
 } from '@/api/dto';
 import type { TMoodRepository } from '@/database/repositories/moodRepository.d';
 
@@ -39,7 +40,7 @@ export declare interface TMoodService {
 	 *
 	 * @throws InvalidArgumentError if the userId is not a valid numeric id
 	 */
-	getDefaultsWithUser({ userId }: TGetMoodsByUserIdServiceArgs): Promise<TGetMoodsByUserIdResponseDto>;
+	getDefaultsWithUser({ userId }: TGetDefaultsWithUserIdRequestDto): Promise<TGetMoodsByUserIdResponseDto>;
 	/**
 	 * Uses the dependency injected repository to create a mood
 	 *
