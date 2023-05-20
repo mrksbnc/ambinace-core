@@ -9,6 +9,7 @@ import type { Application } from 'express';
 import ActivityRoute from './activityRoute';
 import Middleware from '../middlewares/middleware';
 import { API_CONFIG_KEY } from '@/data/constants/config';
+import EntryRoute from './entryRoute';
 
 let sharedInstance: Router | null = null;
 
@@ -27,6 +28,7 @@ export default class Router implements TRouter {
 			AuthRoute.sharedInstance,
 			UserRoute.sharedInstance,
 			MoodRoute.sharedInstance,
+			EntryRoute.sharedInstance,
 			ActivityRoute.sharedInstance,
 		];
 	}
