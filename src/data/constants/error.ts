@@ -27,6 +27,7 @@ export enum ERROR_MESSAGE {
 export enum RESPONSE_ERROR_MESSAGE {
 	UNAUTHORIZED = 'Unauthorized',
 	ROUTE_NOT_FOUND = 'Route Not Found',
+	TOO_MANY_REQUESTS = 'Too many requests',
 	INVALID_CREDENTIALS = 'Invalid credentials',
 	INVALID_CONTENT_TYPE = 'Invalid Content-Type',
 	INTERNAL_SERVER_ERROR = 'Internal Server Error',

@@ -1669,6 +1669,7 @@ __metadata:
     eslint: "npm:^8.40.0"
     eslint-config-prettier: "npm:^8.8.0"
     express: "npm:^4.18.2"
+    express-rate-limit: "npm:^6.7.0"
     helmet: "npm:^7.0.0"
     hpp: "npm:^0.2.3"
     jest: "npm:^29.5.0"
@@ -2902,6 +2903,15 @@ __metadata:
     jest-message-util: "npm:^29.5.0"
     jest-util: "npm:^29.5.0"
   checksum: 106a886342eaaf0443937ac0e76fdf6adadf87462c22f153edd588db6103817e43044ec7cfa5ebb713dc3f0c373dce002a867aa549d06de42b4f219eb95ec27d
+  languageName: node
+  linkType: hard
+
+"express-rate-limit@npm:^6.7.0":
+  version: 6.7.0
+  resolution: "express-rate-limit@npm:6.7.0"
+  peerDependencies:
+    express: ^4 || ^5
+  checksum: 5bee337c88cb81b5ac777664e854254b0885d51d1f88b115b39dcac8b81b0292a453f0865927f9e6ca8dba07246674f188d5e8095a13d1c32f487aae7ddc9bc2
   languageName: node
   linkType: hard
 
