@@ -1,11 +1,12 @@
 import type { TRequestMethod } from '@/api';
-import type { APP_CONFIG_KEY, API_CONFIG_KEY, AUTH_CONFIG_KEY } from '../data/constants/config';
+import type { APP_CONFIG_KEY, API_CONFIG_KEY, AUTH_CONFIG_KEY, CACHE_CONFIG_KEY } from '../data/constants/config';
 /**
  * Interface for the AppConfig class.
  */
 export declare type TAppConfig = {
 	readonly api: TApiConfig;
 	readonly auth: TAuthConfig;
+	readonly cache: TCacheConfig;
 	readonly app: TAmbianceConfig;
 };
 /**
@@ -32,4 +33,15 @@ export declare type TAuthConfig = {
 export declare type TApiConfig = {
 	[API_CONFIG_KEY.BASE_URL]: string;
 	[API_CONFIG_KEY.ENABLED_HTTP_REQUEST_METHODS]: TRequestMethod[];
+};
+/**
+ * Definition for cache config keys.
+ */
+export declare type TCacheConfig = {
+	[CACHE_CONFIG_KEY.CACHE_TTL]: number;
+	[CACHE_CONFIG_KEY.REDIS_HOST]: string;
+	[CACHE_CONFIG_KEY.REDIS_PORT]: number;
+	[CACHE_CONFIG_KEY.CACHE_NAME]: string;
+	[CACHE_CONFIG_KEY.REDIS_USERNAME]: string;
+	[CACHE_CONFIG_KEY.REDIS_PASSWORD]: string;
 };

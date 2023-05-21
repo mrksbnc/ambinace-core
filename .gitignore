@@ -42,3 +42,5 @@ node_modules/
 # Keys
 *.pem
 
+# Ignore redis binary dump (dump.rdb) files
+*.rdb

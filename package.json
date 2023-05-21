@@ -21,16 +21,17 @@
 		"schema": "src/database/prisma/ambiance_core.prisma"
 	},
 	"scripts": {
-		"dev": "nodemon",
-		"start": "node dist",
 		"test": "jest --coverage",
 		"type-check": "tsc --noEmit",
 		"lint:fix": "yarn lint --fix",
 		"build": "sh scripts/build.sh",
 		"setup": "sh scripts/setup.sh",
 		"lint": "eslint . --ext .ts,.js",
+		"build:prod": "sh scripts/build.sh",
 		"format": "yarn prettier --write src",
-		"format:check": "yarn prettier --check src"
+		"start": "sh scripts/start.sh production",
+		"format:check": "yarn prettier --check src",
+		"start:dev": "sh scripts/start.sh development"
 	},
 	"keywords": [
 		"REST",
@@ -54,6 +55,7 @@
 		"jsonwebtoken": "^9.0.0",
 		"morgan": "^1.10.0",
 		"prisma": "^4.14.0",
+		"redis": "^4.6.6",
 		"validator": "^13.9.0",
 		"winston": "^3.8.2"
 	},
