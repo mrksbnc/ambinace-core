@@ -1,12 +1,13 @@
 {
 	"name": "ambinace-core",
-	"version": "1.0.0",
+	"version": "1.0.0-alpha.1",
 	"description": "Api service for Ambinace project",
 	"main": "index.js",
 	"homepage": "git@github.com:mrksbnc/ambinace-core.git/README.md",
 	"author": "Bence Markus<markusbence@outlook.com>",
 	"private": true,
 	"license": "SEE LICENSE IN LICENSE.md",
+	"packageManager": "yarn@4.0.0-rc.44",
 	"files": [
 		"dist/**/*"
 	],
@@ -27,19 +28,21 @@
 		"build": "sh scripts/build.sh",
 		"setup": "sh scripts/setup.sh",
 		"lint": "eslint . --ext .ts,.js",
-		"build:prod": "sh scripts/build.sh",
 		"format": "yarn prettier --write src",
 		"start": "sh scripts/start.sh production",
 		"format:check": "yarn prettier --check src",
 		"start:dev": "sh scripts/start.sh development"
 	},
 	"keywords": [
-		"REST",
-		"Api",
+		"API",
 		"Node",
-		"Express",
+		"ESLint",
+		"Redis",
 		"Prisma",
-		"Postgres"
+		"Express",
+		"Prettier",
+		"Postgres",
+		"Typescript"
 	],
 	"dependencies": {
 		"@prisma/client": "^4.14.0",
@@ -82,6 +85,5 @@
 		"prettier": "^2.8.8",
 		"ts-jest": "^29.1.0",
 		"typescript": "^5.0.4"
-	},
-	"packageManager": "yarn@4.0.0-rc.43"
+	}
 }
