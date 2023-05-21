@@ -1,5 +1,6 @@
 import type jwt from 'jsonwebtoken';
 import type { Prisma } from '@prisma/client';
+import type { TCacheService } from './cacheService.d';
 import type { TLoginResponseDto, TRegisterResponseDto } from '@/api/dto';
 import type { TUserRepository } from '@/database/repositories/userRepository.d';
 
@@ -85,6 +86,7 @@ export declare type TAuthenticateArgs = {
 export declare type TAuthServiceConstructorArgs = {
 	jwtSecret: string;
 	jwtExpiresIn: number;
+	cacheService: TCacheService;
 	userRepository: TUserRepository;
 };
 /**
@@ -126,6 +128,8 @@ export declare interface TAuthService {
 	/**
 	 * Authenticates a user and returns a login response with a token and the user data.
 	 *
+	 * @throw InvalidArgumentError if the email or password is invalid.
+	 * @throw InternalServerError if an error occurs createing the partial user.
 	 */
 	authenticate({ email, password }: TAuthenticateArgs): Promise<TLoginResponseDto>;
 }
