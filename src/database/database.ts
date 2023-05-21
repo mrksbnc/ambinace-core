@@ -33,7 +33,7 @@ DEFAULT_PRISMA_CLIENT.$use(async (params, next) => {
 	const result = await next(params);
 	const after = Date.now();
 
-	Log.sharedInstance.baseLogger.info(`query |  ${params.model}.${params.action} - ${after - before} ms`);
+	Log.sharedInstance.baseLogger.info(`QUERY |  ${params.model}.${params.action} - ${after - before} ms`);
 	return result;
 });
 

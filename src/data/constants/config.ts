@@ -19,4 +19,13 @@ export enum AUTH_CONFIG_KEY {
 	SALT_ROUNDS = 'saltRounds',
 }
 
+export enum CACHE_CONFIG_KEY {
+	REDIS_HOST = 'redisHost',
+	REDIS_PORT = 'redisPort',
+	CACHE_TTL = 'redisDefaultTtl',
+	CACHE_NAME = 'redisCacheName',
+	REDIS_USERNAME = 'redisUsername',
+	REDIS_PASSWORD = 'redisPassword',
+}
+
 export const ENABLED_HTTP_REQUEST_METHODS: TRequestMethod[] = ['GET', 'PUT', 'POST', 'DELETE'];

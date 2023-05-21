@@ -1,5 +1,6 @@
 import type jwt from 'jsonwebtoken';
 import type { Prisma } from '@prisma/client';
+import type { TCacheService } from './cacheService.d';
 import type { TLoginResponseDto, TRegisterResponseDto } from '@/api/dto';
 import type { TUserRepository } from '@/database/repositories/userRepository.d';
 
@@ -85,6 +86,7 @@ export declare type TAuthenticateArgs = {
 export declare type TAuthServiceConstructorArgs = {
 	jwtSecret: string;
 	jwtExpiresIn: number;
+	cacheService: TCacheService;
 	userRepository: TUserRepository;
 };
 /**

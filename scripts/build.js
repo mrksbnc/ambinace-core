@@ -18,9 +18,6 @@ const buildConfig = {
 	platform: 'node',
 	entryPoints: ['src/index.ts'],
 	external: Object.keys(dependencies),
-	define: {
-		'process.env.NODE_ENV': '"production"',
-	},
 };
 
 build(buildConfig).catch(() => process.exit(1));

@@ -16,11 +16,13 @@ import type {
 } from './authService.d';
 import bcrypt from 'bcrypt';
 import Log from '@/utils/logger';
+import CacheService from './cacheService';
 import AppConfig from '@/config/appConfig';
 import Validator from '@/validators/validator';
 import type { TLoginResponseDto } from '@/api/dto';
 import type { Prisma, User } from '@prisma/client';
 import jwt, { type Algorithm } from 'jsonwebtoken';
+import type { TCacheService } from './cacheService.d';
 import UserSchema from '@/validators/schemas/userSchema';
 import { AUTH_CONFIG_KEY } from '@/data/constants/config';
 import InvalidPayloadError from '@/error/invalidPayloadError';
@@ -28,12 +30,14 @@ import InvalidArgumentError from '@/error/invalidArgumentError';
 import ResourceNotFoundError from '@/error/resourceNotFoundError';
 import UserRepository from '@/database/repositories/userRepository';
 import type { TUserRepository } from '@/database/repositories/userRepository.d';
+import { CACHE_KEY } from '@/data/constants/cache';
 
 let sharedInstance: AuthService | null = null;
 
 export default class AuthService implements TAuthService {
 	private readonly _jwtSecret: string;
 	private readonly _jwtExpiresIn: number;
+	private readonly _cacheService: TCacheService;
 	private readonly _userReposiory: TUserRepository;
 
 	public static get sharedInstance(): AuthService {
@@ -44,15 +48,17 @@ export default class AuthService implements TAuthService {
 			sharedInstance = new AuthService({
 				jwtSecret,
 				jwtExpiresIn,
+				cacheService: CacheService.sharedInstance,
 				userRepository: UserRepository.sharedInstance,
 			});
 		}
 		return sharedInstance;
 	}
 
-	constructor({ jwtSecret, jwtExpiresIn, userRepository }: TAuthServiceConstructorArgs) {
+	constructor({ jwtSecret, jwtExpiresIn, userRepository, cacheService }: TAuthServiceConstructorArgs) {
 		this._jwtSecret = jwtSecret;
 		this._jwtExpiresIn = jwtExpiresIn;
+		this._cacheService = cacheService;
 		this._userReposiory = userRepository;
 	}
 
@@ -166,6 +172,11 @@ export default class AuthService implements TAuthService {
 			user: newUser,
 		});
 
+		this._cacheService.set(
+			this._cacheService.generateKey(CACHE_KEY.USER_WITH_ID, `${createdUser.id}`),
+			JSON.stringify(createdUser),
+		);
+
 		const { accessToken: token } = this.encodeSession({
 			userId: createdUser.id,
 		});
@@ -183,10 +194,18 @@ export default class AuthService implements TAuthService {
 			throw new InvalidArgumentError('email');
 		}
 
-		const user: User | null = await this._userReposiory.findByEmail({ email });
+		let servedFromCache = true;
+		let user: User | null = await this._cacheService.get<User | null>(
+			this._cacheService.generateKey(CACHE_KEY.USER_WITH_EMAIL, email),
+		);
 
 		if (user == null) {
-			throw new ResourceNotFoundError();
+			servedFromCache = false;
+			user = await this._userReposiory.findByEmail({ email });
+
+			if (user == null) {
+				throw new ResourceNotFoundError();
+			}
 		}
 
 		const isValidPassword = await this.comparePasswordHash({
@@ -199,6 +218,14 @@ export default class AuthService implements TAuthService {
 		}
 
 		const encodedSession = this.encodeSession({ userId: user.id });
+
+		if (!servedFromCache) {
+			this._cacheService.set(this._cacheService.generateKey(CACHE_KEY.USER_WITH_EMAIL, email), JSON.stringify(user));
+			this._cacheService.set(
+				this._cacheService.generateKey(CACHE_KEY.USER_WITH_ID, `${user?.id}`),
+				JSON.stringify(user),
+			);
+		}
 
 		const dto: TLoginResponseDto = {
 			token: encodedSession.accessToken,
