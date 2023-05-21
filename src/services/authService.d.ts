@@ -128,6 +128,8 @@ export declare interface TAuthService {
 	/**
 	 * Authenticates a user and returns a login response with a token and the user data.
 	 *
+	 * @throw InvalidArgumentError if the email or password is invalid.
+	 * @throw InternalServerError if an error occurs createing the partial user.
 	 */
 	authenticate({ email, password }: TAuthenticateArgs): Promise<TLoginResponseDto>;
 }

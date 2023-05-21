@@ -4,6 +4,7 @@ export enum ERROR_NAME {
 	INVALID_PAYLOAD = 'InvalidPayloadError',
 	INVALID_ARGUMENT = 'InvalidArgumentError',
 	RESOURCE_NOT_FOUND = 'ResourceNotFoundError',
+	INTERNAL_SERVER_ERROR = 'InternalServerError',
 	INVALID_DATE_ARGUMENT = 'InvalidArgumentError',
 	INVALID_CREDENTIALS = 'InvalidCredentialsError',
 	INVALID_CONTENT_TYPE = 'InvalidContentTypeError',
@@ -14,7 +15,7 @@ export enum ERROR_NAME {
 
 export enum ERROR_MESSAGE {
 	INVALID_ID = 'Invalid id received from client',
-	INTERNAL_SERVVER_ERROR = 'Internal server error',
+	INTERNAL_SERVER_ERROR = 'Internal server error',
 	INVALID_DATE = 'Invalid date received from client',
 	INVALID_PAYLOAD = 'Invalid payload received from client',
 	RESOURCE_NOT_FOUND = 'The requested resource was not found',

@@ -26,18 +26,27 @@ export default class CacheService implements TCacheService {
 		});
 	}
 
+	public async init(): Promise<void> {
+		await this._redis_client.connect();
+	}
+
 	public async disconnect(): Promise<void> {
 		await this._redis_client.disconnect();
 		Log.sharedInstance.createInfoMessageBlock(['redis connection closed']);
 	}
 
-	public async init(): Promise<void> {
-		await this._redis_client.connect();
+	public async exists(key: string): Promise<boolean> {
+		return (await this._redis_client.exists(key)) === 1;
 	}
 
 	public async get<T>(key: string): Promise<T | null> {
+		const start = performance.now();
 		const value: string | null = await this._redis_client.get(key);
-		return value ? (JSON.parse(JSON.parse(value)) as T) : null;
+		const end = performance.now();
+
+		Log.sharedInstance.baseLogger.info(`CACHE get for key: ${key} took ${(end - start).toPrecision(5)}ms`);
+
+		return value ? (JSON.parse(value) as T) : null;
 	}
 
 	public async set<T>(key: string, value: T): Promise<void> {
@@ -47,6 +56,14 @@ export default class CacheService implements TCacheService {
 			EX: AppConfig.sharedInstance.cache[CACHE_CONFIG_KEY.CACHE_TTL],
 		});
 		Log.sharedInstance.baseLogger.info(`CACHE new cache entry created for key: ${key}`);
+	}
+
+	public async setSafe<T>(key: string, value: T): Promise<void> {
+		const exists: boolean = await this.exists(key);
+
+		if (exists) await this.del(key);
+
+		await this.set<T>(key, value);
 	}
 
 	public async del(key: string): Promise<void> {

@@ -73,11 +73,10 @@ function handleErrorExit(error: unknown, module: TInitProcessStep): void {
 		handleErrorExit(error, 'server');
 	}
 
-	const end = performance.now() - start;
 	Log.sharedInstance.createInfoMessageBlock([
 		'Server initialization process completed ',
 		'',
-		`Process completed in ${end}ms`,
+		`Process completed in ${(performance.now() - start).toPrecision(5)}ms`,
 	]);
 	Log.sharedInstance.createBlockSeparator();
 })();

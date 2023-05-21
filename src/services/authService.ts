@@ -21,16 +21,18 @@ import AppConfig from '@/config/appConfig';
 import Validator from '@/validators/validator';
 import type { TLoginResponseDto } from '@/api/dto';
 import type { Prisma, User } from '@prisma/client';
+import { CACHE_KEY } from '@/data/constants/cache';
 import jwt, { type Algorithm } from 'jsonwebtoken';
 import type { TCacheService } from './cacheService.d';
 import UserSchema from '@/validators/schemas/userSchema';
 import { AUTH_CONFIG_KEY } from '@/data/constants/config';
 import InvalidPayloadError from '@/error/invalidPayloadError';
+import InternalServerError from '@/error/internalServerError';
 import InvalidArgumentError from '@/error/invalidArgumentError';
 import ResourceNotFoundError from '@/error/resourceNotFoundError';
 import UserRepository from '@/database/repositories/userRepository';
+import type { TPartialUser } from '@/database/repositories/userRepository.d';
 import type { TUserRepository } from '@/database/repositories/userRepository.d';
-import { CACHE_KEY } from '@/data/constants/cache';
 
 let sharedInstance: AuthService | null = null;
 
@@ -172,7 +174,7 @@ export default class AuthService implements TAuthService {
 			user: newUser,
 		});
 
-		this._cacheService.set(
+		this._cacheService.setSafe(
 			this._cacheService.generateKey(CACHE_KEY.USER_WITH_ID, `${createdUser.id}`),
 			JSON.stringify(createdUser),
 		);
@@ -217,13 +219,19 @@ export default class AuthService implements TAuthService {
 			throw new InvalidArgumentError('password');
 		}
 
+		const mappedUser = this._userReposiory.mapUser(user);
 		const encodedSession = this.encodeSession({ userId: user.id });
 
+		if (mappedUser == null) {
+			throw new InternalServerError();
+		}
+
 		if (!servedFromCache) {
-			this._cacheService.set(this._cacheService.generateKey(CACHE_KEY.USER_WITH_EMAIL, email), JSON.stringify(user));
-			this._cacheService.set(
+			this._cacheService.setSafe<User>(this._cacheService.generateKey(CACHE_KEY.USER_WITH_EMAIL, email), user);
+
+			this._cacheService.setSafe<TPartialUser>(
 				this._cacheService.generateKey(CACHE_KEY.USER_WITH_ID, `${user?.id}`),
-				JSON.stringify(user),
+				mappedUser,
 			);
 		}
 
