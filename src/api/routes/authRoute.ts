@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import RouteMeta from './routeMeta';
+import { rateLimit } from 'express-rate-limit';
 import { concatSegmentHelper } from './routeHelper';
 import AuthController from '../controllers/authController';
-import type { TAuthController } from '../controllers/authController.d';
-import type { TRoute, TRouteConstructorArgs, TRouteMeta } from './route.d';
-import { rateLimit } from 'express-rate-limit';
 import { RESPONSE_ERROR_MESSAGE } from '@/data/constants/error';
 import { HTTP_STATUS_CODE } from '@/data/constants/httpStatusCode';
+import type { TAuthController } from '../controllers/authController.d';
+import type { TRoute, TRouteConstructorArgs, TRouteMeta } from './route.d';
 
 let sharedInstance: AuthRoute | null = null;
 
